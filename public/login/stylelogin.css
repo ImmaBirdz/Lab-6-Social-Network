@@ -364,3 +364,96 @@ input {
   display: none; 
 }
  */
+
+
+ .recent-login-box {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 250px;
+  padding: 20px;
+  background-color: #f6f0f0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  z-index: 2; 
+}
+
+.recent-login-box h2 {
+  font-size: 20px;
+  text-decoration: none;
+  margin: 15px 0;
+  transition: 0.3s ease-in-out;
+  margin-bottom: 15px;
+  
+}
+
+.recent-user {
+  margin-bottom: 15px;
+}
+
+.recent-user .user-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.recent-user .user-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.fast-login {
+  background-color: #EED6D3;
+  border: 1px solid #EED6D3;
+  color: #695A5B;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  transition: 0.3s ease-in-out;
+}
+
+.fast-login:hover {
+  background-color: #C39898;
+  color: #fff;
+  cursor: pointer;
+}
+
+
+
+
+/* free .container */
+/* 
+.Free-container {
+  display: flex;
+  justify-content: space-between; 
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.form-Free-container {
+  width: 33%; 
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+.right-box {
+  width: 33%; 
+  background-color: #f1f1f1;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+} */
