@@ -19,6 +19,22 @@ body {
   min-height: 100vh;
 }
 
+
+.falling-hello {
+  position: absolute;
+  top: -100px; /* Start from off-screen */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3rem;
+  color: #fbfbfb;
+  transition: top 3s ease; /* Smooth fall */
+  z-index: 999;
+}
+
+.falling-hello.animate {
+  top: 50px; /* The position where it will stop, adjust as needed */
+}
+
 h1 {
   font-weight: 700;
   letter-spacing: -1.5px;
