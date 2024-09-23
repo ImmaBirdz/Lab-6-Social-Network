@@ -3,7 +3,7 @@ const loginButton = document.getElementById("login");
 const container = document.getElementById("container");
 const hello = document.getElementById('falling-hello');
 
-// Event listener to switch between registration and login forms
+// Trigger panel switching for registration and login
 registerButton.addEventListener("click", () => {
     container.classList.add("right-panel-active");
 });
@@ -12,42 +12,49 @@ loginButton.addEventListener("click", () => {
     container.classList.remove("right-panel-active");
 });
 
-// Reset form input fields when transitioning between forms
 container.addEventListener("transitionend", () => {
     const activeForm = document.querySelector(".form-container:not(.right-panel-active)");
     if (activeForm) {
         const inputs = activeForm.querySelectorAll("input");
-        // Reset input fields here if needed
     }
 });
 
-// Display recent logins on page load
-window.onload = function() {
-    // Start the falling animation for "Hello" text
-    setTimeout(function() {
-        hello.classList.add('animate');
-    }, 500); // Adjust delay before "Hello" starts falling
 
-    // Display recent logins if available
-    displayRecentLogins();
+window.onload = function() {
+    setTimeout(function() {
+        hello.classList.add('animate');  // Falling animation
+        displayRecentLogins();           // Display recent logins
+    }, 500); 
+
+    // animations for recent-login-box and about-us-box
+    const recentLoginBox = document.querySelector('.recent-login-box');
+    const aboutUsBox = document.querySelector('.about-us-box');
+
+    // classes moving animation
+    setTimeout(() => {
+        recentLoginBox.classList.add('slide-in-right');  
+    }, 1000);  
+
+    setTimeout(() => {
+        aboutUsBox.classList.add('slide-in-right');      
+    }, 1200);  
 };
 
-// Login form submission
+// login 
 document.querySelector('.login-container form').addEventListener('submit', (event) => {
     event.preventDefault(); 
     const email = document.querySelector('.login-container input[type="email"]').value;
     const password = document.querySelector('.login-container input[type="password"]').value;
 
     if (email && password) {
-        // Save the login to recent logins
-        saveRecentLogin(email, "John Doe"); // Replace with dynamic username if available
-        window.location.href = "page.html"; // Redirect to another page
+        saveRecentLogin(email, "XXXX"); 
+        window.location.href = "page.html"; 
     } else {
         alert('Please fill in both email and password.');
     }
 });
 
-// Registration form submission
+// regis
 document.querySelector('.register-container form').addEventListener('submit', (event) => {
     event.preventDefault(); 
 
@@ -64,13 +71,15 @@ document.querySelector('.register-container form').addEventListener('submit', (e
     }
 
     if (name && email && password && birthday && gender) {
-        // Optionally save to recent logins here
         saveRecentLogin(email, name);
-        window.location.href = "profile.html"; // Redirect to profile page
+        window.location.href = "profile.html"; 
     } else {
         alert('Please fill in all fields.');
     }
 });
+
+
+// stil have a prob with local Storage idk adk chat gpt instead
 
 // Save recent login to localStorage
 function saveRecentLogin(email, name) {
@@ -108,11 +117,14 @@ function displayRecentLogins() {
     }
 }
 
-// Quick login when clicking a recent login
+// Quick login / recent login
 document.querySelector('.recent-login-box').addEventListener('click', (event) => {
     if (event.target.classList.contains('fast-login')) {
         const email = event.target.getAttribute('data-email');
         document.querySelector('.login-container input[type="email"]').value = email;
-        // Optionally, set the password too if you want
+
+
+        
+        // set the password 
     }
 });
