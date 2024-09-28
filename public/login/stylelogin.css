@@ -6,13 +6,33 @@
 
 body {
   display: flex;
-  background-color: #f6f5f7;
+  background-color: #3d4741;
+  /* background-image: url('https://media1.giphy.com/media/3o85xoi6nNqJQJ95Qc/giphy.webp?cid=ecf05e47h5lxasim9h7e5deqriw5gkv3hmj7ez55s2l7tzzy&ep=v1_gifs_search&rid=giphy.webp&ct=g');  */
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
   justify-content: center;
   align-items: center;
   flex-direction: column;
   font-family: "Poppins";
   overflow: auto;
   min-height: 100vh;
+}
+
+
+.falling-hello {
+  position: absolute;
+  top: -100px; /* Start from off-screen */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3rem;
+  color: #fbfbfb;
+  transition: top 3s ease; /* Smooth fall */
+  z-index: 999;
+}
+
+.falling-hello.animate {
+  top: 50px; /* The position where it will stop, adjust as needed */
 }
 
 h1 {
@@ -129,7 +149,7 @@ button.ghost i.login{
 }
 
 button.ghost:hover i.register{
-  right: 4%;
+  right: 40px;
   opacity: 1;
 }
 
@@ -149,7 +169,7 @@ form {
   text-align: center;
 }
 
- input {
+input {
   background-color: #f5e4e4;
   border-radius: 10px;
   border: none;
@@ -169,7 +189,7 @@ form {
   min-height: 500px;
 } 
 
- .form-container {
+.form-container {
   position: absolute;
   top: 0;
   height: 100%;
@@ -297,22 +317,170 @@ form {
   transform: translateX(20%);
 }
 
-.sociial-container {
+.social-container {
+  text-align: center;
   margin: 20px 0;
 }
 
-.sociial-container a{
-  border: 1px solid #dddddd;
-  border-radius: 50%;
+.social-container span {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.social-links a {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  margin: 0;
   height: 40px;
   width: 40px;
+  border-radius: 50%;
+  overflow: hidden;
   transition: 0.3s ease-in-out;
 }
 
-.sociial-container a:hover {
+.social-links a img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.social-links a:hover {
   border: 1px solid #4bb6b7;
+}
+
+
+
+/* fix later when done */
+
+/* .password-feedback {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+  display: none; 
+}
+ */
+
+
+ .recent-login-box {
+  position: absolute;
+  left: 20px;
+  top: 30%;
+  transform: translateY(-50%);
+  width: 250px;
+  padding: 20px;
+  background-color: #f6f0f0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  z-index: 2; 
+}
+
+.recent-login-box h2 {
+  /* font-size: 20px; */
+  text-decoration: none;
+  margin: 15px 0;
+  transition: 0.3s ease-in-out;
+  margin-bottom: 15px;
+  
+}
+
+.recent-user {
+  margin-bottom: 15px;
+}
+
+.recent-user .user-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.recent-user .user-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.fast-login {
+  background-color: #EED6D3;
+  border: 1px solid #EED6D3;
+  color: #695A5B;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  transition: 0.3s ease-in-out;
+}
+
+.fast-login:hover {
+  background-color: #C39898;
+  color: #fff;
+  cursor: pointer;
+}
+
+
+
+
+/* free .container */
+
+.about-us-box {
+  position: absolute;
+  right: 20px;
+  top: 40%;
+  transform: translateY(-50%);
+  width: 250px;
+  padding: 20px;
+  background-color: #f6f0f0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  z-index: 2; 
+}
+.about-us-box h2 {
+  /* font-size: 20px; */
+  text-decoration: none;
+  margin: 15px 0;
+  transition: 0.3s ease-in-out;
+  margin-bottom: 15px;
+  
+}
+
+
+
+
+.recent-login-box {
+  opacity: 0;
+  transform: translateX(-100px); 
+  transition: transform 1s ease-out, opacity 1s ease-out; 
+}
+.about-us-box {
+  opacity: 0;
+  transform: translateX(100px); 
+  transition: transform 1s ease-out, opacity 1s ease-out; 
+}
+
+.recent-login-box.slide-in-right, .about-us-box.slide-in-right {
+  opacity: 1;
+  transform: translateX(0); 
+}
+
+@keyframes fall {
+  0% {
+      transform: translateY(-200%);
+      opacity: 0;
+  }
+  100% {
+      transform: translateY(0);
+      opacity: 1;
+  }
 }
