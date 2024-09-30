@@ -253,7 +253,7 @@ input {
 }    
 
 .overlay {
-  background-image: url("bg3.gif");
+  background-image: url("../img/bg3.gif");
   /* background-color: #000000; */
   background-repeat: no-repeat;
   background-size: cover;

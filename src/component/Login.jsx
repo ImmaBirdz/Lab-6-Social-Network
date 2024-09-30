@@ -1,6 +1,75 @@
 import React from 'react'
+import { useEffect } from 'react'
 
 const Login = () => {
+    // Trigger panel switching for registration and login
+    useEffect(() => {
+        const registerButton = document.getElementById("register");
+        const loginButton = document.getElementById("login");
+        const container = document.getElementById("container");
+
+        const handleRegisterClick = () => {
+            container.classList.add("right-panel-active");
+        };
+
+        const handleLoginClick = () => {
+            container.classList.remove("right-panel-active");
+        };
+
+        const handleTransitionEnd = () => {
+            const activeForm = document.querySelector(".form-container:not(.right-panel-active)");
+            if (activeForm) {
+                const inputs = activeForm.querySelectorAll("input");
+            }
+        };
+
+        registerButton.addEventListener("click", handleRegisterClick);
+        loginButton.addEventListener("click", handleLoginClick);
+        container.addEventListener("transitionend", handleTransitionEnd);
+
+        return () => {
+            registerButton.removeEventListener("click", handleRegisterClick);
+            loginButton.removeEventListener("click", handleLoginClick);
+            container.removeEventListener("transitionend", handleTransitionEnd);
+        };
+    }, []);
+
+    const handleLoginSubmit = (event) => {
+        event.preventDefault();
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+
+        if (email && password) {
+            // saveRecentLogin(email, "XXXX"); // Replace XXXX with actual user name logic
+            window.location.href = "page.html"; // Navigate to the page
+        } else {
+            alert('Please fill in both email and password.');
+        }
+    };
+
+    const handleRegisterSubmit = (event) => {
+        event.preventDefault();
+        const name = event.target.name.value;
+        const email = event.target.email.value; // error here | .value
+        console.log("Registering..."); // debug
+        const password = event.target.password.value;
+        const confirmPassword = event.target.confirmPassword.value;
+        const birthday = event.target.birthday.value;
+        const gender = event.target.gender.value;
+        
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+        
+        if (name && email && password && birthday && gender) {
+            // saveRecentLogin(email, name);
+            window.location.href = "profile.html"; // Navigate to the profile
+        } else {
+            alert('Please fill in all fields.');
+        }
+    };
+
     return (
         <body>
         {/* ++logo */}
@@ -32,15 +101,15 @@ const Login = () => {
                         <option value="Suuuuuuu">Don't wanna tell...</option>
                         <option value="Other" />
                     </datalist>
-                    <button>Register</button>
+                    <button onClick={handleRegisterSubmit}>Register</button>
                 </form>
             </div>
     
             <div className="form-container login-container">
                 <form action="#">
                     <h1>Login here.</h1>
-                    <input type="email" placeholder="Email or phone number" />
-                    <input type="password" placeholder="Password" />
+                    <input type="email" name="email" placeholder="Email or phone number" />
+                    <input type="password" name="password" placeholder="Password" />
                     <div className="content">
                         {/* remember me เผื่ออนาคตได้ใช้ */}
     
@@ -52,7 +121,7 @@ const Login = () => {
                             <a href="#">Forgot password?</a>
                         </div>
                     </div>
-                    <button>Login</button>
+                    <button onClick={handleLoginSubmit}>Login</button>
                     <span>or use your account</span>
     
                     {/* add social link */}
