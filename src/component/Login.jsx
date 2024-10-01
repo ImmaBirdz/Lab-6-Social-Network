@@ -1,5 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
+import '../css/Login.css'
+import { TabTitle } from './TabTitle'
 
 const Login = () => {
     // Trigger panel switching for registration and login
@@ -7,6 +9,7 @@ const Login = () => {
         const registerButton = document.getElementById("register");
         const loginButton = document.getElementById("login");
         const container = document.getElementById("container");
+        document.title = "Sign in | Black Cat with Bow";
 
         const handleRegisterClick = () => {
             container.classList.add("right-panel-active");
@@ -34,6 +37,25 @@ const Login = () => {
         };
     }, []);
 
+    // Change the title of the page when the user switches between login and register
+    useEffect(() => {
+        TabTitle("Sign in | Black Cat with Bow");
+        dynamicTitle();
+    },[]);
+
+    const dynamicTitle = () => {
+        let registerButtonTitle = document.getElementById('register');
+        let loginButtonTitle = document.getElementById('login');
+
+        registerButtonTitle.addEventListener('click', () => {
+            document.title = "Sign up | Black Cat with Bow";
+        });
+
+        loginButtonTitle.addEventListener('click', () => {
+            document.title = "Sign in | Black Cat with Bow";
+        });
+    };
+
     const handleLoginSubmit = (event) => {
         event.preventDefault();
         const email = event.target.email.value;
@@ -41,7 +63,7 @@ const Login = () => {
 
         if (email && password) {
             // saveRecentLogin(email, "XXXX"); // Replace XXXX with actual user name logic
-            window.location.href = "page.html"; // Navigate to the page
+            window.location.href = "page"; // Navigate to the page
         } else {
             alert('Please fill in both email and password.');
         }
@@ -64,7 +86,7 @@ const Login = () => {
         
         if (name && email && password && birthday && gender) {
             // saveRecentLogin(email, name);
-            window.location.href = "profile.html"; // Navigate to the profile
+            window.location.href = "profile"; // Navigate to the profile
         } else {
             alert('Please fill in all fields.');
         }
@@ -146,14 +168,14 @@ const Login = () => {
                     <div className="overlay-panel overlay-left">
                         <h1 className="title">Hello <br />There</h1>
                         <p>if you have an account, login here</p>
-                        <button className="ghost" id="login">Login
+                        <button className="ghost" id="login" onChange={dynamicTitle}>Login
                             <i className="Ini Ini-arrow-left login"></i>
                         </button>
                     </div>
                     <div className="overlay-panel overlay-right">
                         <h1 className="title">Start your <br /> journey</h1>
                         <p>if you don't have an account yet why not have one?</p>
-                        <button className="ghost" id="register">Register
+                        <button className="ghost" id="register" onChange={dynamicTitle}>Register
                             <i className="Ini Ini-arrow-right register"></i>
                         </button>
                     </div>
