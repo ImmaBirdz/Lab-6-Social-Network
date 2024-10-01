@@ -5,24 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login / Registration Form</title>
     <link href="http://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="stylelogin.css">
+    <link rel="stylesheet" href="../../src/css/Login.css">
 </head>
 <body>
+    <!-- <button class="dark-mode-toggle"></button> -->
 
     <!-- ++logo  -->
     <h1 class="falling-hello" id="falling-hello">Hello</h1>
 
-    
-    
     <div class="container" id="container">
         <div class="form-container register-container">
             <form action="#">
                 <h1>Register here.</h1>
+
+                <input type="text" placeholder="Name">
+                <input type="email" placeholder="Email or phone number">
+                <input type="password" placeholder="Password">
+                <button>Register</button>
+                <span>or use your account</span>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="Ini Ini-facebook-fill"></i></a>
+                    <a href="#" class="social"><i class="Ini Ini-google"></i></a>
+                    <a href="#" class="social"><i class="Ini Ini-linkedin"></i></a>
+                </div>
                 <input type="text" placeholder="Name" required>
                 <input type="email" placeholder="Email or phone number" required>
                 <input type="password" id="password" placeholder="Password" required 
-                       pattern="(?=.*\d)(?=.*[A-Z]).{8,}" 
-                       title="Password must be at least 8 characters long, contain at least one uppercase letter, and one number">
+                    pattern="(?=.*\d)(?=.*[A-Z]).{8,}" 
+                    title="Password must be at least 8 characters long, contain at least one uppercase letter, and one number">
+
+                <!-- confirm pass, gender and birthday -->
+                <input type="password" placeholder="Confirm Password" required> 
+                <input type="date" placeholder="Birthday" required>
+                <input type="text" placeholder="Gender" list="gender-options" required>
+                <datalist id="gender-options">
+                    <option value="Male">
+                    <option value="Female">
+                    <option value="God">
+                    <option value="Unicon">
+                    <option value="Thai">I am Thai and Thai mean Freedom...</option>
+                    <option value="Suuuuuuu">Don't wanna tell...</option>
+                    <option value="Other">
+                </datalist>
+                <button>Register</button>
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email or phone number" required>
+                <input type="password" id="password" placeholder="Password" required 
+                        pattern="(?=.*\d)(?=.*[A-Z]).{8,}" 
+                        title="Password must be at least 8 characters long, contain at least one uppercase letter, and one number">
               
                 <!-- confirm pass, gender and birthday -->
                 <input type="password" placeholder="Confirm Password" required> 
@@ -51,6 +81,7 @@
                 <input type="password" placeholder="Password">
                 <div class="content">
 
+                    <div class="checkbox">
 
 
             <!-- remember me เผื่ออนาคตได้ใช้ -->
@@ -63,7 +94,19 @@
 
                 <div class="pass-link"> 
                     <a href="#">Forgot password?</a>
-                  </div>
+                </div>
+
+            <!-- remember me เผื่ออนาคตได้ใช้ -->
+
+                    <!-- <div class="checkbox">
+                        <input type="checkbox" name="checkbox" id="checkbox">
+                        <label>Remember me</label>
+                    </div> -->
+
+                    <div class="pass-link"> 
+                        <a href="#">Forgot password?</a>
+                    </div>
+
                 </div>
                 <button>Login</button>
                 <span>or use your account</span>
@@ -122,12 +165,15 @@
 
 
     <!-- don no yet whatthis box for but it shoud be sth to balance the page -->
+    <div class="about-us-box">
+        <h2>About Us.</h2>
+        <p>hello this is our web project.....</p>
+    </div>
      <div class="about-us-box">
         <h2>About Us.</h2>
         <p>hello this is our web project.....</p>
     </div>
         
-
 
     <script src="scriptLogin.js"></script>
 
