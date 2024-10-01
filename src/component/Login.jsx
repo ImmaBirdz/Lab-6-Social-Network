@@ -49,13 +49,13 @@ const Login = () => {
 
     const handleRegisterSubmit = (event) => {
         event.preventDefault();
-        const name = event.target.name.value;
-        const email = event.target.email.value; // error here | .value
-        console.log("Registering..."); // debug
-        const password = event.target.password.value;
-        const confirmPassword = event.target.confirmPassword.value;
-        const birthday = event.target.birthday.value;
-        const gender = event.target.gender.value;
+        
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const birthday = document.getElementById("birthday").value;
+        const gender = document.getElementById("gender").value;
         
         if (password !== confirmPassword) {
             alert("Passwords do not match.");
@@ -76,10 +76,10 @@ const Login = () => {
         <h1 className="falling-hello" id="falling-hello">Hello</h1>
         <div className="container" id="container">
             <div className="form-container register-container">
-                <form action="#">
+                <form action="#" onSubmit={handleRegisterSubmit}>
                     <h1>Register here.</h1>
-                    <input type="text" placeholder="Name" required />
-                    <input type="email" placeholder="Email or phone number" required />
+                    <input type="text" id="name" placeholder="Name" required />
+                    <input type="email" id="email" placeholder="Email or phone number" required />
                     <input 
                         type="password" 
                         id="password" 
@@ -89,9 +89,9 @@ const Login = () => {
                         title="Password must be at least 8 characters long, contain at least one uppercase letter, and one number" 
                     />
                     {/* confirm pass, gender and birthday */}
-                    <input type="password" placeholder="Confirm Password" required /> 
-                    <input type="date" placeholder="Birthday" required />
-                    <input type="text" placeholder="Gender" list="gender-options" required />
+                    <input type="password" id="confirmPassword" placeholder="Confirm Password" required /> 
+                    <input type="date" id="birthday" placeholder="Birthday" required />
+                    <input type="text" id="gender" placeholder="Gender" list="gender-options" required />
                     <datalist id="gender-options">
                         <option value="Male" />
                         <option value="Female" />
@@ -101,15 +101,15 @@ const Login = () => {
                         <option value="Suuuuuuu">Don't wanna tell...</option>
                         <option value="Other" />
                     </datalist>
-                    <button onClick={handleRegisterSubmit}>Register</button>
+                    <button type='submit'>Register</button>
                 </form>
             </div>
     
             <div className="form-container login-container">
-                <form action="#">
+                <form action="#" onSubmit={handleLoginSubmit}>
                     <h1>Login here.</h1>
-                    <input type="email" name="email" placeholder="Email or phone number" />
-                    <input type="password" name="password" placeholder="Password" />
+                    <input type="email" id="email" name="email" placeholder="Email or phone number" />
+                    <input type="password" id="password" name="password" placeholder="Password" />
                     <div className="content">
                         {/* remember me เผื่ออนาคตได้ใช้ */}
     
@@ -121,7 +121,7 @@ const Login = () => {
                             <a href="#">Forgot password?</a>
                         </div>
                     </div>
-                    <button onClick={handleLoginSubmit}>Login</button>
+                    <button type='submit'>Login</button>
                     <span>or use your account</span>
     
                     {/* add social link */}
