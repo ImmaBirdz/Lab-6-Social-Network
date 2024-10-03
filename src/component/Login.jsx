@@ -117,6 +117,7 @@ const Login = () => {
                     <datalist id="gender-options">
                         <option value="Male" />
                         <option value="Female" />
+                        <option value="Gay">pls tell me if you Gay</option>
                         <option value="God" />
                         <option value="Unicon" />
                         <option value="Thai">I am Thai and Thai means Freedom...</option>
