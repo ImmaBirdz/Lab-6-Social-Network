@@ -118,7 +118,7 @@ const Login = () => {
                         <option value="Male" />
                         <option value="Female" />
                         <option value="Gay">pls tell me if you Gay</option>
-                        <option value="God" />
+                        <option value="LGBTQ A+" />
                         <option value="Unicon" />
                         <option value="Thai">I am Thai and Thai means Freedom...</option>
                         <option value="Suuuuuuu">Don't wanna tell...</option>
