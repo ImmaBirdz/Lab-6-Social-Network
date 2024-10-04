@@ -1,0 +1,432 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    padding: 0;
+}
+
+
+.navbar {
+    background-color: #e1b5db;
+    color: white;
+    display: flex;
+    justify-content: flex-end; /* Space between elements */
+    align-items: center; 
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.back {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    position: absolute; 
+    left: -70px; /* Adjusted positioning */
+}
+
+.back-arrow {
+    left: 10;
+    width: 30px;
+    height: 30px;
+}
+
+.nav-center {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center; 
+}
+
+.message-icon {
+    width: 35px;
+    height: 35px;
+}
+
+.menu-bar {
+    position: absolute; 
+    right: 10px; 
+    display: flex;
+    background: none;
+    border: none;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    right: -80px;
+}
+
+
+.menu-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #444;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.menu-content a {
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: block;
+}
+
+.menu-content a:hover {
+    background-color: #555;
+}
+
+.container {
+    display: flex;
+    padding: 20px;
+    border-radius: 0;
+    gap: 20px;
+    justify-content: flex-start; /* Aligns content to the left */
+    margin-top: 60px; /* Adjust this value based on navbar height */
+    height: calc(100vh - 60px); 
+    width: 185vh;
+    overflow-y: auto; 
+}
+
+
+.sidebar-left {
+    width: 20%;
+    background-color: hsl(300, 53%, 94%);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    height: 100%; 
+    overflow-y: auto; /* Allows the sidebar to scroll if needed */
+   
+    
+}
+
+.sidebar-left ul li {
+    display: flex;
+    align-items: center; /* Vertically centers the content (profile pic and name) */
+    padding: 20px 0; /* Increase padding for more space around each item */
+    cursor: pointer;
+    border-bottom: 2px solid #ddd; /* Adjust thickness and color of the separating line */
+    margin-bottom: 0; /* Remove extra margin between items */
+}
+
+.sidebar-left ul li:last-child {
+    border-bottom: none; /* Remove bottom border from the last list item */
+}
+
+.sidebar-left ul li:hover {
+    background-color: #f0f2f5; /* Light background on hover */
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Circular profile picture */
+    margin-right: 10px;
+    object-fit: cover; /* Ensures the image fits perfectly within the circle */
+}
+
+.sidebar-left ul li span {
+    font-size: 16px;
+    color: #333;
+    flex-grow: 1;
+    margin: 0; /* Reset margin to ensure it aligns with the profile picture */
+    display: flex;
+    align-items: center; /* Vertically centers the text with the profile picture */
+}
+
+
+
+
+
+.feed {
+    flex-grow: 1;
+    background-color: hsl(300, 53%, 94%);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    height: 100%; /* Make the feed fill the remaining space */
+    overflow-y: auto; /* Allows the feed to scroll if needed */
+}
+
+
+
+/* General Image Styling */
+.msgimg {
+    width: 50px;
+    vertical-align: middle;
+    border-style: none;
+    border-radius: 100%;
+}
+
+/* Styling the msg-header container */
+.msg-header {
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 12%;
+    border-bottom: none;
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+    background-color: #726573;
+    margin: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+/* Styling the profile picture */
+.msgimg {
+    margin-left: 5%;
+    margin-right: 10px; /* Add right margin for spacing */
+}
+
+.container1 {
+    display: flex;            /* Use flexbox for layout */
+    align-items: center; 
+      
+    margin: 0;
+    width: 300px;            /* Set a fixed width or remove this line for responsiveness */
+}
+
+/* Update the .active class for user name styling */
+.active {
+    color: black;
+    font-weight: bold;
+    margin-left: 20px; 
+    margin-top: 10px;           
+}
+
+/* Styling the chat page */
+.chat-page {
+   
+    padding: 0 0 50px 0;
+}
+
+/* Inbox container */
+.msg-inbox {
+    border: 1px solid #ccc;
+    overflow: hidden;
+    
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+/* Chats styling */
+.chats {
+    
+    padding: 30px 15px 0 25px;
+}
+
+/* Msg page container */
+.msg-page {
+    
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Styling the msg-bottom container */
+.msg-bottom {
+    border-top: 1px solid #ccc;
+    position: relative;
+    height: 11%;
+    background-color: rgb(239, 239, 239);
+}
+
+/* Styling the input field */
+.input-group {
+    float: right;
+    margin-top: 13px;
+    margin-right: 20px;
+    outline: none !important;
+    border-radius: 20px;
+    width: 61% !important;
+    background-color: #fff;
+    display: flex;
+    align-items: stretch;
+}
+
+.input-group > .form-control {
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    margin-bottom: 0;
+}
+
+.form-control {
+    border: none !important;
+    border-radius: 20px !important;
+    display: block;
+    height: calc(2.25rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.input-group-text {
+    background: transparent !important;
+    border: none !important;
+    display: flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #495057;
+    text-align: center;
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+/* Remove default input focus outline */
+input:focus {
+    outline: none;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.send-icon {
+    font-weight: bold !important;
+}
+
+/* Styling for received messages */
+.received-chats-img {
+    display: inline-block;
+    width: 50px;
+    float: left;
+}
+
+.received-msg {
+    display: inline-block;
+    padding: 0 0 0 10px;
+    vertical-align: top;
+    width: 92%;
+}
+
+.received-msg-inbox {
+    width: 57%;
+}
+
+.received-msg-inbox p {
+    background: #efefef;
+    border-radius: 10px;
+    color: #646464;
+    font-size: 14px;
+    margin-left: 1rem;
+    padding: 1rem;
+    width: 100%;
+    box-shadow: rgb(0 0 0 / 25%) 0px 5px 5px 2px;
+}
+
+/* General paragraph styles */
+p {
+    overflow-wrap: break-word;
+}
+
+/* Styling the msg-sent time */
+.time {
+    color: #777;
+    display: block;
+    font-size: 12px;
+    margin: 8px 0 0;
+}
+
+.outgoing-chats {
+    overflow: hidden;
+    margin: 26px 20px;
+}
+
+.outgoing-chats-msg p {
+    background-color: #3a12ff;
+    background-image: linear-gradient(45deg, #ee087f 0%, #DD2A7B 25%, #9858ac 50%, #8134AF 75%, #515BD4 100%);
+    color: #fff;
+    border-radius: 10px;
+    font-size: 14px;
+    padding: 5px 10px 5px 12px;
+    width: 100%;
+    box-shadow: rgb(0 0 0 / 25%) 0px 2px 5px 2px;
+}
+
+.outgoing-chats-msg {
+    float: right;
+    width: 46%;
+}
+
+/* Styling the avatar for outgoing messages */
+.outgoing-chats-img {
+    display: inline-block;
+    width: 50px;
+    float: right;
+    margin-right: 1rem;
+}
+
+/* Responsive Styles */
+@media only screen and (max-device-width: 850px) {
+    *,
+    .time {
+        font-size: 28px;
+    }
+    
+    img {
+        width: 65px;
+    }
+    
+    .msg-header {
+        height: 5%;
+    }
+    
+    .msg-page {
+        max-height: none;
+    }
+    
+    .received-msg-inbox p {
+        font-size: 28px;
+    }
+    
+    .outgoing-chats-msg p {
+        font-size: 28px;
+    }
+}
+
+@media only screen and (max-device-width: 450px) {
+    *,
+    .time {
+        font-size: 28px;
+    }
+    
+    img {
+        width: 65px;
+    }
+    
+    .msg-header {
+        height: 5%;
+    }
+    
+    .msg-page {
+        max-height: none;
+    }
+    
+    .received-msg-inbox p {
+        font-size: 28px;
+    }
+    
+    .outgoing-chats-msg p {
+        font-size: 28px;
+    }
+}
