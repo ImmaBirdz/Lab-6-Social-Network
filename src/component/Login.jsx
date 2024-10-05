@@ -96,7 +96,7 @@ const Login = () => {
         <body>
         {/* ++logo */}
         <h1 className="falling-hello" id="falling-hello">Hello</h1>
-        <div className="container" id="container">
+        <div className="licontainer" id="container">
             <div className="form-container register-container">
                 <form action="#" onSubmit={handleRegisterSubmit}>
                     <h1>Register here.</h1>

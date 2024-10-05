@@ -101,7 +101,7 @@ const Message = () => {
         <div>   
 
             {/* Top Navbar */}
-            <header className="Msnavbar">
+            <header className="navbar">
 
                 {/* link back to page */}
                 <button className="back" onClick={() => window.location.href = 'http://localhost:3000/page'}>
@@ -113,10 +113,10 @@ const Message = () => {
                 </nav>
             </header>
 
-            <div className="Mscontainer">
+            <div className="container">
 
                 {/* Left Sidebar (Friends List) */}
-                <aside className="Mssidebar-left">
+                <aside className="sidebar-left">
                     <ul>
                         {friends.map(friend => (
                             <li key={friend.id} onClick={() => openChat(friend.id, friend)}>
@@ -128,11 +128,11 @@ const Message = () => {
                 </aside>
 
                 {/* Chat Area (Middle Section) */}
-                <main className="Msfeed">
+                <main className="feed">
 
                     {/* Msg Header Section */}
                     <div className="msg-header">
-                        <div className="Mscontainer1">
+                        <div className="container1">
                             <img src={selectedFriend.imgSrc} className="msgimg" alt={selectedFriend.name} />
                             <div className="active">
                                 <p>{selectedFriend.name}</p>

@@ -13,7 +13,7 @@ body {
 }
 
 
-.Msnavbar {
+.navbar {
     background-color: #e1b5db;
     color: white;
     display: flex;
@@ -91,7 +91,7 @@ body {
     background-color: #555;
 }
 
-.Mscontaine {
+.container {
     display: flex;
     padding: 20px;
     border-radius: 0;
@@ -104,7 +104,7 @@ body {
 }
 
 
-.Mssidebar-left {
+.sidebar-left {
     width: 20%;
     background-color: hsl(0, 0%, 100%);
     padding: 20px;
@@ -116,7 +116,7 @@ body {
     
 }
 
-.Mssidebar-left ul li {
+.sidebar-left ul li {
     display: flex;
     align-items: center; 
     padding: 20px 0; 
@@ -125,11 +125,11 @@ body {
     margin-bottom: 0; 
 }
 
-.Mssidebar-left ul li:last-child {
+.sidebar-left ul li:last-child {
     border-bottom: none; 
 }
 
-.Mssidebar-left ul li:hover {
+.sidebar-left ul li:hover {
     background-color: #f0f2f5; 
 }
 
@@ -141,7 +141,7 @@ body {
     object-fit: cover; 
 }
 
-.Mssidebar-left ul li span {
+.sidebar-left ul li span {
     font-size: 16px;
     color: #333;
     flex-grow: 1;
@@ -154,7 +154,7 @@ body {
 
 
 
-.Msfeed {
+.feed {
     flex-grow: 1;
     background-color: hsl(300, 53%, 94%);
     padding: 20px;
@@ -194,7 +194,7 @@ body {
     margin-right: 10px; 
 }
 
-.Mscontainer1 {
+.container1 {
     display: flex;            
     align-items: center; 
       
@@ -326,7 +326,7 @@ p {
 
 
 @media only screen and (max-width: 850px) {
-    .Mscontainer {
+    .container {
         flex-direction: column;
     }
 

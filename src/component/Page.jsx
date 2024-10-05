@@ -14,7 +14,7 @@ const Page = () => {
                 <link rel="stylesheet" href="page.css" />
             </head>
             <body>
-                <header className="Pnavbar">
+                <header className="navbar">
                     <div className="logo">Logo</div>
                     <nav className="nav-links">
                         <a href="#">Home</a>
@@ -24,8 +24,8 @@ const Page = () => {
                     </nav>
                 </header>
 
-                <div className="Pcontainer">
-                    <aside className="Psidebar-left">
+                <div className="container">
+                    <aside className="sidebar-left">
                         <h3>Menu</h3>
                         <ul>
                             <li><a href="#">Dashboard</a></li>
@@ -35,7 +35,7 @@ const Page = () => {
                         </ul>
                     </aside>
 
-                    <main className="Pfeed">
+                    <main className="feed">
                         <div className="new-post">
                             <textarea placeholder="What's on your mind?" rows="3"></textarea>
                             <button>Post</button>
@@ -64,7 +64,7 @@ const Page = () => {
                         </div>
                     </main>
 
-                    <aside className="Psidebar-right">
+                    <aside className="sidebar-right">
                         <h3>Updates</h3>
                         <ul>
                             <li>Update 1</li>
