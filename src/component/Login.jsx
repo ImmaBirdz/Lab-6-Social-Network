@@ -96,7 +96,7 @@ const Login = () => {
         <body>
         {/* ++logo */}
         <h1 className="falling-hello" id="falling-hello">Hello</h1>
-        <div className="container" id="container">
+        <div className="licontainer" id="container">
             <div className="form-container register-container">
                 <form action="#" onSubmit={handleRegisterSubmit}>
                     <h1>Register here.</h1>
@@ -117,7 +117,8 @@ const Login = () => {
                     <datalist id="gender-options">
                         <option value="Male" />
                         <option value="Female" />
-                        <option value="God" />
+                        <option value="Gay">pls tell me if you Gay</option>
+                        <option value="LGBTQ A+" />
                         <option value="Unicon" />
                         <option value="Thai">I am Thai and Thai means Freedom...</option>
                         <option value="Suuuuuuu">Don't wanna tell...</option>
