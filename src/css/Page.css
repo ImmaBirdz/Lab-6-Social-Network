@@ -37,7 +37,7 @@ body {
     gap: 20px;
 }
 
-.sidebar-left, .sidebar-right {
+.Psidebar-left, .Psidebar-right {
     width: 20%;
     background-color: #fff;
     padding: 20px;
@@ -45,11 +45,11 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-.sidebar-left ul, .sidebar-right ul {
+.Psidebar-left ul, .Psidebar-right ul {
     list-style-type: none;
 }
 
-.sidebar-left ul li, .sidebar-right ul li {
+.Psidebar-left ul li, .Psidebar-right ul li {
     padding: 10px 0;
 }
 

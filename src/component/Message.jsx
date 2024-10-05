@@ -116,7 +116,7 @@ const Message = () => {
             <div className="Mscontainer">
 
                 {/* Left Sidebar (Friends List) */}
-                <aside className="sidebar-left">
+                <aside className="Mssidebar-left">
                     <ul>
                         {friends.map(friend => (
                             <li key={friend.id} onClick={() => openChat(friend.id, friend)}>
@@ -132,7 +132,7 @@ const Message = () => {
 
                     {/* Msg Header Section */}
                     <div className="msg-header">
-                        <div className="container1">
+                        <div className="Mscontainer1">
                             <img src={selectedFriend.imgSrc} className="msgimg" alt={selectedFriend.name} />
                             <div className="active">
                                 <p>{selectedFriend.name}</p>

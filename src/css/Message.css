@@ -104,7 +104,7 @@ body {
 }
 
 
-.sidebar-left {
+.Mssidebar-left {
     width: 20%;
     background-color: hsl(0, 0%, 100%);
     padding: 20px;
@@ -116,7 +116,7 @@ body {
     
 }
 
-.sidebar-left ul li {
+.Mssidebar-left ul li {
     display: flex;
     align-items: center; 
     padding: 20px 0; 
@@ -125,11 +125,11 @@ body {
     margin-bottom: 0; 
 }
 
-.sidebar-left ul li:last-child {
+.Mssidebar-left ul li:last-child {
     border-bottom: none; 
 }
 
-.sidebar-left ul li:hover {
+.Mssidebar-left ul li:hover {
     background-color: #f0f2f5; 
 }
 
@@ -141,7 +141,7 @@ body {
     object-fit: cover; 
 }
 
-.sidebar-left ul li span {
+.Mssidebar-left ul li span {
     font-size: 16px;
     color: #333;
     flex-grow: 1;
@@ -194,7 +194,7 @@ body {
     margin-right: 10px; 
 }
 
-.container1 {
+.Mscontainer1 {
     display: flex;            
     align-items: center; 
       

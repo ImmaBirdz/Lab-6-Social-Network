@@ -25,7 +25,7 @@ const Page = () => {
                 </header>
 
                 <div className="Pcontainer">
-                    <aside className="sidebar-left">
+                    <aside className="Psidebar-left">
                         <h3>Menu</h3>
                         <ul>
                             <li><a href="#">Dashboard</a></li>
@@ -64,7 +64,7 @@ const Page = () => {
                         </div>
                     </main>
 
-                    <aside className="sidebar-right">
+                    <aside className="Psidebar-right">
                         <h3>Updates</h3>
                         <ul>
                             <li>Update 1</li>
