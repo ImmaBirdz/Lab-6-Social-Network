@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './component/Login';
 import Page from './component/Page';
 import Profile from './component/Profile';
+import Message from './component/Message';
+
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
         <Route path="/page" element={<Page />} />
         {/* <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<Page />} /> */}
+        <Route path="/message" element={<Message />} />
+
       </Routes>
     </BrowserRouter>
   );
