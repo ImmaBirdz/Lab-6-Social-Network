@@ -101,7 +101,7 @@ const Message = () => {
         <div>   
 
             {/* Top Navbar */}
-            <header className="navbar">
+            <header className="Msnavbar">
 
                 {/* link back to page */}
                 <button className="back" onClick={() => window.location.href = 'http://localhost:3000/page'}>

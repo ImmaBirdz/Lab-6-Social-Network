@@ -13,7 +13,7 @@ body {
 }
 
 
-.navbar {
+.Msnavbar {
     background-color: #e1b5db;
     color: white;
     display: flex;
@@ -326,7 +326,7 @@ p {
 
 
 @media only screen and (max-width: 850px) {
-    .container {
+    .Mscontainer {
         flex-direction: column;
     }
 

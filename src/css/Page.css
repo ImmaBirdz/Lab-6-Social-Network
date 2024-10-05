@@ -9,7 +9,7 @@ body {
     background-color: #f0f2f5;
 }
 
-.navbar {
+.Pnavbar {
     background-color: #4e6455;
     color: white;
     display: flex;
@@ -20,11 +20,11 @@ body {
     top: 0;
 }
 
-.navbar .logo {
+.Pnavbar .logo {
     font-size: 24px;
 }
 
-.navbar .nav-links a {
+.Pnavbar .nav-links a {
     color: white;
     margin-left: 20px;
     text-decoration: none;

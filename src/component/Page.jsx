@@ -14,7 +14,7 @@ const Page = () => {
                 <link rel="stylesheet" href="page.css" />
             </head>
             <body>
-                <header className="navbar">
+                <header className="Pnavbar">
                     <div className="logo">Logo</div>
                     <nav className="nav-links">
                         <a href="#">Home</a>
