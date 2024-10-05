@@ -113,7 +113,7 @@ const Message = () => {
                 </nav>
             </header>
 
-            <div className="container">
+            <div className="Mscontainer">
 
                 {/* Left Sidebar (Friends List) */}
                 <aside className="sidebar-left">
@@ -128,7 +128,7 @@ const Message = () => {
                 </aside>
 
                 {/* Chat Area (Middle Section) */}
-                <main className="feed">
+                <main className="Msfeed">
 
                     {/* Msg Header Section */}
                     <div className="msg-header">

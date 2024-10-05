@@ -30,7 +30,7 @@ body {
     text-decoration: none;
 }
 
-.container {
+.Pcontainer {
     display: flex;
     margin-top: 60px;
     padding: 20px;
@@ -53,7 +53,7 @@ body {
     padding: 10px 0;
 }
 
-.feed {
+.Pfeed {
     flex-grow: 1;
     background-color: #fff;
     padding: 20px;

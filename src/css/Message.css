@@ -91,7 +91,7 @@ body {
     background-color: #555;
 }
 
-.container {
+.Mscontaine {
     display: flex;
     padding: 20px;
     border-radius: 0;
@@ -154,7 +154,7 @@ body {
 
 
 
-.feed {
+.Msfeed {
     flex-grow: 1;
     background-color: hsl(300, 53%, 94%);
     padding: 20px;

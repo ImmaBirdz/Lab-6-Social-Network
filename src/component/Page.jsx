@@ -24,7 +24,7 @@ const Page = () => {
                     </nav>
                 </header>
 
-                <div className="container">
+                <div className="Pcontainer">
                     <aside className="sidebar-left">
                         <h3>Menu</h3>
                         <ul>
@@ -35,7 +35,7 @@ const Page = () => {
                         </ul>
                     </aside>
 
-                    <main className="feed">
+                    <main className="Pfeed">
                         <div className="new-post">
                             <textarea placeholder="What's on your mind?" rows="3"></textarea>
                             <button>Post</button>
