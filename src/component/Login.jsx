@@ -184,23 +184,23 @@ const Login = () => {
             </div>
         </div>
     
-        <div className="recent-login-box">
+        {/* <div className="recent-login-box">
             <h2>Recent Login.</h2>
             <div className="recent-user">
-                {/* this img should be path link to recent user png */}
+                
                 <img src="https://bestfriends.org/sites/default/files/styles/hero_mobile/public/hero-dash/Asana3808_Dashboard_Standard.jpg?h=ebad9ecf&itok=cWevo33k" alt="User Picture" className="user-pic" />
                 <p className="user-name">เสี่ยโต๋</p>
             </div>
     
-            {/* link to recent user name */}
+            
             <button className="fast-login">Login as เสี่ยโต๋</button>
         </div>
     
-        {/* don no yet what this box for but it should be sth to balance the page */}
+        
         <div className="about-us-box">
             <h2>About Us.</h2>
             <p>hello this is our web project.....</p>
-        </div>
+        </div> */}
         <script src="scriptLogin.js"></script>
     </body>
     )
