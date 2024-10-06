@@ -8,7 +8,7 @@ const Login = () => {
     useEffect(() => {
         const registerButton = document.getElementById("register");
         const loginButton = document.getElementById("login");
-        const container = document.getElementById("container");
+        const container = document.getElementById("esus");
         document.title = "Sign in | Black Cat with Bow";
 
         const handleRegisterClick = () => {
@@ -95,8 +95,7 @@ const Login = () => {
     return (
         <body>
         {/* ++logo */}
-        <h1 className="falling-hello" id="falling-hello">Hello</h1>
-        <div className="licontainer" id="container">
+        <div className="licontainer" id="esus">
             <div className="form-container register-container">
                 <form action="#" onSubmit={handleRegisterSubmit}>
                     <h1>Register here.</h1>
