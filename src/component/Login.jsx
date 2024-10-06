@@ -127,7 +127,7 @@ const Login = () => {
                         return;
                     }
                     // check if the email is already in use
-                    else if (data.email === email) {
+                    if (data.email === email) {
                         alert("Email is already in use.");
                         isDuplicate = true;
                         // reset the fields
