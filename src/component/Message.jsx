@@ -60,6 +60,10 @@ const Message = () => {
     const [currentChat, setCurrentChat] = useState('chat1');
     const [inputMessage, setInputMessage] = useState('');
 
+    useEffect(() => {
+        TabTitle('Messages | Black Cat with Bow');
+    }, []);
+
     const friends = [
         { id: 'chat1', name: 'Friend 1', imgSrc: 'https://via.placeholder.com/40' },
         { id: 'chat2', name: 'Friend 2', imgSrc: 'https://via.placeholder.com/40' },
