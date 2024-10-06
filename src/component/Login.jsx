@@ -69,7 +69,7 @@ const Login = () => {
             getDocs(collection(db, "user_data")).then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    if (data.email === email && data.password === password) {
+                    if (data.email === email && data.password === password && !found) {
                         found = true;
                         // delete input fields
                         document.getElementById("email").value = "";
@@ -107,26 +107,59 @@ const Login = () => {
             // saveRecentLogin(email, name);
             const payload = {
                 name: name,
+                display_name: name,
                 email: email,
                 password: password,
                 birthday: birthday,
                 gender: gender
             };
-            // Add a new document with a generated id.
-            addDoc(collection(db, "user_data"), {
-                ...payload,
-                number_of_friends: 0,
-                number_of_posts: 0
-                // Add more fields here
+            // check if some data is already in the database
+            let isDuplicate = false;
+            getDocs(collection(db, "user_data")).then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    // check if the name is already in use
+                    if (data.name === name) {
+                        alert("Name is already in use.");
+                        isDuplicate = true;
+                        // reset the fields
+                        document.getElementById("name").value = "";
+                        return;
+                    }
+                    // check if the email is already in use
+                    else if (data.email === email) {
+                        alert("Email is already in use.");
+                        isDuplicate = true;
+                        // reset the fields
+                        document.getElementById("email").value = "";
+                        document.getElementById("password").value = "";
+                        document.getElementById("confirmPassword").value = "";
+                        return;
+                    }
+                    // if it is not a duplicate, add the data to the database
+                    if (!isDuplicate) {
+                        console.log("Email is not in use.");
+                        // Add a new document with a generated id.
+                        addDoc(collection(db, "user_data"), {
+                            ...payload,
+                            number_of_friends: 0,
+                            number_of_posts: 0
+                            // Add more fields here
+                        });
+                        console.log(payload + " is added to the database.");
+                        // delete input fields
+                        document.getElementById("name").value = "";
+                        document.getElementById("email").value = "";
+                        document.getElementById("password").value = "";
+                        document.getElementById("confirmPassword").value = "";
+                        document.getElementById("birthday").value = "";
+                        document.getElementById("gender").value = "";
+                        console.log("Redirecting to profile...");
+                        // Navigate to the profile
+                        window.location.href = "profile"; 
+                    }
+                });
             });
-            // delete input fields
-            document.getElementById("name").value = "";
-            document.getElementById("email").value = "";
-            document.getElementById("password").value = "";
-            document.getElementById("confirmPassword").value = "";
-            document.getElementById("birthday").value = "";
-            document.getElementById("gender").value = "";
-            window.location.href = "profile"; // Navigate to the profile
         } else {
             alert('Please fill in all fields.');
         }
