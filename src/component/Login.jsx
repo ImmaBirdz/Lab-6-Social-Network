@@ -2,6 +2,8 @@ import React from 'react'
 import { useEffect } from 'react'
 import '../css/Login.css'
 import { TabTitle } from './TabTitle'
+import { db } from '../backend/firebaseConfig'
+import { addDoc, collection } from 'firebase/firestore';
 
 const Login = () => {
     // Trigger panel switching for registration and login
@@ -86,6 +88,17 @@ const Login = () => {
         
         if (name && email && password && birthday && gender) {
             // saveRecentLogin(email, name);
+            // // Add a new document with a generated id.
+            // const docRef = addDoc(collection(db, "users"), {
+            //     name: name,
+            //     email: email,
+            //     password: password,
+            //     birthday: birthday,
+            //     gender: gender,
+            //     number_of_friends: 0,
+            //     number_of_posts: 0
+            //     // Add more fields here
+            // });
             window.location.href = "profile"; // Navigate to the profile
         } else {
             alert('Please fill in all fields.');
@@ -200,7 +213,6 @@ const Login = () => {
             <h2>About Us.</h2>
             <p>hello this is our web project.....</p>
         </div> */}
-        <script src="scriptLogin.js"></script>
     </body>
     )
 }
