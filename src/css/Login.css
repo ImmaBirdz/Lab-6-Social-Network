@@ -20,21 +20,6 @@ body {
 }
 
 
-.falling-hello {
-  position: absolute;
-  top: -100px; /* Start from off-screen */
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 3rem;
-  color: #fbfbfb;
-  transition: top 3s ease; /* Smooth fall */
-  z-index: 999;
-}
-
-.falling-hello.animate {
-  top: 50px; /* The position where it will stop, adjust as needed */
-}
-
 h1 {
   font-weight: 700;
   letter-spacing: -1.5px;
@@ -202,7 +187,7 @@ input {
   z-index: 2;
 }
 
-.container.right-panel-active .login-container {
+.licontainer.right-panel-active.right-panel-active .login-container {
   transform: translateX(100%);
 }
 
@@ -213,7 +198,7 @@ input {
   z-index: 1;
 }
 
-.container.right-panel-active .register-container {
+.licontainer.right-panel-active .register-container {
   transform: translateX(100%);
   opacity: 1;
   z-index: 5;
@@ -248,7 +233,7 @@ input {
   z-index: 100;
 }
 
-.container.right-panel-active .overlay-container {
+.licontainer.right-panel-active .overlay-container {
   transform: translate(-100%);
 }    
 
@@ -281,7 +266,7 @@ input {
   );
 }
 
-.container.right-panel-active .overlay {
+.licontainer.right-panel-active .overlay {
   transform: translateX(50%);
 }
 
@@ -304,7 +289,7 @@ input {
   transform: translateX(-20%);
 }
 
-.container.right-panel-active .overlay-left {
+.licontainer.right-panel-active .overlay-left {
   transform: translateX(0);
 }
 
@@ -313,7 +298,7 @@ input {
   transform: translateX(0);
 }
 
-.container.right-panel-active .overlay-right {
+.licontainer.right-panel-active .overlay-right {
   transform: translateX(20%);
 }
 
