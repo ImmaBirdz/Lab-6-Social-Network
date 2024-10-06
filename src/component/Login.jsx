@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import '../css/Login.css'
 import { TabTitle } from './TabTitle'
 import { db } from '../backend/firebaseConfig'
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, getDocs } from 'firebase/firestore';
 
 const Login = () => {
     // Trigger panel switching for registration and login
@@ -65,10 +65,27 @@ const Login = () => {
 
         if (email && password) {
             // saveRecentLogin(email, "XXXX"); // Replace XXXX with actual user name logic
-            window.location.href = "page"; // Navigate to the page
-        } else {
-            alert('Please fill in both email and password.');
+            let found = false; // flag to check if email and password match in the database
+            getDocs(collection(db, "user_data")).then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    if (data.email === email && data.password === password) {
+                        found = true;
+                        // delete input fields
+                        document.getElementById("email").value = "";
+                        document.getElementById("password").value = "";
+                        window.location.href = "profile"; // Navigate to the profile
+                    }
+                });
+                if (!found) {
+                    alert("Email or password is incorrect.");
+                }
+            });
         }
+        else {
+            alert('Please fill in all fields.');
+        }
+
     };
 
     const handleRegisterSubmit = (event) => {
@@ -88,17 +105,27 @@ const Login = () => {
         
         if (name && email && password && birthday && gender) {
             // saveRecentLogin(email, name);
-            // // Add a new document with a generated id.
-            // const docRef = addDoc(collection(db, "users"), {
-            //     name: name,
-            //     email: email,
-            //     password: password,
-            //     birthday: birthday,
-            //     gender: gender,
-            //     number_of_friends: 0,
-            //     number_of_posts: 0
-            //     // Add more fields here
-            // });
+            const payload = {
+                name: name,
+                email: email,
+                password: password,
+                birthday: birthday,
+                gender: gender
+            };
+            // Add a new document with a generated id.
+            addDoc(collection(db, "user_data"), {
+                ...payload,
+                number_of_friends: 0,
+                number_of_posts: 0
+                // Add more fields here
+            });
+            // delete input fields
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("confirmPassword").value = "";
+            document.getElementById("birthday").value = "";
+            document.getElementById("gender").value = "";
             window.location.href = "profile"; // Navigate to the profile
         } else {
             alert('Please fill in all fields.');
