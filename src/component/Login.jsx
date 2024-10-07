@@ -140,7 +140,6 @@ const Login = () => {
                     }
                     // if it is not a duplicate, add the data to the database
                     if (!isDuplicate) {
-                        console.log("Email is not in use.");
                         // console.log(doc.id, " => ", data); // Debugging
                         // Add a new document with a generated id.
                         addDoc(collection(db, "user_data"), {
@@ -177,7 +176,7 @@ const Login = () => {
             <div className="form-container register-container">
                 <form action="#" onSubmit={handleRegisterSubmit}>
                     <h1>Register here.</h1>
-                    <input type="text" id="name" placeholder="Name" required />
+                    <input type="text" id="name" placeholder="Name" required pattern='^[a-z._]+$' title='Name must contain only lowercase letters, numbers, and _ .'/>
                     <input type="email" id="email" placeholder="Email or phone number" required />
                     <input 
                         type="password" 
