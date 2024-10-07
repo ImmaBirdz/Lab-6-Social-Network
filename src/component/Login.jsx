@@ -74,7 +74,9 @@ const Login = () => {
                         // delete input fields
                         document.getElementById("email").value = "";
                         document.getElementById("password").value = "";
-                        window.location.href = "profile"; // Navigate to the profile
+                        // console.log(doc.id, " => ", data); // Debugging
+                        // Navigate to the profile
+                        window.location.href = "profile"; 
                     }
                 });
                 if (!found) {
@@ -138,7 +140,7 @@ const Login = () => {
                     }
                     // if it is not a duplicate, add the data to the database
                     if (!isDuplicate) {
-                        console.log("Email is not in use.");
+                        // console.log(doc.id, " => ", data); // Debugging
                         // Add a new document with a generated id.
                         addDoc(collection(db, "user_data"), {
                             ...payload,
@@ -147,6 +149,8 @@ const Login = () => {
                             // Add more fields here
                         });
                         console.log(payload + " is added to the database.");
+                        // get document id from the database and send it to the profile page 
+                        
                         // delete input fields
                         document.getElementById("name").value = "";
                         document.getElementById("email").value = "";
@@ -154,7 +158,7 @@ const Login = () => {
                         document.getElementById("confirmPassword").value = "";
                         document.getElementById("birthday").value = "";
                         document.getElementById("gender").value = "";
-                        console.log("Redirecting to profile...");
+                        // console.log("Redirecting to profile..."); // Debugging
                         // Navigate to the profile
                         window.location.href = "profile"; 
                     }
@@ -172,7 +176,7 @@ const Login = () => {
             <div className="form-container register-container">
                 <form action="#" onSubmit={handleRegisterSubmit}>
                     <h1>Register here.</h1>
-                    <input type="text" id="name" placeholder="Name" required />
+                    <input type="text" id="name" placeholder="Name" required pattern='^[a-z._]+$' title='Name must contain only lowercase letters, numbers, and _ .'/>
                     <input type="email" id="email" placeholder="Email or phone number" required />
                     <input 
                         type="password" 
