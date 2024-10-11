@@ -67,54 +67,7 @@ const Post = () => {
 
     return (
         <div>
-            {/* Top Navbar */}
-            <header className="navbar">
-                <button className="back" onClick={() => window.location.href = 'http://localhost:3000/page'}>
-                    <img src="https://img.icons8.com/parakeet-line/48/FFFFFF/circled-left.png" alt="Back-arrow" className="back-arrow" />
-                </button>
-
-                <nav className="nav-center">
-                    <img src="https://img.icons8.com/ios-glyphs/30/cat--v1.png" alt="Feed-icon" className="feed-icon" />
-                </nav>
-
-                <div className="nav-right">
-                    <button className="nav-button" onClick={() => window.location.href = 'http://localhost:3000/page'}>
-                        Page
-                    </button>
-                    <button className="nav-button" onClick={() => window.location.href = 'http://localhost:3000/message'}>
-                        Message
-                    </button>
-                    <button className="nav-button" onClick={() => window.location.href = 'http://localhost:3000/profile'}>
-                        Profile
-                    </button>
-                    <button className="nav-button" onClick={() => window.location.href = 'http://localhost:3000'}>
-                        Log Out
-                    </button>
-                </div>
-            </header>
-
             <div className="container">
-                {/* Left Sidebar (Friends List with Online Status) */}
-                <aside className="sidebar-left">
-                    <ul>
-                        {friends.map(friend => (
-                            <li key={friend.id} onClick={() => handleFriendClick(friend.id)}>
-                            <img src={friend.imgSrc} alt={friend.name} className="profile-pic" />
-                            <span>{friend.name}</span>
-                            {friend.isOnline && (
-                                <img 
-                                    src="https://img.icons8.com/color-glass/48/cat.png" 
-                                    alt="Online" 
-                                    className="online-icon" 
-                                />
-                            )}
-                        </li>
-                        ))}
-                    </ul>
-                </aside>
-
-              
-
                 <main className="feed">
                     <div className="post">
                         {/* Post Author Information */}
@@ -162,27 +115,6 @@ const Post = () => {
                         )}
                     </div>
                 </main>
-
-
-                {/* Right Sidebar with Trending and Suggestions */}
-                <aside className="sidebar-right">
-                    <div className="trending-box">
-                        <h4>Trending</h4>
-                        <ul>
-                            <li>Trend 1</li>
-                            <li>Trend 2</li>
-                            <li>Trend 3</li>
-                        </ul>
-                    </div>
-                    <div className="suggestions-box">
-                        <h4>Suggestions</h4>
-                        <ul>
-                            <li>Suggestion 1</li>
-                            <li>Suggestion 2</li>
-                            <li>Suggestion 3</li>
-                        </ul>
-                    </div>
-                </aside>
             </div>
         </div>
     );

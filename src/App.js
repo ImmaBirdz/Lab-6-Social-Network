@@ -1,5 +1,7 @@
 import './App.css';
+import { useEffect, useContext } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { LoginContext } from './variable/LoginContext';
 import Login from './component/Login';
 import Page from './component/Page';
 import Profile from './component/Profile';
@@ -10,22 +12,25 @@ import SideBarRight from './component/SideBarRight';
 import Post from './component/Post';
 
 function App() {
+  const { isLogin } = useContext(LoginContext);
+  
   return (
-    <BrowserRouter>
-    <NavBar />
-      <SideBarLeft />
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/page" element={<Page />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/message" element={<Message />} />
-        <Route path='/post' element={<Post />} />
-        <Route path="*" element={<Page />} />
-
-      </Routes>
-      <SideBarRight />
-    </BrowserRouter>
+    !isLogin ? (
+      <Login />
+    ) : (
+      <BrowserRouter>
+        <NavBar />
+        <SideBarLeft />
+        <Routes>
+          <Route path="*" element={<Page />} />
+          <Route path="/page" element={<Page />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/message" element={<Message />} />
+          <Route path='/post' element={<Post />} />
+        </Routes>
+        <SideBarRight />
+      </BrowserRouter>
+    )
   );
 }
 
