@@ -4,7 +4,7 @@ import { TabTitle } from './TabTitle';
 
 const Post = () => {
     const [selectedFriend, setSelectedFriend] = useState({
-        name: 'User Name',
+        name: 'User ID',
         imgSrc: 'https://via.placeholder.com/40',
     });
 

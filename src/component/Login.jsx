@@ -140,7 +140,6 @@ const Login = () => {
                     }
                     // if it is not a duplicate, add the data to the database
                     if (!isDuplicate) {
-                        // console.log(doc.id, " => ", data); // Debugging
                         // Add a new document with a generated id.
                         addDoc(collection(db, "user_data"), {
                             ...payload,
@@ -158,7 +157,6 @@ const Login = () => {
                         document.getElementById("confirmPassword").value = "";
                         document.getElementById("birthday").value = "";
                         document.getElementById("gender").value = "";
-                        // console.log("Redirecting to profile..."); // Debugging
                         // Navigate to the profile
                         window.location.href = "profile"; 
                     }

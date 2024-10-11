@@ -7,14 +7,8 @@ const Page = () => {
 
     return (
         <div>
-            <head>
-                <meta charSet="UTF-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <title>Social Feed Page</title>
-                <link rel="stylesheet" href="page.css" />
-            </head>
             <body>
-                <header className="navbar">
+                {/* <header className="navbar">
                     <div className="logo">Logo</div>
                     <nav className="nav-links">
                         <a href="#">Home</a>
@@ -22,10 +16,10 @@ const Page = () => {
                         <a href="#">Messages</a>
                         <a href="#">Logout</a>
                     </nav>
-                </header>
+                </header> */}
 
                 <div className="container">
-                    <aside className="sidebar-left">
+                    {/* <aside className="sidebar-left">
                         <h3>Menu</h3>
                         <ul>
                             <li><a href="#">Dashboard</a></li>
@@ -33,7 +27,7 @@ const Page = () => {
                             <li><a href="#">Groups</a></li>
                             <li><a href="#">Settings</a></li>
                         </ul>
-                    </aside>
+                    </aside> */}
 
                     <main className="feed">
                         <div className="new-post">
@@ -64,7 +58,7 @@ const Page = () => {
                         </div>
                     </main>
 
-                    <aside className="sidebar-right">
+                    {/* <aside className="sidebar-right">
                         <h3>Updates</h3>
                         <ul>
                             <li>Update 1</li>
@@ -72,7 +66,7 @@ const Page = () => {
                             <li>Update 3</li>
                             <li>Update 4</li>
                         </ul>
-                    </aside>
+                    </aside> */}
                 </div>
             </body>
         </div>
