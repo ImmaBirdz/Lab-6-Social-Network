@@ -1,11 +1,34 @@
 import React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import '../css/Login.css'
 import { TabTitle } from './TabTitle'
 import { db } from '../backend/firebaseConfig'
 import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { LoginContext } from '../variable/LoginContext';
 
 const Login = () => {
+
+    const {isLogin, setIsLogin, setLoginID} = useContext(LoginContext);
+
+    // redirect to home if you are out of path location
+    // useEffect(() => {
+    //     if(window.location.pathname !== '/'){
+    //         setUrlToHome();
+    //     }
+    // }, []);
+
+    // set url to /
+    // function setUrlToHome(){
+    //     window.location.href = '/';
+    // }
+
+    useEffect(() => {
+        if (isLogin) {
+            // Navigate to the profile page after login state is set
+            window.location.href = "/page";
+        }
+    }, [isLogin]);
+
     // Trigger panel switching for registration and login
     useEffect(() => {
         const registerButton = document.getElementById("register");
@@ -62,32 +85,29 @@ const Login = () => {
         event.preventDefault();
         const email = event.target.email.value;
         const password = event.target.password.value;
-
+    
         if (email && password) {
-            // saveRecentLogin(email, "XXXX"); // Replace XXXX with actual user name logic
-            let found = false; // flag to check if email and password match in the database
-            getDocs(collection(db, "user_data")).then((querySnapshot) => {
+            let found = false;
+            const fetchData = async () => {
+                const querySnapshot = await getDocs(collection(db, 'user_data'));
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    if (data.email === email && data.password === password && !found) {
+                    if (data.email === email && data.password === password) {
                         found = true;
-                        // delete input fields
-                        document.getElementById("email").value = "";
-                        document.getElementById("password").value = "";
-                        // console.log(doc.id, " => ", data); // Debugging
-                        // Navigate to the profile
-                        window.location.href = "profile"; 
+                        setIsLogin(true);
+                        setLoginID(doc.id);
+                        localStorage.setItem('loginID', doc.id); // add loginID to localStorage
                     }
                 });
                 if (!found) {
-                    alert("Email or password is incorrect.");
+                    alert('Email or password is incorrect');
                 }
-            });
+            }
+            fetchData();
         }
         else {
             alert('Please fill in all fields.');
         }
-
     };
 
     const handleRegisterSubmit = (event) => {
@@ -106,7 +126,6 @@ const Login = () => {
         }
         
         if (name && email && password && birthday && gender) {
-            // saveRecentLogin(email, name);
             const payload = {
                 name: name,
                 display_name: name,
@@ -148,7 +167,6 @@ const Login = () => {
                             // Add more fields here
                         });
                         console.log(payload + " is added to the database.");
-                        // get document id from the database and send it to the profile page 
                         
                         // delete input fields
                         document.getElementById("name").value = "";
@@ -157,8 +175,9 @@ const Login = () => {
                         document.getElementById("confirmPassword").value = "";
                         document.getElementById("birthday").value = "";
                         document.getElementById("gender").value = "";
+
                         // Navigate to the profile
-                        window.location.href = "profile"; 
+                        window.location.href = "/login"; 
                     }
                 });
             });
@@ -257,24 +276,6 @@ const Login = () => {
                 </div>
             </div>
         </div>
-    
-        {/* <div className="recent-login-box">
-            <h2>Recent Login.</h2>
-            <div className="recent-user">
-                
-                <img src="https://bestfriends.org/sites/default/files/styles/hero_mobile/public/hero-dash/Asana3808_Dashboard_Standard.jpg?h=ebad9ecf&itok=cWevo33k" alt="User Picture" className="user-pic" />
-                <p className="user-name">เสี่ยโต๋</p>
-            </div>
-    
-            
-            <button className="fast-login">Login as เสี่ยโต๋</button>
-        </div>
-    
-        
-        <div className="about-us-box">
-            <h2>About Us.</h2>
-            <p>hello this is our web project.....</p>
-        </div> */}
     </body>
     )
 }
