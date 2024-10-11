@@ -12,19 +12,19 @@ import Post from './component/Post';
 function App() {
   return (
     <BrowserRouter>
-    {/* <NavBar />
-      <SideBarLeft /> */}
+    <NavBar />
+      <SideBarLeft />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/page" element={<Page />} />
-        {/* <Route path="/profile" element={<Profile />} />
-        <Route path="*" element={<Page />} /> */}
+        <Route path="/profile" element={<Profile />} />
         <Route path="/message" element={<Message />} />
         <Route path='/post' element={<Post />} />
+        <Route path="*" element={<Page />} />
 
       </Routes>
-      {/* <SideBarRight /> */}
+      <SideBarRight />
     </BrowserRouter>
   );
 }
