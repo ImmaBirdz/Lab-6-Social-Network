@@ -33,7 +33,7 @@ const Login = () => {
     useEffect(() => {
         const registerButton = document.getElementById("register");
         const loginButton = document.getElementById("login");
-        const container = document.getElementById("esus");
+        const container = document.getElementById("licontainer");
         document.title = "Sign in | Black Cat with Bow";
 
         const handleRegisterClick = () => {
@@ -113,7 +113,7 @@ const Login = () => {
     const handleRegisterSubmit = (event) => {
         event.preventDefault();
         
-        const name = document.getElementById("name").value;
+        const username = document.getElementById("username").value;
         const email = document.getElementById("email").value
         const password = document.getElementById("password").value;
         const confirmPassword = document.getElementById("confirmPassword").value;
@@ -125,10 +125,10 @@ const Login = () => {
             return;
         }
         
-        if (name && email && password && birthday && gender) {
+        if (username && email && password && birthday && gender) {
             const payload = {
-                name: name,
-                display_name: name,
+                username: username,
+                display_name: username,
                 email: email,
                 password: password,
                 birthday: birthday,
@@ -139,12 +139,12 @@ const Login = () => {
             getDocs(collection(db, "user_data")).then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    // check if the name is already in use
-                    if (data.name === name) {
-                        alert("Name is already in use.");
+                    // check if the username is already in use
+                    if (data.username === username) {
+                        alert("This userame is already in use.");
                         isDuplicate = true;
                         // reset the fields
-                        document.getElementById("name").value = "";
+                        document.getElementById("username").value = "";
                         return;
                     }
                     // check if the email is already in use
@@ -169,7 +169,7 @@ const Login = () => {
                         console.log(payload + " is added to the database.");
                         
                         // delete input fields
-                        document.getElementById("name").value = "";
+                        document.getElementById("username").value = "";
                         document.getElementById("email").value = "";
                         document.getElementById("password").value = "";
                         document.getElementById("confirmPassword").value = "";
@@ -189,12 +189,12 @@ const Login = () => {
     return (
         <body>
         {/* ++logo */}
-        <div className="licontainer" id="esus">
+        <div className="licontainer" id="licontainer">
             <div className="form-container register-container">
                 <form action="#" onSubmit={handleRegisterSubmit}>
                     <h1>Register here.</h1>
-                    <input type="text" id="name" placeholder="Name" required pattern='^[a-z._]+$' title='Name must contain only lowercase letters, numbers, and _ .'/>
-                    <input type="email" id="email" placeholder="Email or phone number" required />
+                    <input type="text" id="username" placeholder="Username" required pattern='^[a-z._]+$' title='Username must contain only lowercase letters, numbers, and _ .'/>
+                    <input type="email" id="email" placeholder="Email" required />
                     <input 
                         type="password" 
                         id="password" 
@@ -224,15 +224,9 @@ const Login = () => {
             <div className="form-container login-container">
                 <form action="#" onSubmit={handleLoginSubmit}>
                     <h1>Login here.</h1>
-                    <input type="email" id="email" name="email" placeholder="Email or phone number" />
+                    <input type="email" id="email" name="email" placeholder="Email" />
                     <input type="password" id="password" name="password" placeholder="Password" />
                     <div className="content">
-                        {/* remember me เผื่ออนาคตได้ใช้ */}
-    
-                        {/* <div className="checkbox">
-                            <input type="checkbox" name="checkbox" id="checkbox" />
-                            <label>Remember me</label>
-                        </div> */}
                         <div className="pass-link"> 
                             <a href="#">Forgot password?</a>
                         </div>
@@ -261,14 +255,14 @@ const Login = () => {
                 <div className="overlay">
                     <div className="overlay-panel overlay-left">
                         <h1 className="title">Hello <br />There</h1>
-                        <p>if you have an account, login here</p>
+                        <p>If you have an account, Login here</p>
                         <button className="ghost" id="login" onChange={dynamicTitle}>Login
                             <i className="Ini Ini-arrow-left login"></i>
                         </button>
                     </div>
                     <div className="overlay-panel overlay-right">
                         <h1 className="title">Start your <br /> journey</h1>
-                        <p>if you don't have an account yet why not have one?</p>
+                        <p>If you don't have an account yet, why not have one?</p>
                         <button className="ghost" id="register" onChange={dynamicTitle}>Register
                             <i className="Ini Ini-arrow-right register"></i>
                         </button>
