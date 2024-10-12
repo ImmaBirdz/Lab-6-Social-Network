@@ -10,6 +10,7 @@ import NavBar from './component/NavBar';
 import SideBarLeft from './component/SideBarLeft';
 import SideBarRight from './component/SideBarRight';
 import Post from './component/Post';
+import Notfound from './component/Notfound';
 
 function App() {
   const { isLogin } = useContext(LoginContext);
@@ -27,6 +28,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/message" element={<Message />} />
           <Route path='/post' element={<Post />} />
+          <Route path='/notfound' element={<Notfound />} />
         </Routes>
         <SideBarRight />
       </BrowserRouter>
