@@ -1,16 +1,39 @@
 import React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import '../css/Login.css'
 import { TabTitle } from './TabTitle'
 import { db } from '../backend/firebaseConfig'
 import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { LoginContext } from '../variable/LoginContext';
 
 const Login = () => {
+
+    const {isLogin, setIsLogin, setLoginID} = useContext(LoginContext);
+
+    // redirect to home if you are out of path location
+    // useEffect(() => {
+    //     if(window.location.pathname !== '/'){
+    //         setUrlToHome();
+    //     }
+    // }, []);
+
+    // set url to /
+    // function setUrlToHome(){
+    //     window.location.href = '/';
+    // }
+
+    useEffect(() => {
+        if (isLogin) {
+            // Navigate to the profile page after login state is set
+            window.location.href = "/page";
+        }
+    }, [isLogin]);
+
     // Trigger panel switching for registration and login
     useEffect(() => {
         const registerButton = document.getElementById("register");
         const loginButton = document.getElementById("login");
-        const container = document.getElementById("esus");
+        const container = document.getElementById("licontainer");
         document.title = "Sign in | Black Cat with Bow";
 
         const handleRegisterClick = () => {
@@ -62,38 +85,35 @@ const Login = () => {
         event.preventDefault();
         const email = event.target.email.value;
         const password = event.target.password.value;
-
+    
         if (email && password) {
-            // saveRecentLogin(email, "XXXX"); // Replace XXXX with actual user name logic
-            let found = false; // flag to check if email and password match in the database
-            getDocs(collection(db, "user_data")).then((querySnapshot) => {
+            let found = false;
+            const fetchData = async () => {
+                const querySnapshot = await getDocs(collection(db, 'user_data'));
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    if (data.email === email && data.password === password && !found) {
+                    if (data.email === email && data.password === password) {
                         found = true;
-                        // delete input fields
-                        document.getElementById("email").value = "";
-                        document.getElementById("password").value = "";
-                        // console.log(doc.id, " => ", data); // Debugging
-                        // Navigate to the profile
-                        window.location.href = "profile"; 
+                        setIsLogin(true);
+                        setLoginID(doc.id);
+                        localStorage.setItem('loginID', doc.id); // add loginID to localStorage
                     }
                 });
                 if (!found) {
-                    alert("Email or password is incorrect.");
+                    alert('Email or password is incorrect');
                 }
-            });
+            }
+            fetchData();
         }
         else {
             alert('Please fill in all fields.');
         }
-
     };
 
     const handleRegisterSubmit = (event) => {
         event.preventDefault();
         
-        const name = document.getElementById("name").value;
+        const username = document.getElementById("username").value;
         const email = document.getElementById("email").value
         const password = document.getElementById("password").value;
         const confirmPassword = document.getElementById("confirmPassword").value;
@@ -105,11 +125,10 @@ const Login = () => {
             return;
         }
         
-        if (name && email && password && birthday && gender) {
-            // saveRecentLogin(email, name);
+        if (username && email && password && birthday && gender) {
             const payload = {
-                name: name,
-                display_name: name,
+                username: username,
+                display_name: username,
                 email: email,
                 password: password,
                 birthday: birthday,
@@ -120,12 +139,12 @@ const Login = () => {
             getDocs(collection(db, "user_data")).then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    // check if the name is already in use
-                    if (data.name === name) {
-                        alert("Name is already in use.");
+                    // check if the username is already in use
+                    if (data.username === username) {
+                        alert("This userame is already in use.");
                         isDuplicate = true;
                         // reset the fields
-                        document.getElementById("name").value = "";
+                        document.getElementById("username").value = "";
                         return;
                     }
                     // check if the email is already in use
@@ -138,31 +157,28 @@ const Login = () => {
                         document.getElementById("confirmPassword").value = "";
                         return;
                     }
-                    // if it is not a duplicate, add the data to the database
-                    if (!isDuplicate) {
-                        // console.log(doc.id, " => ", data); // Debugging
-                        // Add a new document with a generated id.
-                        addDoc(collection(db, "user_data"), {
-                            ...payload,
-                            number_of_friends: 0,
-                            number_of_posts: 0
-                            // Add more fields here
-                        });
-                        console.log(payload + " is added to the database.");
-                        // get document id from the database and send it to the profile page 
-                        
-                        // delete input fields
-                        document.getElementById("name").value = "";
-                        document.getElementById("email").value = "";
-                        document.getElementById("password").value = "";
-                        document.getElementById("confirmPassword").value = "";
-                        document.getElementById("birthday").value = "";
-                        document.getElementById("gender").value = "";
-                        // console.log("Redirecting to profile..."); // Debugging
-                        // Navigate to the profile
-                        window.location.href = "profile"; 
-                    }
                 });
+                // if it is not a duplicate, add the data to the database
+                if (!isDuplicate) {
+                    // Add a new document with a generated id.
+                    addDoc(collection(db, "user_data"), {
+                        ...payload,
+                        number_of_friends: 0,
+                        number_of_posts: 0
+                        // Add more fields here
+                    });
+                    
+                    // delete input fields
+                    document.getElementById("username").value = "";
+                    document.getElementById("email").value = "";
+                    document.getElementById("password").value = "";
+                    document.getElementById("confirmPassword").value = "";
+                    document.getElementById("birthday").value = "";
+                    document.getElementById("gender").value = "";
+
+                    // Navigate to the profile
+                    window.location.href = "/login"; 
+                }
             });
         } else {
             alert('Please fill in all fields.');
@@ -172,12 +188,12 @@ const Login = () => {
     return (
         <body>
         {/* ++logo */}
-        <div className="licontainer" id="esus">
+        <div className="licontainer" id="licontainer">
             <div className="form-container register-container">
                 <form action="#" onSubmit={handleRegisterSubmit}>
                     <h1>Register here.</h1>
-                    <input type="text" id="name" placeholder="Name" required pattern='^[a-z._]+$' title='Name must contain only lowercase letters, numbers, and _ .'/>
-                    <input type="email" id="email" placeholder="Email or phone number" required />
+                    <input type="text" id="username" placeholder="Username" required pattern='^[a-z0-9._]+$' title='Username must contain only lowercase letters, numbers, and _ .'/>
+                    <input type="email" id="email" placeholder="Email" required />
                     <input 
                         type="password" 
                         id="password" 
@@ -207,15 +223,9 @@ const Login = () => {
             <div className="form-container login-container">
                 <form action="#" onSubmit={handleLoginSubmit}>
                     <h1>Login here.</h1>
-                    <input type="email" id="email" name="email" placeholder="Email or phone number" />
+                    <input type="email" id="email" name="email" placeholder="Email" />
                     <input type="password" id="password" name="password" placeholder="Password" />
                     <div className="content">
-                        {/* remember me เผื่ออนาคตได้ใช้ */}
-    
-                        {/* <div className="checkbox">
-                            <input type="checkbox" name="checkbox" id="checkbox" />
-                            <label>Remember me</label>
-                        </div> */}
                         <div className="pass-link"> 
                             <a href="#">Forgot password?</a>
                         </div>
@@ -244,14 +254,14 @@ const Login = () => {
                 <div className="overlay">
                     <div className="overlay-panel overlay-left">
                         <h1 className="title">Hello <br />There</h1>
-                        <p>if you have an account, login here</p>
+                        <p>If you have an account, Login here</p>
                         <button className="ghost" id="login" onChange={dynamicTitle}>Login
                             <i className="Ini Ini-arrow-left login"></i>
                         </button>
                     </div>
                     <div className="overlay-panel overlay-right">
                         <h1 className="title">Start your <br /> journey</h1>
-                        <p>if you don't have an account yet why not have one?</p>
+                        <p>If you don't have an account yet, why not have one?</p>
                         <button className="ghost" id="register" onChange={dynamicTitle}>Register
                             <i className="Ini Ini-arrow-right register"></i>
                         </button>
@@ -259,24 +269,6 @@ const Login = () => {
                 </div>
             </div>
         </div>
-    
-        {/* <div className="recent-login-box">
-            <h2>Recent Login.</h2>
-            <div className="recent-user">
-                
-                <img src="https://bestfriends.org/sites/default/files/styles/hero_mobile/public/hero-dash/Asana3808_Dashboard_Standard.jpg?h=ebad9ecf&itok=cWevo33k" alt="User Picture" className="user-pic" />
-                <p className="user-name">เสี่ยโต๋</p>
-            </div>
-    
-            
-            <button className="fast-login">Login as เสี่ยโต๋</button>
-        </div>
-    
-        
-        <div className="about-us-box">
-            <h2>About Us.</h2>
-            <p>hello this is our web project.....</p>
-        </div> */}
     </body>
     )
 }
