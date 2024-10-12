@@ -1,0 +1,334 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Itim", cursive;
+}
+
+.itim-regular {
+    font-family: "Itim", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    background-color: #FFF8F8;
+    font-family: "Itim", cursive;
+}
+
+.profileContainer {
+    width: 65%;
+    height: 100vh;
+    background-color: hsl(300, 53%, 94%);
+    padding: 20px;
+    border-radius: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 60px);
+    overflow-y: hidden;
+    position: fixed;
+    top: 60px;
+    left: 15%;
+    overflow-x: hidden;
+}
+
+.bioPart {
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+}
+
+.goBackTab {
+    float: left;
+    padding-top: 10px;
+    padding-left: 10px;
+    color: #A87676;
+    font-size: 2.2rem;
+}
+
+.bioBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    padding: 30px 40px;
+    gap: 20px;
+    overflow-y: hidden;
+}
+
+@media (max-width: 768px) {
+
+    /*for small screen (mobile)*/
+    .bioBox {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .bioPart .leftBox,
+    .bioPart .rightBox {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .bioPart .rightBox .accNum {
+        gap: 50px;
+    }
+
+    .bioPart .rightBox .editBtn {
+        text-wrap: nowrap;
+        position: relative;
+        top: 35px;
+    }
+
+    .actionPart {
+        margin-top: 1px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    /*for medium screen (tablet)*/
+    .bioBox {
+        flex-direction: row;
+        gap: 30px;
+    }
+
+    .bioPart .leftBox,
+    .bioPart .rightBox {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* .bioPart .leftBox {
+        flex: 1;
+        max-width: 220px;
+    }
+
+    .bioPart .rightBox {
+        flex: 2;
+        max-width: 300px;
+    } */
+
+    .bioPart .leftBox .profPic {
+        margin-left: 70px;
+    }
+
+    .bioPart .rightBox .accNum {
+        gap: 50px;
+    }
+}
+
+@media (min-width: 1025px) {
+
+    /*for large screen (desktop)*/
+    .bioBox {
+        flex-direction: row;
+        gap: 40px;
+    }
+
+    .bioPart .leftBox {
+        flex: 1;
+        max-width: 250px;
+    }
+
+    .bioPart .rightBox {
+        flex: 2;
+        max-width: 450px;
+    }
+
+    .bioPart .rightBox .accNum {
+        gap: 50px;
+    }
+}
+
+.bioPart .leftBox,
+.bioPart .rightBox {
+    flex: 1 1 100%;
+}
+
+.bioPart .leftBox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-width: 500px;
+}
+
+.bioPart .profPic {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: aqua;
+    width: 20vmin;
+    border-radius: 50%;
+    background-size: cover;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+    box-shadow: lightgrey 0px 0px 10px;
+}
+
+.bioPart .accInfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100%;
+    min-width: 50%;
+    /* border: 1px dashed red; */
+    text-wrap: wrap;
+    gap: 15px;
+}
+
+.accInfo .nameBox {
+    font-weight: bold;
+    font-family: serif;
+    font-size: 1.2rem;
+}
+
+.accInfo .bioPfBox {
+    font-size: 1rem;
+    word-wrap: break-word;
+    max-width: 200px;
+    font-family: serif;
+    /* border: red 1px dashed; */
+    text-wrap: wrap;
+}
+
+.accInfo .accBox {
+    font-family: serif;
+    font-size: 1rem;
+}
+
+.accInfo .accBox a {
+    font-weight: bold;
+    font-size: 0.95rem;
+    text-decoration: none;
+}
+
+.bioPart .rightBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 700px;
+    /* border: 1px dashed red; */
+}
+
+.rightBox .accNum {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: absolute;
+    gap: 150px;
+    padding-left: 30px;
+    text-wrap: nowrap;
+    font-size: 1.1rem;
+}
+
+.rightBox .accNum a {
+    text-decoration: underline 1.2px;
+    color: black;
+}
+
+.rightBox .editBtn {
+    background-color: #D9D9D9;
+    position: relative;
+    top: 50%;
+    width: 20vmin;
+    height: 5vmin;
+    border-radius: 3px;
+}
+
+.editBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rightBox .editBtn:hover {
+    background-color: #C5C5C5;
+    transition: 0.27s;
+}
+
+.rightBox .editBtn:hover a {
+    font-size: 1.1rem;
+}
+
+.rightBox .editBtn a {
+    text-decoration: none;
+    color: black;
+    font-weight: 300;
+    font-size: 1rem;
+    font-family: serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+}
+
+/* Line Part */
+
+.line {
+    margin: 0 30px;
+    width: 96%;
+    height: 1px;
+    background-color: #000000;
+    /* position: fixed; */
+    z-index: 1;
+}
+
+/* Action Part */
+
+/* .contentSec {
+    position: static;
+    width: 100%;
+    height: 100%;
+} */
+
+.actionPart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* border: red 1px dashed; */
+    position: relative;
+    width: 100%;
+}
+
+.actionBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    min-height: 5vh;
+    padding-bottom: 50px;
+}
+
+.actionBox .textBox,
+.actionBox .mediaBox {
+    background-color: #D9D9D9;
+    width: 17vmin;
+    height: 5vmin;
+    border-radius: 5px;
+}
+
+.actionBox .textBox:hover,
+.actionBox .mediaBox:hover {
+    background-color: #C5C5C5;
+    transition: 0.27s;
+}
+
+/* .actionBox .mediaBox {
+    visibility: hidden;
+} */
+
+.actionPart .actionBox .textBox a,
+.actionPart .actionBox .mediaBox a {
+    font-size: 1.27rem;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+}
