@@ -182,7 +182,7 @@ body {
     border-bottom: none;
     display: flex; 
     align-items: center; 
-    background-color: rgb(176, 150, 172);
+    background-color:#e6c7ce;
     margin: 0;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
@@ -275,7 +275,7 @@ body {
 .msg-bottom {
     border-top: 1px solid #e8e5e5;
     position: relative;
-    background-color: rgb(176, 150, 172);
+    background-color: #e6c7ce;
     padding: 10px;
     
 }
