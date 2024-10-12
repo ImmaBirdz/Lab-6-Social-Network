@@ -157,29 +157,28 @@ const Login = () => {
                         document.getElementById("confirmPassword").value = "";
                         return;
                     }
-                    // if it is not a duplicate, add the data to the database
-                    if (!isDuplicate) {
-                        // Add a new document with a generated id.
-                        addDoc(collection(db, "user_data"), {
-                            ...payload,
-                            number_of_friends: 0,
-                            number_of_posts: 0
-                            // Add more fields here
-                        });
-                        console.log(payload + " is added to the database.");
-                        
-                        // delete input fields
-                        document.getElementById("username").value = "";
-                        document.getElementById("email").value = "";
-                        document.getElementById("password").value = "";
-                        document.getElementById("confirmPassword").value = "";
-                        document.getElementById("birthday").value = "";
-                        document.getElementById("gender").value = "";
-
-                        // Navigate to the profile
-                        window.location.href = "/login"; 
-                    }
                 });
+                // if it is not a duplicate, add the data to the database
+                if (!isDuplicate) {
+                    // Add a new document with a generated id.
+                    addDoc(collection(db, "user_data"), {
+                        ...payload,
+                        number_of_friends: 0,
+                        number_of_posts: 0
+                        // Add more fields here
+                    });
+                    
+                    // delete input fields
+                    document.getElementById("username").value = "";
+                    document.getElementById("email").value = "";
+                    document.getElementById("password").value = "";
+                    document.getElementById("confirmPassword").value = "";
+                    document.getElementById("birthday").value = "";
+                    document.getElementById("gender").value = "";
+
+                    // Navigate to the profile
+                    window.location.href = "/login"; 
+                }
             });
         } else {
             alert('Please fill in all fields.');
@@ -193,7 +192,7 @@ const Login = () => {
             <div className="form-container register-container">
                 <form action="#" onSubmit={handleRegisterSubmit}>
                     <h1>Register here.</h1>
-                    <input type="text" id="username" placeholder="Username" required pattern='^[a-z._]+$' title='Username must contain only lowercase letters, numbers, and _ .'/>
+                    <input type="text" id="username" placeholder="Username" required pattern='^[a-z0-9._]+$' title='Username must contain only lowercase letters, numbers, and _ .'/>
                     <input type="email" id="email" placeholder="Email" required />
                     <input 
                         type="password" 
