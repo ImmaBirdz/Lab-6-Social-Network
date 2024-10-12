@@ -15,6 +15,21 @@ body {
     font-family: "Itim", cursive;
 }
 
+.profileContainer {
+    width: 65%;
+    height: 100vh;
+    background-color: hsl(300, 53%, 94%);
+    padding: 20px;
+    border-radius: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 60px);
+    overflow-y: hidden;
+    position: fixed;
+    top: 60px;
+    left: 15%;
+    overflow-x: hidden;
+}
+
 .bioPart {
     display: flex;
     flex-direction: column;
@@ -36,6 +51,7 @@ body {
     flex-wrap: nowrap;
     padding: 30px 40px;
     gap: 20px;
+    overflow-y: hidden;
 }
 
 @media (max-width: 768px) {
@@ -212,6 +228,12 @@ body {
     width: 20vmin;
     height: 5vmin;
     border-radius: 3px;
+}
+
+.editBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .rightBox .editBtn:hover {
