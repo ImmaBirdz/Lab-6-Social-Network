@@ -169,11 +169,12 @@ body {
 .bioPart .accInfo {
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-direction: column;
     min-height: 100%;
     min-width: 50%;
-    padding: 0 50px;
-    /* padding-left: 70px; */
+    /* border: 1px dashed red; */
+    text-wrap: wrap;
     gap: 15px;
 }
 
@@ -189,11 +190,18 @@ body {
     max-width: 200px;
     font-family: serif;
     /* border: red 1px dashed; */
+    text-wrap: wrap;
 }
 
 .accInfo .accBox {
     font-family: serif;
     font-size: 1rem;
+}
+
+.accInfo .accBox a {
+    font-weight: bold;
+    font-size: 0.95rem;
+    text-decoration: none;
 }
 
 .bioPart .rightBox {
@@ -323,106 +331,4 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100%;
-}
-
-.postContainer {
-    position: static;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-}
-
-.postBox {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #E2DAD6;
-    min-height: 25vh;
-    width: 100%;
-    max-width: 700px;
-    border-radius: 5px;
-}
-
-.postedContent {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-radius: 10px;
-    padding: 15px 0 10px 0;
-}
-
-.userProf {
-    display: flex;
-    /* align-items: center; */
-}
-
-.userProf img {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    padding-right: 10px;
-}
-
-.userProf p {
-    margin-bottom: -3px;
-    font-weight: 500;
-}
-
-.userProf a {
-    text-decoration: none;
-    color: #612b2b;
-    font-weight: 300;
-    font-size: 1.1rem;
-}
-
-.userProf :hover {
-    cursor: pointer;
-}
-
-.userProf small {
-    font-size: 12px;
-    color: rgb(71, 70, 70);
-}
-
-.postText {
-    color: #000000;
-    margin: 0 0 10px 70px;
-    font-size: 1rem;
-    font-weight: 300;
-}
-
-/* in case it appears */
-.postText a {
-    color: rgb(190, 35, 61);
-    text-decoration: none;
-}
-
-.postAction {
-    margin: 10px 10px 10px 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.postAction a {
-    color: #612b2b;
-    font-size: 1.2rem;
-}
-
-.activitiesIcons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 40%;
-}
-
-.activitiesIcons .iconAct {
-    font-size: 1.1rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
 }

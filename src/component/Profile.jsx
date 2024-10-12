@@ -42,7 +42,7 @@ const Profile = () => {
                             </div>
 
                             <div className="accBox">
-                                <div className="accProf">@Your Account Profile</div>
+                                <div className="accProf"><a href="#" className='accProfName'>@Your Account Profile</a></div>
                             </div>
 
                         </div>
