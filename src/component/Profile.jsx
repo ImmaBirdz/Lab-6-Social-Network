@@ -1,15 +1,33 @@
 import '../css/Profile.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { LoginContext } from '../variable/LoginContext';
+import { db } from '../backend/firebaseConfig';
+import { collection, doc, getDocs } from 'firebase/firestore';
 import { TabTitle } from './TabTitle';
 import TextPage from './TextPage';
 import MediaPage  from './mediaPage';
 
 const Profile = () => {
-
     const [activeTab, setActiveTab] = useState('Text'); //set default tab to Text's Page
+    const { loginID } = useContext(LoginContext);
+    const [profileData, setProfileData] = useState({});
 
     useEffect(() => {
         TabTitle("Profile | Black Cat with Bow");
+        // fetch user's profile data based on loginID from firebase
+        const fetchProfileData = async () => {
+            // fetch data from firebase
+            const userDoc = collection(db, 'user_data');
+            const userSnapshot = await getDocs(userDoc);
+            console.log(userSnapshot);
+            console.log(loginID);
+            userSnapshot.forEach(doc => {
+                if (doc.data().username === loginID) {
+                    setProfileData(doc.data());
+                }
+            });
+        }
+        fetchProfileData();
     }, []);
 
     return (
@@ -34,15 +52,15 @@ const Profile = () => {
                         <div className="accInfo">
 
                             <div className="nameBox">
-                                <div className="profName">Your Profile Name</div>
+                                <div className="profName">{profileData.display_name}</div>
                             </div>
 
                             <div className="bioPfBox">
-                                <div className="accBio">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, labore.</div>
+                                <div className="accBio">{profileData.bio}</div>
                             </div>
 
                             <div className="accBox">
-                                <div className="accProf"><a href="#" className='accProfName'>@Your Account Profile</a></div>
+                                <div className="accProf"><a href="#" className='accProfName'>{profileData.username}</a></div>
                             </div>
 
                         </div>
@@ -52,9 +70,18 @@ const Profile = () => {
                     <div className="rightBox">
 
                         <div className="accNum">
-                            <div className="postNum">0 post</div>
-                            <div className="followersNum"><a href="#">0 followers</a></div>
-                            <div className="followingNum"><a href="#">0 following</a></div>
+                            {
+                                profileData.number_of_posts > 1 ? 
+                                <div className="postNum">{profileData.number_of_posts} posts</div>
+                                :
+                                <div className="postNum">{profileData.number_of_posts} post</div>
+                            }
+                            {
+                                profileData.number_of_followers > 1 ? 
+                                <div className="followersNum"><a href="#">{profileData.number_of_friends} friends</a></div>
+                                :
+                                <div className="followersNum"><a href="#">{profileData.number_of_friends} friend</a></div>
+                            }
                         </div>
                             
                         <div className="editBtn"><a href="#">Edit Profile</a></div>
@@ -65,7 +92,7 @@ const Profile = () => {
 
             </div>
 
-            <div className="line"></div>
+            <div className="line" />
 
             <div className="actionPart">
 
