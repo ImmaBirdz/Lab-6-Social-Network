@@ -2,9 +2,11 @@ import React from 'react'
 import '../css/Page.css'
 import { useContext } from 'react'
 import { LoginContext } from '../variable/LoginContext'
+import { Link, useNavigate } from 'react-router-dom'
 
 const NavBar = () => {
     const { setLoginID, setIsLogin } = useContext(LoginContext);
+    const navigate = useNavigate();
 
     // logout
     function handleLogout(){
@@ -12,7 +14,7 @@ const NavBar = () => {
         localStorage.removeItem('loginID');
         setIsLogin(false);
         alert('You are successfully logged out');
-        window.location.href = '/';
+        navigate('/');
     }
 
     return (
@@ -26,15 +28,24 @@ const NavBar = () => {
                 </nav>
 
                 <div className="nav-right">
-                    <button className="nav-button" onClick={() => window.location.href = '/page'}>
-                        Page
-                    </button>
-                    <button className="nav-button" onClick={() => window.location.href = '/message'}>
-                        Message
-                    </button>
-                    <button className="nav-button" onClick={() => window.location.href = '/profile'}>
-                        Profile
-                    </button>
+                    <Link to='/page'>
+                        <button className="nav-button">
+                            Page
+                        </button>
+                    </Link>
+                        
+                    <Link to='/message'>
+                        <button className="nav-button">
+                            Message
+                        </button>
+                    </Link>
+                    
+                    <Link to='profile'>
+                        <button className="nav-button">
+                            Profile
+                        </button>
+                    </Link>
+
                     <button className="nav-button" onClick={handleLogout}>
                         Log Out
                     </button>

@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../css/Page.css'
 import { TabTitle } from './TabTitle'
 
 const Page = () => {
-    TabTitle("Feed | Black Cat with Bow");
+    useEffect(() => {
+        TabTitle("Feed | Black Cat with Bow");
+    } , []);
 
     return (
         <div>

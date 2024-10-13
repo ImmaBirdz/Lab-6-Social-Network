@@ -8,19 +8,7 @@ import { LoginContext } from '../variable/LoginContext';
 
 const Login = () => {
 
-    const {isLogin, setIsLogin, setLoginID} = useContext(LoginContext);
-
-    // redirect to home if you are out of path location
-    // useEffect(() => {
-    //     if(window.location.pathname !== '/'){
-    //         setUrlToHome();
-    //     }
-    // }, []);
-
-    // set url to /
-    // function setUrlToHome(){
-    //     window.location.href = '/';
-    // }
+    const {isLogin, setIsLogin, setLoginID, setUsername, setPassword, setDisplayName, isLoaded} = useContext(LoginContext);
 
     useEffect(() => {
         if (isLogin) {
@@ -31,6 +19,10 @@ const Login = () => {
 
     // Trigger panel switching for registration and login
     useEffect(() => {
+        if (!isLoaded) return;
+        TabTitle("Sign in | Black Cat with Bow");
+        dynamicTitle();
+
         const registerButton = document.getElementById("register");
         const loginButton = document.getElementById("login");
         const container = document.getElementById("licontainer");
@@ -60,13 +52,7 @@ const Login = () => {
             loginButton.removeEventListener("click", handleLoginClick);
             container.removeEventListener("transitionend", handleTransitionEnd);
         };
-    }, []);
-
-    // Change the title of the page when the user switches between login and register
-    useEffect(() => {
-        TabTitle("Sign in | Black Cat with Bow");
-        dynamicTitle();
-    },[]);
+    }, [isLoaded]);
 
     const dynamicTitle = () => {
         let registerButtonTitle = document.getElementById('register');
@@ -97,6 +83,7 @@ const Login = () => {
                         setIsLogin(true);
                         setLoginID(doc.id);
                         localStorage.setItem('loginID', doc.id); // add loginID to localStorage
+                        alert('Login successful');
                     }
                 });
                 if (!found) {
@@ -177,7 +164,7 @@ const Login = () => {
                     document.getElementById("gender").value = "";
 
                     // Navigate to the profile
-                    window.location.href = "/login"; 
+                    // window.location.href = "/login"; 
                 }
             });
         } else {
