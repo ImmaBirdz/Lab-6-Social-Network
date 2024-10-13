@@ -8,7 +8,7 @@ import { LoginContext } from '../variable/LoginContext';
 
 const Login = () => {
 
-    const {isLogin, setIsLogin, setLoginID, setUsername, setPassword, setDisplayName, isLoaded} = useContext(LoginContext);
+    const {isLogin, setIsLogin, setLoginID, isLoaded} = useContext(LoginContext);
 
     useEffect(() => {
         if (isLogin) {
@@ -119,7 +119,8 @@ const Login = () => {
                 email: email,
                 password: password,
                 birthday: birthday,
-                gender: gender
+                gender: gender,
+                bio : "This is a bio"
             };
             // check if some data is already in the database
             let isDuplicate = false;
@@ -159,6 +160,11 @@ const Login = () => {
                     setDoc(userDoc, userPayload);
                     alert("Registration successful.");
                     
+                    // set the login state
+                    setIsLogin(true);
+                    setLoginID(doc.id);
+                    localStorage.setItem('loginID', doc.id); // add loginID to localStorage
+                    
                     // delete input fields
                     document.getElementById("username").value = "";
                     document.getElementById("email").value = "";
@@ -167,8 +173,8 @@ const Login = () => {
                     document.getElementById("birthday").value = "";
                     document.getElementById("gender").value = "";
 
-                    // refresh the page
-                    window.location.reload();
+                    // it will redirect to the profile page after registration automatically
+                    // using the useEffect depends on isLogin state
                 }
             });
         } else {
