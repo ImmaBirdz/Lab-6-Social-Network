@@ -9,8 +9,10 @@ import MediaPage  from './mediaPage';
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('Text'); //set default tab to Text's Page
-    const { loginID } = useContext(LoginContext);
+    const { profileID } = useContext(LoginContext);
     const [profileData, setProfileData] = useState({});
+    const [isLoaded, setIsLoaded] = useState(false);
+    console.log(profileID);
 
     useEffect(() => {
         TabTitle("Profile | Black Cat with Bow");
@@ -19,16 +21,16 @@ const Profile = () => {
             // fetch data from firebase
             const userDoc = collection(db, 'user_data');
             const userSnapshot = await getDocs(userDoc);
-            console.log(userSnapshot);
-            console.log(loginID);
             userSnapshot.forEach(doc => {
-                if (doc.data().username === loginID) {
+                if (doc.data().username === profileID) {
                     setProfileData(doc.data());
                 }
             });
         }
+        console.log(profileData);
         fetchProfileData();
-    }, []);
+        setIsLoaded(true);
+    }, [isLoaded]);
 
     return (
         <div className="profileContainer">

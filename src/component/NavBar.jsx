@@ -5,7 +5,7 @@ import { LoginContext } from '../variable/LoginContext'
 import { Link, useNavigate } from 'react-router-dom'
 
 const NavBar = () => {
-    const { setLoginID, setIsLogin } = useContext(LoginContext);
+    const { loginID, setLoginID, setIsLogin } = useContext(LoginContext);
     const navigate = useNavigate();
 
     // logout
@@ -16,6 +16,7 @@ const NavBar = () => {
         alert('You are successfully logged out');
         navigate('/');
     }
+
 
     return (
         <header className="navbar">
@@ -36,8 +37,8 @@ const NavBar = () => {
                         <button className="nav-button">Message</button>
                     </Link>
                     
-                    <Link to='profile'>
-                        <button className="nav-button">Profile</button>
+                    <Link to={`/profile/${loginID}`}>
+                        <button className="nav-button">Your Profile</button>
                     </Link>
 
                     <button className="nav-button" onClick={handleLogout}>Log Out</button>

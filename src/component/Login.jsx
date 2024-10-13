@@ -148,6 +148,9 @@ const Login = () => {
                 });
                 // if it is not a duplicate, add the data to the database
                 if (!isDuplicate) {
+                    // fetch the user_data collection
+                    
+                    
                     // Add a new document with a generated id.
                     const userDoc = doc(db, 'user_data', username);
                     const userPayload = {

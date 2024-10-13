@@ -1,4 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
+import { db } from '../backend/firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
 
 const LoginContext = createContext();
 
@@ -9,6 +11,8 @@ const LoginProvider = (props) => {
     const [hello, setHello] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
     const [loginID, setLoginID] = useState(null);
+    const [profileID , setProfileID] = useState(null);
+    const [contextProfileID, setContextProfileID] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
     // check if the user is already login
@@ -31,6 +35,19 @@ const LoginProvider = (props) => {
         }, 500);
     }, []);
 
+    // fetch every profile id to profileID
+    useEffect(() => {
+        const fetchProfileID = async () => {
+            const userCollection = collection(db, 'user_data');
+            const userSnapshot = await getDocs(userCollection);
+            userSnapshot.forEach(doc => {
+                setContextProfileID(contextProfileID => [...contextProfileID, doc.id]);
+            });
+        }
+        console.log(contextProfileID);
+        fetchProfileID();
+    }, []);
+
     return (
         <LoginContext.Provider value={{
             registerButton,
@@ -45,6 +62,10 @@ const LoginProvider = (props) => {
             setIsLogin,
             loginID,
             setLoginID,
+            profileID,
+            setProfileID,
+            contextProfileID,
+            setContextProfileID,
             isLoaded,
             setIsLoaded
         }}>
