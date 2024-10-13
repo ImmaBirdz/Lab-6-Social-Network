@@ -19,7 +19,7 @@ const NavBar = () => {
 
     return (
         <header className="navbar">
-                <button className="back" onClick={() => window.location.href = '/page'}>
+                <button className="back" onClick={() => navigate(-1)}>
                     <img src="https://img.icons8.com/parakeet-line/48/FFFFFF/circled-left.png" alt="Back-arrow" className="back-arrow" />
                 </button>
 
@@ -29,26 +29,18 @@ const NavBar = () => {
 
                 <div className="nav-right">
                     <Link to='/page'>
-                        <button className="nav-button">
-                            Page
-                        </button>
+                        <button className="nav-button">Page</button>
                     </Link>
                         
                     <Link to='/message'>
-                        <button className="nav-button">
-                            Message
-                        </button>
+                        <button className="nav-button">Message</button>
                     </Link>
                     
                     <Link to='profile'>
-                        <button className="nav-button">
-                            Profile
-                        </button>
+                        <button className="nav-button">Profile</button>
                     </Link>
 
-                    <button className="nav-button" onClick={handleLogout}>
-                        Log Out
-                    </button>
+                    <button className="nav-button" onClick={handleLogout}>Log Out</button>
                 </div>
             </header>
     )
