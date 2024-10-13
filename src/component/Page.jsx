@@ -38,6 +38,39 @@ const Page = () => {
                             </div>
                             <p>Another sample post content...</p>
                         </div>
+
+                        <div className="post">
+                            <div className="post-header">
+                                <img src="avatar.png" alt="User Avatar" />
+                                <div>
+                                    <h4>User Name</h4>
+                                    <p>Just now</p>
+                                </div>
+                            </div>
+                            <p>This is a sample post content...</p>
+                        </div>
+
+                        <div className="post">
+                            <div className="post-header">
+                                <img src="avatar.png" alt="User Avatar" />
+                                <div>
+                                    <h4>User Name</h4>
+                                    <p>Just now</p>
+                                </div>
+                            </div>
+                            <p>This is a sample post content...</p>
+                        </div>
+
+                        <div className="post">
+                            <div className="post-header">
+                                <img src="avatar.png" alt="User Avatar" />
+                                <div>
+                                    <h4>User Name</h4>
+                                    <p>Just now</p>
+                                </div>
+                            </div>
+                            <p>This is a sample post content...</p>
+                        </div>
                     </main>
                 </div>
             </body>
