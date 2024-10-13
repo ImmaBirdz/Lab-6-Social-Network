@@ -3,7 +3,7 @@ import { useEffect, useContext } from 'react'
 import '../css/Login.css'
 import { TabTitle } from './TabTitle'
 import { db } from '../backend/firebaseConfig'
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
 import { LoginContext } from '../variable/LoginContext';
 
 const Login = () => {
@@ -128,7 +128,7 @@ const Login = () => {
                     const data = doc.data();
                     // check if the username is already in use
                     if (data.username === username) {
-                        alert("This userame is already in use.");
+                        alert("This username is already in use.");
                         isDuplicate = true;
                         // reset the fields
                         document.getElementById("username").value = "";
@@ -148,12 +148,16 @@ const Login = () => {
                 // if it is not a duplicate, add the data to the database
                 if (!isDuplicate) {
                     // Add a new document with a generated id.
-                    addDoc(collection(db, "user_data"), {
+                    const userDoc = doc(db, 'user_data', username);
+                    const userPayload = {
                         ...payload,
                         number_of_friends: 0,
                         number_of_posts: 0
                         // Add more fields here
-                    });
+                    }
+                    // set the document
+                    setDoc(userDoc, userPayload);
+                    alert("Registration successful.");
                     
                     // delete input fields
                     document.getElementById("username").value = "";
@@ -163,8 +167,8 @@ const Login = () => {
                     document.getElementById("birthday").value = "";
                     document.getElementById("gender").value = "";
 
-                    // Navigate to the profile
-                    // window.location.href = "/login"; 
+                    // refresh the page
+                    window.location.reload();
                 }
             });
         } else {
