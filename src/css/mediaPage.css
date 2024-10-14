@@ -1,0 +1,30 @@
+/* ---------------------- Media Css--Start Here ----------------------*/
+.mediaContainer {
+    display: flex;
+    position: static;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 0 auto;
+    height: 500px;
+    overflow-x: hidden;
+}
+
+.mediaContent {
+    flex: 1 1 calc(25% - 10px); /* 25% is for 4pics/row, use calc() to calculate it */
+    line-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* .mediaContent a {
+
+} */
+
+.mediaContent a img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}

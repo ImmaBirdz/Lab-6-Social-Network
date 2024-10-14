@@ -3,24 +3,12 @@ import { useEffect, useContext } from 'react'
 import '../css/Login.css'
 import { TabTitle } from './TabTitle'
 import { db } from '../backend/firebaseConfig'
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
 import { LoginContext } from '../variable/LoginContext';
 
 const Login = () => {
 
-    const {isLogin, setIsLogin, setLoginID} = useContext(LoginContext);
-
-    // redirect to home if you are out of path location
-    // useEffect(() => {
-    //     if(window.location.pathname !== '/'){
-    //         setUrlToHome();
-    //     }
-    // }, []);
-
-    // set url to /
-    // function setUrlToHome(){
-    //     window.location.href = '/';
-    // }
+    const {isLogin, setIsLogin, setLoginID, isLoaded} = useContext(LoginContext);
 
     useEffect(() => {
         if (isLogin) {
@@ -31,6 +19,10 @@ const Login = () => {
 
     // Trigger panel switching for registration and login
     useEffect(() => {
+        if (!isLoaded) return;
+        TabTitle("Sign in | Black Cat with Bow");
+        dynamicTitle();
+
         const registerButton = document.getElementById("register");
         const loginButton = document.getElementById("login");
         const container = document.getElementById("licontainer");
@@ -60,13 +52,7 @@ const Login = () => {
             loginButton.removeEventListener("click", handleLoginClick);
             container.removeEventListener("transitionend", handleTransitionEnd);
         };
-    }, []);
-
-    // Change the title of the page when the user switches between login and register
-    useEffect(() => {
-        TabTitle("Sign in | Black Cat with Bow");
-        dynamicTitle();
-    },[]);
+    }, [isLoaded]);
 
     const dynamicTitle = () => {
         let registerButtonTitle = document.getElementById('register');
@@ -97,6 +83,7 @@ const Login = () => {
                         setIsLogin(true);
                         setLoginID(doc.id);
                         localStorage.setItem('loginID', doc.id); // add loginID to localStorage
+                        alert('Login successful');
                     }
                 });
                 if (!found) {
@@ -132,7 +119,8 @@ const Login = () => {
                 email: email,
                 password: password,
                 birthday: birthday,
-                gender: gender
+                gender: gender,
+                bio : "This is a bio"
             };
             // check if some data is already in the database
             let isDuplicate = false;
@@ -141,7 +129,7 @@ const Login = () => {
                     const data = doc.data();
                     // check if the username is already in use
                     if (data.username === username) {
-                        alert("This userame is already in use.");
+                        alert("This username is already in use.");
                         isDuplicate = true;
                         // reset the fields
                         document.getElementById("username").value = "";
@@ -161,12 +149,21 @@ const Login = () => {
                 // if it is not a duplicate, add the data to the database
                 if (!isDuplicate) {
                     // Add a new document with a generated id.
-                    addDoc(collection(db, "user_data"), {
+                    const userDoc = doc(db, 'user_data', username);
+                    const userPayload = {
                         ...payload,
                         number_of_friends: 0,
                         number_of_posts: 0
                         // Add more fields here
-                    });
+                    }
+                    // set the document
+                    setDoc(userDoc, userPayload);
+                    alert("Registration successful.");
+                    
+                    // set the login state
+                    setIsLogin(true);
+                    setLoginID(doc.id);
+                    localStorage.setItem('loginID', doc.id); // add loginID to localStorage
                     
                     // delete input fields
                     document.getElementById("username").value = "";
@@ -176,8 +173,8 @@ const Login = () => {
                     document.getElementById("birthday").value = "";
                     document.getElementById("gender").value = "";
 
-                    // Navigate to the profile
-                    window.location.href = "/login"; 
+                    // it will redirect to the profile page after registration automatically
+                    // using the useEffect depends on isLogin state
                 }
             });
         } else {

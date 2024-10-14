@@ -9,6 +9,7 @@ const LoginProvider = (props) => {
     const [hello, setHello] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
     const [loginID, setLoginID] = useState(null);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     // check if the user is already login
     useEffect(() => {
@@ -17,6 +18,7 @@ const LoginProvider = (props) => {
             setIsLogin(true);
             setLoginID(loginID);
         }
+        setIsLoaded(true);
     }, []);
 
     useEffect(() => {
@@ -42,7 +44,9 @@ const LoginProvider = (props) => {
             isLogin,
             setIsLogin,
             loginID,
-            setLoginID
+            setLoginID,
+            isLoaded,
+            setIsLoaded
         }}>
             {props.children}
         </LoginContext.Provider>
