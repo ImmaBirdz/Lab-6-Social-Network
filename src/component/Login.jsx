@@ -162,12 +162,6 @@ const Login = () => {
                 // set the document
                 setDoc(userDoc, userPayload);
                 alert("Registration successful.");
-            
-                // set the login state
-                setIsLogin(true);
-                setLoginID(doc.id);
-                localStorage.setItem('loginID', doc.id); // add loginID to localStorage
-                fetchData();
                 
                 // delete input fields
                 document.getElementById("username").value = "";
@@ -176,9 +170,9 @@ const Login = () => {
                 document.getElementById("confirmPassword").value = "";
                 document.getElementById("birthday").value = "";
                 document.getElementById("gender").value = "";
-                
-                // it will redirect to the profile page after registration automatically
-                // using the useEffect depends on isLogin state
+
+                // ge back to login
+                document.getElementById("login").click();
             }
         } else {
             alert('Please fill in all fields.');

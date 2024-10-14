@@ -12,10 +12,8 @@ const Profile = () => {
     const { profileID } = useContext(LoginContext);
     const [profileData, setProfileData] = useState({});
     const [isLoaded, setIsLoaded] = useState(false);
-    console.log(profileID);
 
     useEffect(() => {
-        TabTitle("Profile | Black Cat with Bow");
         // fetch user's profile data based on loginID from firebase
         const fetchProfileData = async () => {
             // fetch data from firebase
@@ -27,10 +25,9 @@ const Profile = () => {
                 }
             });
         }
-        console.log(profileData);
         fetchProfileData();
-        setIsLoaded(true);
-    }, [isLoaded]);
+        TabTitle(`${profileData.display_name} (@${profileID}) | Black Cat with Bow`);
+    }, [profileData.display_name, profileID]);
 
     return (
         <div className="profileContainer">
@@ -62,7 +59,7 @@ const Profile = () => {
                             </div>
 
                             <div className="accBox">
-                                <div className="accProf"><a href="#" className='accProfName'>{profileData.username}</a></div>
+                                <div className="accProf"><a href="#" className='accProfName'>{`@${profileData.username}`}</a></div>
                             </div>
 
                         </div>
@@ -79,7 +76,7 @@ const Profile = () => {
                                 <div className="postNum">{profileData.number_of_posts} post</div>
                             }
                             {
-                                profileData.number_of_followers > 1 ? 
+                                profileData.number_of_friends > 1 ? 
                                 <div className="followersNum"><a href="#">{profileData.number_of_friends} friends</a></div>
                                 :
                                 <div className="followersNum"><a href="#">{profileData.number_of_friends} friend</a></div>

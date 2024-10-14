@@ -17,7 +17,6 @@ const NavBar = () => {
         navigate('/');
     }
 
-
     return (
         <header className="navbar">
                 <button className="back" onClick={() => navigate(-1)}>
@@ -29,18 +28,9 @@ const NavBar = () => {
                 </nav>
 
                 <div className="nav-right">
-                    <Link to='/page'>
-                        <button className="nav-button">Page</button>
-                    </Link>
-                        
-                    <Link to='/message'>
-                        <button className="nav-button">Message</button>
-                    </Link>
-                    
-                    <Link to={`/profile/${loginID}`}>
-                        <button className="nav-button">Your Profile</button>
-                    </Link>
-
+                        <button className="nav-button" onClick={() => window.location.href = `/page`}>Page</button>
+                        <button className="nav-button" onClick={() => window.location.href = `/message`}>Message</button>
+                        <button className="nav-button" onClick={() => window.location.href = `/profile/${loginID}`}>My Profile</button>
                     <button className="nav-button" onClick={handleLogout}>Log Out</button>
                 </div>
             </header>
