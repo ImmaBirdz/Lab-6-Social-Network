@@ -8,22 +8,28 @@ import TextPage from './TextPage';
 import MediaPage  from './mediaPage';
 
 const Profile = () => {
-    const [activeTab, setActiveTab] = useState('Text'); // set default tab to Text's Page
-    const { loginID } = useContext(LoginContext);
+    const [activeTab, setActiveTab] = useState('Text'); //set default tab to Text's Page
+    const { profileID } = useContext(LoginContext);
     const [profileData, setProfileData] = useState({});
+    const [isLoaded, setIsLoaded] = useState(false);
     const [isEditing, setIsEditing] = useState(false); // Edit mode state
     const [updatedName, setUpdatedName] = useState('');
     const [updatedProfilePic, setUpdatedProfilePic] = useState('');
+  
+    useEffect(() => {
+        // fetch user's profile data based on loginID from firebase
+    const [activeTab, setActiveTab] = useState('Text'); // set default tab to Text's Page
+    const { loginID } = useContext(LoginContext);
+    const [profileData, setProfileData] = useState({});
 
     useEffect(() => {
         TabTitle("Profile | Black Cat with Bow");
-
         // Fetch user's profile data based on loginID from Firebase
         const fetchProfileData = async () => {
             const userDoc = collection(db, 'user_data');
             const userSnapshot = await getDocs(userDoc);
             userSnapshot.forEach(doc => {
-                if (doc.data().username === loginID) {
+                if (doc.data().username === profileID) {
                     setProfileData(doc.data());
                     setUpdatedName(doc.data().display_name); // Set initial name
                     setUpdatedProfilePic(doc.data().profile_picture); // Set initial profile pic
@@ -31,7 +37,8 @@ const Profile = () => {
             });
         }
         fetchProfileData();
-    }, [loginID]);
+        TabTitle(`${profileData.display_name} (@${profileID}) | Black Cat with Bow`);
+    }, [profileData.display_name, profileID]);
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -96,9 +103,7 @@ const Profile = () => {
                             </div>
 
                             <div className="accBox">
-                                <div className="accProf">
-                                    <a href="#" className='accProfName'>{profileData.username}</a>
-                                </div>
+                                <div className="accProf"><a href="#" className='accProfName'>{`@${profileData.username}`}</a></div>
                             </div>
                         </div>
                     </div>
@@ -109,16 +114,13 @@ const Profile = () => {
                                 <div className="postNum">{profileData.number_of_posts} posts</div>
                             ) : (
                                 <div className="postNum">{profileData.number_of_posts} post</div>
-                            )}
-                            {profileData.number_of_friends > 1 ? (
-                                <div className="followersNum">
-                                    <a href="#">{profileData.number_of_friends} friends</a>
-                                </div>
-                            ) : (
-                                <div className="followersNum">
-                                    <a href="#">{profileData.number_of_friends} friend</a>
-                                </div>
-                            )}
+                            }
+                            {
+                                profileData.number_of_friends > 1 ? 
+                                <div className="followersNum"><a href="#">{profileData.number_of_friends} friends</a></div>
+                                :
+                                <div className="followersNum"><a href="#">{profileData.number_of_friends} friend</a></div>
+                            }
                         </div>
 
                         {isEditing ? (

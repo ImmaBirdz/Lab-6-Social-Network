@@ -124,59 +124,56 @@ const Login = () => {
             };
             // check if some data is already in the database
             let isDuplicate = false;
-            getDocs(collection(db, "user_data")).then((querySnapshot) => {
+
+            const fetchData = async () => {
+                const querySnapshot = await getDocs(collection(db, 'user_data'));
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    // check if the username is already in use
                     if (data.username === username) {
-                        alert("This username is already in use.");
+                        alert('Username is already in use');
                         isDuplicate = true;
                         // reset the fields
                         document.getElementById("username").value = "";
                         return;
                     }
-                    // check if the email is already in use
                     if (data.email === email) {
-                        alert("Email is already in use.");
+                        alert('Email is already in use');
                         isDuplicate = true;
                         // reset the fields
                         document.getElementById("email").value = "";
-                        document.getElementById("password").value = "";
-                        document.getElementById("confirmPassword").value = "";
                         return;
                     }
                 });
-                // if it is not a duplicate, add the data to the database
-                if (!isDuplicate) {
-                    // Add a new document with a generated id.
-                    const userDoc = doc(db, 'user_data', username);
-                    const userPayload = {
-                        ...payload,
-                        number_of_friends: 0,
-                        number_of_posts: 0
-                        // Add more fields here
-                    }
-                    // set the document
-                    setDoc(userDoc, userPayload);
-                    alert("Registration successful.");
-                    
-                    // set the login state
-                    setIsLogin(true);
-                    setLoginID(doc.id);
-                    localStorage.setItem('loginID', doc.id); // add loginID to localStorage
-                    
-                    // delete input fields
-                    document.getElementById("username").value = "";
-                    document.getElementById("email").value = "";
-                    document.getElementById("password").value = "";
-                    document.getElementById("confirmPassword").value = "";
-                    document.getElementById("birthday").value = "";
-                    document.getElementById("gender").value = "";
+            }
+            fetchData();
+            // if it is not a duplicate, add the data to the database
+            if (!isDuplicate) {
+                // fetch the user_data collection
+                fetchData();
 
-                    // it will redirect to the profile page after registration automatically
-                    // using the useEffect depends on isLogin state
+                // Add a new document with a generated id.
+                const userDoc = doc(db, 'user_data', username);
+                const userPayload = {
+                    ...payload,
+                    number_of_friends: 0,
+                    number_of_posts: 0
+                    // Add more fields here
                 }
-            });
+                // set the document
+                setDoc(userDoc, userPayload);
+                alert("Registration successful.");
+                
+                // delete input fields
+                document.getElementById("username").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("password").value = "";
+                document.getElementById("confirmPassword").value = "";
+                document.getElementById("birthday").value = "";
+                document.getElementById("gender").value = "";
+
+                // ge back to login
+                document.getElementById("login").click();
+            }
         } else {
             alert('Please fill in all fields.');
         }
