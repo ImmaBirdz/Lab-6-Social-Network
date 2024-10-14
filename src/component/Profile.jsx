@@ -15,9 +15,8 @@ const Profile = () => {
     const [isEditing, setIsEditing] = useState(false); // Edit mode state
     const [updatedName, setUpdatedName] = useState('');
     const [updatedProfilePic, setUpdatedProfilePic] = useState('');
-    
+
     useEffect(() => {
-        TabTitle("Profile | Black Cat with Bow");
         // Fetch user's profile data based on loginID from Firebase
         const fetchProfileData = async () => {
             const userDoc = collection(db, 'user_data');
