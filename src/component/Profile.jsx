@@ -15,13 +15,7 @@ const Profile = () => {
     const [isEditing, setIsEditing] = useState(false); // Edit mode state
     const [updatedName, setUpdatedName] = useState('');
     const [updatedProfilePic, setUpdatedProfilePic] = useState('');
-  
-    useEffect(() => {
-        // fetch user's profile data based on loginID from firebase
-    const [activeTab, setActiveTab] = useState('Text'); // set default tab to Text's Page
-    const { loginID } = useContext(LoginContext);
-    const [profileData, setProfileData] = useState({});
-
+    
     useEffect(() => {
         TabTitle("Profile | Black Cat with Bow");
         // Fetch user's profile data based on loginID from Firebase
@@ -114,6 +108,7 @@ const Profile = () => {
                                 <div className="postNum">{profileData.number_of_posts} posts</div>
                             ) : (
                                 <div className="postNum">{profileData.number_of_posts} post</div>
+                            )
                             }
                             {
                                 profileData.number_of_friends > 1 ? 
