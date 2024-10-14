@@ -164,6 +164,10 @@ body {
     aspect-ratio: 1 / 1;
     flex-shrink: 0;
     box-shadow: lightgrey 0px 0px 10px;
+
+
+    position: relative;
+
 }
 
 .bioPart .accInfo {
@@ -331,4 +335,60 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100%;
+}
+
+
+
+
+/* EDIT PROFILE */
+
+
+
+.nameBox input {
+    font-family: "Itim", cursive;
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+    padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.editBtn {
+    background-color: #D9D9D9;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    text-align: center;
+    width: fit-content;
+    margin-top: 10px;
+}
+
+.editBtn:hover {
+    background-color: #C5C5C5;
+}
+
+.upload-label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.upload-label {
+    position: absolute; 
+    width: 140px;
+    top: 0px; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background-color: rgba(234, 128, 214, 0.8); 
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    color: rgb(255, 255, 255);
+}
+
+.upload-label:hover {
+    background-color: rgba(43, 72, 51, 0.9); /* Change background on hover */
 }
