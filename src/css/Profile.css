@@ -340,55 +340,87 @@ body {
 
 
 
-/* EDIT PROFILE */
+
+/* modal */
 
 
 
-.nameBox input {
-    font-family: "Itim", cursive;
-    font-size: 1.2rem;
-    border: 1px solid #ccc;
-    padding: 5px;
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
+
+.modalBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.editBtn {
-    background-color: #D9D9D9;
-    cursor: pointer;
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: 5px;
-    text-align: center;
-    width: fit-content;
-    margin-top: 10px;
+.modalContent {
+    background-color: rgb(91, 157, 181);
+    border-radius: 10px;
+    padding: 0px;
+    width: 90%; 
+    max-width: 500px;
+    max-height: 90%; 
+    overflow-y: auto; 
 }
 
-.editBtn:hover {
-    background-color: #C5C5C5;
-}
-
-.upload-label {
+  
+  .formGroup {
+    margin-bottom: 15px;
+    color: #000000;
+  }
+  
+  .formGroup label {
     display: block;
-    margin-bottom: 10px;
-}
-
-.upload-label {
-    position: absolute; 
-    width: 140px;
-    top: 0px; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    background-color: rgba(234, 128, 214, 0.8); 
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+  
+  .formGroup input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  
+  .saveBtn, .closeBtn {
+    padding: 10px 15px;
+    margin-right: 10px;
+  }
+  
+  .saveBtn {
+    background-color: #28a745;
+    color: white;
+    border: none;
     cursor: pointer;
-    text-align: center;
-    color: rgb(255, 255, 255);
-}
+  }
+  
+  .closeBtn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .closeBtn:hover, .saveBtn:hover {
+    opacity: 0.8;
+  }
+  
 
-.upload-label:hover {
-    background-color: rgba(43, 72, 51, 0.9); /* Change background on hover */
-}
+.profilePreview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .profileImage {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
