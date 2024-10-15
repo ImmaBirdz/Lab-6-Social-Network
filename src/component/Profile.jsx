@@ -9,7 +9,7 @@ import MediaPage from './mediaPage';
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('Text'); // Set default tab to Text Page
-    const { profileID } = useContext(LoginContext);
+    const { loginID, profileID } = useContext(LoginContext);
     const [profileData, setProfileData] = useState({});
     const [isLoaded, setIsLoaded] = useState(false);
     const [showModal, setShowModal] = useState(false); // Modal state
@@ -24,8 +24,7 @@ const Profile = () => {
             userSnapshot.forEach(doc => {
                 if (doc.data().username === profileID) {
                     setProfileData(doc.data());
-                    setUpdatedName(doc.data().display_name); // Set initial name
-                    setUpdatedProfilePic(doc.data().profile_picture); // Set initial profile pic
+                    setEditProfileData(doc.data().display_name); // Set initial name
                 }
             });
         }
@@ -115,10 +114,12 @@ const Profile = () => {
                                 <div className="followersNum"><a href="#">{profileData.number_of_friends} friend</a></div>
                             }
                         </div>
-
-                        <div className="editBtn">
-                            <button onClick={handleShow}>Edit Profile</button>
-                        </div>
+                        { // Show edit button if the profile is the user's own profile
+                            profileID === loginID &&
+                            <div className="editBtn">
+                                <button onClick={handleShow}>Edit Profile</button>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
