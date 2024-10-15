@@ -30,7 +30,7 @@ const NavBar = () => {
                 <div className="nav-right">
                         <button className="nav-button" onClick={() => window.location.href = `/page`}>Page</button>
                         <button className="nav-button" onClick={() => window.location.href = `/message`}>Message</button>
-                        <button className="nav-button" onClick={() => window.location.href = `/profile/${loginID}`}>My Profile</button>
+                        <button className="nav-button" onClick={() => window.location.href = `/${loginID}`}>My Profile</button>
                     <button className="nav-button" onClick={handleLogout}>Log Out</button>
                 </div>
             </header>
