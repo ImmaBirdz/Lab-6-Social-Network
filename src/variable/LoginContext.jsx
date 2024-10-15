@@ -44,7 +44,6 @@ const LoginProvider = (props) => {
                 setContextProfileID(contextProfileID => [...contextProfileID, doc.id]);
             });
         }
-        console.log(contextProfileID);
         fetchProfileID();
     }, []);
 
