@@ -35,7 +35,7 @@ const LoginProvider = (props) => {
         }, 500);
     }, []);
 
-    // fetch every profile id to profileID
+    // fetch every profile id to contextProfileID
     useEffect(() => {
         const fetchProfileID = async () => {
             const userCollection = collection(db, 'user_data');
