@@ -9,27 +9,28 @@ import MediaPage from './mediaPage';
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('Text'); // Set default tab to Text Page
-    const { loginID } = useContext(LoginContext);
+    const { loginID, profileID } = useContext(LoginContext);
     const [profileData, setProfileData] = useState({});
+    const [isLoaded, setIsLoaded] = useState(false);
     const [showModal, setShowModal] = useState(false); // Modal state
     const [editProfileData, setEditProfileData] = useState({}); // Editable profile uplode
     const [profilePic, setProfilePic] = useState(null); // State uploaded file
 
-    // Fetch data based on loginID
     useEffect(() => {
-        TabTitle("Profile | Black Cat with Bow");
+        // Fetch user's profile data based on loginID from Firebase
         const fetchProfileData = async () => {
             const userDoc = collection(db, 'user_data');
             const userSnapshot = await getDocs(userDoc);
             userSnapshot.forEach(doc => {
-                if (doc.data().username === loginID) {
+                if (doc.data().username === profileID) {
                     setProfileData(doc.data());
-                    setEditProfileData(doc.data()); // Set editable data
+                    setEditProfileData(doc.data().display_name); // Set initial name
                 }
             });
-        };
+        }
         fetchProfileData();
-    }, [loginID]);
+        TabTitle(`${profileData.display_name} (@${profileID}) | Black Cat with Bow`);
+    }, [profileData.display_name, profileID]);
 
     // Handle open/close modal
     const handleClose = () => setShowModal(false);
@@ -113,10 +114,12 @@ const Profile = () => {
                                 <div className="followersNum"><a href="#">{profileData.number_of_friends} friend</a></div>
                             }
                         </div>
-
-                        <div className="editBtn">
-                            <button onClick={handleShow}>Edit Profile</button>
-                        </div>
+                        { // Show edit button if the profile is the user's own profile
+                            profileID === loginID &&
+                            <div className="editBtn">
+                                <button onClick={handleShow}>Edit Profile</button>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
