@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import '../css/Post.css';  // Separate CSS for styling posts
 import SideBarRight from './SideBarRight';
+// import Navbar  from './NavBar';
+import Layout from './Layout';
 import { TabTitle } from './TabTitle';
 
 const Post = () => {
+
+    //this part for call NavBar
+
+
 
     const [isSidebarShown, setSidebarShow] = useState(false);
 
@@ -76,7 +82,7 @@ const Post = () => {
 
     return (
 
-        <div>
+        <Layout>
 
             <button className="toggle-sidebar-right" onClick={toggleSidebar}>
                 {isSidebarShown ? '✖' : '☰'}
@@ -134,7 +140,7 @@ const Post = () => {
                     </div>
                 </main>
             </div>
-        </div>
+        </Layout>
     );
 };
 
