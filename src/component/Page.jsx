@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../css/Page.css'
 import { TabTitle } from './TabTitle'
 
 const Page = () => {
-    TabTitle("Feed | Black Cat with Bow");
+    useEffect(() => {
+        TabTitle("Feed | Black Cat with Bow");
+    } , []);
 
     return (
         <div>
@@ -35,6 +37,39 @@ const Page = () => {
                                 </div>
                             </div>
                             <p>Another sample post content...</p>
+                        </div>
+
+                        <div className="post">
+                            <div className="post-header">
+                                <img src="avatar.png" alt="User Avatar" />
+                                <div>
+                                    <h4>User Name</h4>
+                                    <p>Just now</p>
+                                </div>
+                            </div>
+                            <p>This is a sample post content...</p>
+                        </div>
+
+                        <div className="post">
+                            <div className="post-header">
+                                <img src="avatar.png" alt="User Avatar" />
+                                <div>
+                                    <h4>User Name</h4>
+                                    <p>Just now</p>
+                                </div>
+                            </div>
+                            <p>This is a sample post content...</p>
+                        </div>
+
+                        <div className="post">
+                            <div className="post-header">
+                                <img src="avatar.png" alt="User Avatar" />
+                                <div>
+                                    <h4>User Name</h4>
+                                    <p>Just now</p>
+                                </div>
+                            </div>
+                            <p>This is a sample post content...</p>
                         </div>
                     </main>
                 </div>
