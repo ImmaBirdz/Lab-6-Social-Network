@@ -2,7 +2,7 @@ import React from 'react'
 import '../css/Page.css'
 import { useContext } from 'react'
 import { LoginContext } from '../variable/LoginContext'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const NavBar = () => {
     const { loginID, setLoginID, setIsLogin } = useContext(LoginContext);
