@@ -67,14 +67,21 @@ const Profile = () => {
 
     // Handle saving edited profile data
     const handleSaveChanges = async () => {
-        if (editProfileData.password !== confirmPassword) {
-            setError("Passwords not match go change again!!!!.");
-            return;
+        
+        if (editProfileData.password || confirmPassword) {
+            if (editProfileData.password !== confirmPassword) {
+                setError("PASSWORD NOT MATCH!!!!!.");
+                return;
+            }
         }
+    
         setError(''); 
+    
+       
         const userRef = doc(db, 'user_data', loginID); // Assume loginID is the doc ID
         await updateDoc(userRef, editProfileData);
-
+    
+        
         setProfileData(editProfileData);
         handleClose();
     };
