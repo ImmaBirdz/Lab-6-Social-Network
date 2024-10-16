@@ -37,6 +37,6 @@ body {
     transition: background-color 0.3s; 
 }
 
-.red-button:hover {
+.NFbutton:hover {
     background-color: #c82333; 
 }
