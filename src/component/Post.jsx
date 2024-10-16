@@ -7,7 +7,6 @@ const Post = () => {
 
     const [isSidebarShown, setSidebarShow] = useState(false);
 
-
     const toggleSidebar = () => {
         setSidebarShow(!isSidebarShown);
     };
@@ -78,62 +77,70 @@ const Post = () => {
 
         <div>
 
-            <button className="toggle-sidebar-right" onClick={toggleSidebar}>
-                {isSidebarShown ? '✖' : '☰'}
-            </button>
+            <div className="main-Content">
 
-            <SideBarRight isSidebarShown={isSidebarShown} />
+                <button className="toggle-sidebar-right" onClick={toggleSidebar}>
+                    {isSidebarShown ? '✖' : '☰'}
+                </button>
 
+                <SideBarRight isSidebarShown={isSidebarShown} />
 
-            <div className="container">
-                <main className="feed">
-                    <div className="post">
-                        {/* Post Author Information */}
-                        <div className="post-header">
-                            <img src={selectedFriend.imgSrc} alt="Post Author" className="profile-pic-large" />
-                            <span>{selectedFriend.name}</span>
+                <div className="container">
+
+                    <main className="feed">
+                        <div className="post">
+                            {/* Post Author Information */}
+                            <div className="post-header">
+                                <img src={selectedFriend.imgSrc} alt="Post Author" className="profile-pic-large" />
+                                <span>{selectedFriend.name}</span>
+                            </div>
+
+                            <p>This is the content of the post. hehehehehehehhehehehe.</p>
+                            {/* Display Post Date and Time */}
+                            <p className="post-date">{postDate}</p>
                         </div>
 
-                        <p>This is the content of the post. hehehehehehehhehehehe.</p>
-                        {/* Display Post Date and Time */}
-                        <p className="post-date">{postDate}</p>
-                    </div>
+                        {/* Separator Line */}
+                        <hr className="post-separator" />
 
-                    {/* Separator Line */}
-                    <hr className="post-separator" />
-
-                    <div className="comment-section">
-                        <h4>Comments</h4>
-                        {comments.map(comment => (
-                            <div key={comment.id} className="comment">
-                                <div className="comment-header">
-                                    <img src={comment.user.imgSrc} alt="User Pic" className="profile-pic" />
-                                    <h4>{comment.user.name}</h4>
+                        <div className="comment-section">
+                            <h4>Comments</h4>
+                            {comments.map(comment => (
+                                <div key={comment.id} className="comment">
+                                    <div className="comment-header">
+                                        <img src={comment.user.imgSrc} alt="User Pic" className="profile-pic" />
+                                        <h4>{comment.user.name}</h4>
+                                    </div>
+                                    <p>{comment.text}</p>
                                 </div>
-                                <p>{comment.text}</p>
-                            </div>
-                        ))}
+                            ))}
 
-                        {/* Add Comment Button */}
-                        <button className="add-comment-btn" onClick={handleAddCommentClick}>
-                            {showCommentInput ? 'Cancel' : 'Add Comment'}
-                        </button>
+                            {/* Add Comment Button */}
+                            <button className="add-comment-btn" onClick={handleAddCommentClick}>
+                                {showCommentInput ? 'Cancel' : 'Add Comment'}
+                            </button>
 
-                        {/* Comment Input Field */}
-                        {showCommentInput && (
-                            <div className="comment-input">
-                                <input
-                                    type="text"
-                                    value={commentText}
-                                    onChange={(e) => setCommentText(e.target.value)}
-                                    placeholder="Write a comment..."
-                                />
-                                <button className="submit-comment-btn" onClick={handleCommentSubmit}>Submit</button>
-                            </div>
-                        )}
-                    </div>
-                </main>
+                            {/* Comment Input Field */}
+                            {showCommentInput && (
+                                <div className="comment-input">
+                                    <input
+                                        type="text"
+                                        value={commentText}
+                                        onChange={(e) => setCommentText(e.target.value)}
+                                        placeholder="Write a comment..."
+                                    />
+                                    <button className="submit-comment-btn" onClick={handleCommentSubmit}>Submit</button>
+                                </div>
+                            )}
+
+                        </div>
+
+                    </main>
+
+                </div>
+
             </div>
+
         </div>
     );
 };

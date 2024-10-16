@@ -189,14 +189,6 @@ body {
     z-index: 1;
 }
 
-/* Action Part */
-
-/* .contentSec {
-    position: static;
-    width: 100%;
-    height: 100%;
-} */
-
 .actionPart {
     display: flex;
     flex-direction: column;
@@ -294,16 +286,6 @@ body {
         width: 100%;
         justify-content: center;
     }
-
-    /* .bioPart .leftBox {
-        flex: 1;
-        max-width: 220px;
-    }
-
-    .bioPart .rightBox {
-        flex: 2;
-        max-width: 300px;
-    } */
 
     .bioPart .leftBox .profPic {
         margin-left: 70px;

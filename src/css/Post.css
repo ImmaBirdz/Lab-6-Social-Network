@@ -78,7 +78,6 @@ body {
     height: 35px;
 }
 
-
 .container {
     display: flex;
     padding: 20px;
@@ -142,9 +141,6 @@ body {
     vertical-align: middle;
 }
 
-
-
-
 .feed {
     width: 65%;
     background-color: hsl(300, 53%, 94%);
@@ -183,7 +179,6 @@ body {
     background-color: #ccc;
     margin: 1em 0;
 }
-
 
 .comment-section {
     margin-top: 20px;
