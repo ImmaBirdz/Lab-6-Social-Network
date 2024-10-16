@@ -83,9 +83,12 @@ const Post = () => {
                     {isSidebarShown ? '✖' : '☰'}
                 </button>
 
-                <SideBarRight isSidebarShown={isSidebarShown} />
+                <div className={`sidebar-right ${isSidebarShown ? 'show' : ''}`}>
+                    <SideBarRight isSidebarShown={isSidebarShown} />
+                </div>
 
-                <div className="container">
+
+                <div className={`container ${isSidebarShown ? 'shifted' : ''}`}>
 
                     <main className="feed">
                         <div className="post">
