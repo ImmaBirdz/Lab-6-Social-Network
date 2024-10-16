@@ -75,8 +75,6 @@ const Post = () => {
 
     return (
 
-        <div>
-
             <div className="main-Content">
 
                 <button className="toggle-sidebar-right" onClick={toggleSidebar}>
@@ -141,7 +139,6 @@ const Post = () => {
 
             </div>
 
-        </div>
     );
 };
 

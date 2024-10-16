@@ -1,6 +1,5 @@
 import React from 'react'
 import '../css/Page.css'
-import { TabTitle } from './TabTitle'
 import { useState, useEffect } from 'react';
 
 const SideBarLeft = () => {
@@ -11,10 +10,6 @@ const SideBarLeft = () => {
     });
 
     const [postDate, setPostDate] = useState(new Date().toLocaleString()); // State for date and time
-
-    useEffect(() => {
-        TabTitle('Posts | Black Cat with Bow');
-    }, []);
 
     // Updated friends array with isOnline property
     const friends = [

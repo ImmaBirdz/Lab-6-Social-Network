@@ -13,18 +13,18 @@ body {
 }
 
 
-.navbar {
+/* .navbar {
     background-color: #e1b5db;
     color: white;
     display: flex;
-    justify-content: flex-end; /* Space between elements */
+    justify-content: flex-end;  Space between elements
     align-items: center; 
     padding: 10px;
     position: fixed;
     width: 100%;
     top: 0;
     left: 0;
-}
+} */
 
 .back {
     background: none;
