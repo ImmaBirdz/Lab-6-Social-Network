@@ -11,10 +11,12 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState('Text'); // Set default tab to Text Page
     const { loginID, profileID } = useContext(LoginContext);
     const [profileData, setProfileData] = useState({});
-    const [isLoaded, setIsLoaded] = useState(false);
     const [showModal, setShowModal] = useState(false); // Modal state
     const [editProfileData, setEditProfileData] = useState({}); // Editable profile uplode
     const [profilePic, setProfilePic] = useState(null); // State uploaded file
+    const [confirmPassword, setConfirmPassword] = useState(''); // Confirm pass
+    const [error, setError] = useState(''); // Error pass not match
+
 
     useEffect(() => {
         // Fetch user's profile data based on loginID from Firebase
@@ -65,11 +67,21 @@ const Profile = () => {
 
     // Handle saving edited profile data
     const handleSaveChanges = async () => {
-        // Save updated data to the database (firebase)
-        const userRef = doc(db, 'user_data', loginID); // Assuming loginID is the doc ID
+        
+        if (editProfileData.password || confirmPassword) {
+            if (editProfileData.password !== confirmPassword) {
+                setError("PASSWORD NOT MATCH!!!!!.");
+                return;
+            }
+        }
+    
+        setError(''); 
+    
+       
+        const userRef = doc(db, 'user_data', loginID); // Assume loginID is the doc ID
         await updateDoc(userRef, editProfileData);
-
-        // Update local state
+    
+        
         setProfileData(editProfileData);
         handleClose();
     };
@@ -98,7 +110,7 @@ const Profile = () => {
                             </div>
 
                             <div className="accBox">
-                                <div className="accProf"><a href="#" className='accProfName'>{profileData.username}</a></div>
+                                <div className="accProf"><a href="#" className='accProfName'>{`@${profileData.username}`}</a></div>
                             </div>
                         </div>
                     </div>
@@ -109,7 +121,7 @@ const Profile = () => {
                                 <div className="postNum">{profileData.number_of_posts} posts</div> :
                                 <div className="postNum">{profileData.number_of_posts} post</div>
                             }
-                            {profileData.number_of_followers > 1 ? 
+                            {profileData.number_of_friends > 1 ? 
                                 <div className="followersNum"><a href="#">{profileData.number_of_friends} friends</a></div> :
                                 <div className="followersNum"><a href="#">{profileData.number_of_friends} friend</a></div>
                             }
@@ -141,10 +153,13 @@ const Profile = () => {
                     <div className="modalContent">
                         <h2>Edit Profile</h2>
                         <form>
-                            <div className="formGroup">
+
+                            {/* if want current profile pic it here */}
+
+                            {/* <div className="formGroup">
                                 <label>Current Profile Picture:</label>
                                 <img src={profileData.profile_pic} alt="Current Profile" style={{ width: '100px', height: '100px' }} />
-                            </div>
+                            </div> */}
 
                             <div className="formGroup">
                                 <label>Upload New Profile Picture:</label>
@@ -177,12 +192,22 @@ const Profile = () => {
                             </div>
 
                             <div className="formGroup">
-                                <label>Password:</label>
+                                <label>New Password:</label>
                                 <input
                                     type="password"
                                     name="password"
                                     value={editProfileData.password || ''}
                                     onChange={handleInputChange}
+                                />
+                            </div>
+                            
+                            <div className="formGroup">
+                                <label>Confirm Password:</label>
+                                <input
+                                    type="password"
+                                    name="confirmPassword"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
                                 />
                             </div>
 
@@ -195,6 +220,7 @@ const Profile = () => {
                                     onChange={handleInputChange}
                                 />
                             </div>
+                            {error && <p className="error">{error}</p>}
 
                             <button type="button" className="saveBtn" onClick={handleSaveChanges}>
                                 Save Changes
