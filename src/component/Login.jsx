@@ -2,8 +2,9 @@ import React from 'react'
 import { useEffect, useContext } from 'react'
 import '../css/Login.css'
 import { TabTitle } from './TabTitle'
-import { db } from '../backend/firebaseConfig'
+import { db, storage } from '../backend/firebaseConfig'
 import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
+import { ref, getDownloadURL } from 'firebase/storage'
 import { LoginContext } from '../variable/LoginContext';
 
 const Login = () => {
@@ -97,7 +98,7 @@ const Login = () => {
         }
     };
 
-    const handleRegisterSubmit = (event) => {
+    const handleRegisterSubmit = async (event) => {
         event.preventDefault();
         
         const username = document.getElementById("username").value;
@@ -106,6 +107,9 @@ const Login = () => {
         const confirmPassword = document.getElementById("confirmPassword").value;
         const birthday = document.getElementById("birthday").value;
         const gender = document.getElementById("gender").value;
+        // get default profile picture from firebase storage
+        const defaultProfilePicRef = ref(storage, 'default_profile.jpg');
+        const defaultProfilePic = await getDownloadURL(defaultProfilePicRef);
         
         if (password !== confirmPassword) {
             alert("Passwords do not match.");
@@ -120,7 +124,8 @@ const Login = () => {
                 password: password,
                 birthday: birthday,
                 gender: gender,
-                bio : "This is a bio"
+                bio : "This is a bio",
+                profile_pic : defaultProfilePic
             };
             // check if some data is already in the database
             let isDuplicate = false;
