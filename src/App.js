@@ -55,7 +55,7 @@ function App() {
                 <Route path="/:profileID" element={<ProfileWrapper />} />
                 <Route path="/message" element={<Message />} />
                 <Route path="/post" element={<Post />} />
-                {/* <Route path="*" element={<NotFound />} /> */}
+                <Route path="*" element={<NotFound />} />
               </>
             ) : (
               <>
