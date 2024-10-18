@@ -1,12 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import '../css/Post.css';  // Separate CSS for styling posts
 import { TabTitle } from './TabTitle';
+import { LoginContext } from '../variable/LoginContext';
+import { db } from '../backend/firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
 
 const Post = () => {
+    const { postID, contextProfileID, contextPostID } = useContext(LoginContext);
     const [selectedFriend, setSelectedFriend] = useState({
         name: 'User ID',
         imgSrc: 'https://via.placeholder.com/40',
     });
+
+    const [ postData, setPostData ] = useState({}); // State for post data
+
 
     const [postDate, setPostDate] = useState(new Date().toLocaleString()); // State for date and time
 
@@ -14,23 +21,20 @@ const Post = () => {
         TabTitle('Posts | Black Cat with Bow');
     }, []);
 
-    // Updated friends array with isOnline property
-    const friends = [
-        { id: 'chat1', name: 'Friend 1', imgSrc: 'https://via.placeholder.com/40', isOnline: true },
-        { id: 'chat2', name: 'Friend 2', imgSrc: 'https://via.placeholder.com/40', isOnline: false },
-        { id: 'chat3', name: 'Friend 3', imgSrc: 'https://via.placeholder.com/40', isOnline: true },
-        { id: 'chat4', name: 'Friend 4', imgSrc: 'https://via.placeholder.com/40', isOnline: false },
-        { id: 'chat5', name: 'Friend 5', imgSrc: 'https://via.placeholder.com/40', isOnline: true },
-        { id: 'chat6', name: 'Friend 6', imgSrc: 'https://via.placeholder.com/40', isOnline: false },
-        { id: 'chat7', name: 'Friend 7', imgSrc: 'https://via.placeholder.com/40', isOnline: true },
-        { id: 'chat8', name: 'Friend 8', imgSrc: 'https://via.placeholder.com/40', isOnline: false },
-        { id: 'chat9', name: 'Friend 9', imgSrc: 'https://via.placeholder.com/40', isOnline: true },
-    ];
-
-    const handleFriendClick = (friendId) => {
-        // Link to that friend's message page that online, route based on their ID
-        window.location.href = `/messages/${friendId}`;
-    };
+    useEffect(() => {
+        // Fetch post data from the database
+        const fetchPostData = async () => {
+            const postCollection = collection(db, 'post');
+            const postSnapshot = await getDocs(postCollection);
+            postSnapshot.forEach(doc => {
+                if (doc.id === postID) {
+                    setPostData(doc.data());
+                }
+            });
+        }
+        fetchPostData();
+        TabTitle(`Post from ${postData.user_id} | Black Cat with Bow`);
+    }, [postID, postData.user_id]);
 
     const [showCommentInput, setShowCommentInput] = useState(false);
     const [commentText, setCommentText] = useState('');

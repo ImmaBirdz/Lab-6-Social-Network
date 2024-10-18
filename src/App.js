@@ -33,27 +33,66 @@ function ProfileWrapper() {
   // window.location.href = '/notfound'; // redirect to NotFound if the profileID in the URL doesn't match the one in the context
 }
 
+function PostWrapper() {
+  const { postID, setPostID, contextPostID } = useContext(LoginContext);
+  // set tempPostID to the postID in the URL
+  const { postID: tempPostID } = useParams();
+  let found = false;
+
+  // Redirect to NotFound if the postID in the URL doesn't match the one in the context
+  for (let i = 0; i < contextPostID.length; i++) {
+    if (tempPostID === contextPostID[i]) { // if the postID in the URL matches the one in the context
+      found = true;
+      setPostID(tempPostID);
+      console.log('Post ID: ' + postID);
+      return <Post />;
+    }
+  }
+  // if not found and no post id in context (preventing contextPost unfinished or not load) then redirect to NotFound
+  if (!found && contextPostID.length > 0) {
+    return <NotFound />;
+  }
+}
+
 function App() {
   const { isLogin } = useContext(LoginContext);
   
   return (
-    !isLogin ? (
-      <Login />
-    ) : (
-      <BrowserRouter>
-        <NavBar />
-        <SideBarLeft />
-        <Routes>
-          <Route path="/page" element={<Page />} />
-          <Route path={`/profile/:profileID`} element={<ProfileWrapper  />} /> {/* profileID is a URL parameter */}
-          <Route path="/message" element={<Message />} />
-          <Route path="/post" element={<Post />} />
-          <Route path="/notfound" element={<NotFound />} />
-          <Route path="*" element={<Page />} />
-        </Routes>
-        <SideBarRight />
-      </BrowserRouter>
-    )
+    <>
+      {isLoaded ?
+        <BrowserRouter>
+          {isLogin && (
+            <>
+              <NavBar />
+              <SideBarLeft />
+              <SideBarRight />
+            </>
+          )}
+          <Routes>
+            {isLogin ? (
+              <>
+                <Route path="/" element={<Page />} />
+                <Route path="/page" element={<Page />} />
+                <Route path="/:profileID" element={<ProfileWrapper />} />
+                <Route path="/message" element={<Message />} />
+                <Route path="/post" element={<Post />} />
+                <Route path="/post/:postID" element={<PostWrapper />} />
+                <Route path="*" element={<NotFound />} />
+              </>
+            ) : (
+              <>
+                <Route path="*" element={<Login />} />
+                <Route path="/" element={<Login />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Login />} />
+              </>
+            )
+          }
+          </Routes>
+        </BrowserRouter>
+      :
+      <>Loading...</>}
+    </>
   );
 }
 

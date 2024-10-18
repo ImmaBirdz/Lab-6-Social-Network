@@ -12,7 +12,9 @@ const LoginProvider = (props) => {
     const [isLogin, setIsLogin] = useState(false);
     const [loginID, setLoginID] = useState(null);
     const [profileID , setProfileID] = useState(null);
+    const [postID, setPostID] = useState(null);
     const [contextProfileID, setContextProfileID] = useState([]);
+    const [contextPostID, setContextPostID] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
     // check if the user is already login
@@ -48,6 +50,19 @@ const LoginProvider = (props) => {
         fetchProfileID();
     }, []);
 
+    // fetch every post id to contextPostID
+    useEffect(() => {
+        const fetchPostID = async () => {
+            const postCollection = collection(db, 'post');
+            const postSnapshot = await getDocs(postCollection);
+            postSnapshot.forEach(doc => {
+                setContextPostID(contextPostID => [...contextPostID, doc.id]);
+                console.log(contextPostID);
+            });
+        }
+        fetchPostID();
+    }, []);
+
     return (
         <LoginContext.Provider value={{
             registerButton,
@@ -64,8 +79,12 @@ const LoginProvider = (props) => {
             setLoginID,
             profileID,
             setProfileID,
+            postID,
+            setPostID,
             contextProfileID,
             setContextProfileID,
+            contextPostID,
+            setContextPostID,
             isLoaded,
             setIsLoaded
         }}>
