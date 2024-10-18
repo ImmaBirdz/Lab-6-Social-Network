@@ -56,7 +56,6 @@ const LoginProvider = (props) => {
             const postSnapshot = await getDocs(postCollection);
             postSnapshot.forEach(doc => {
                 setContextPostID(contextPostID => [...contextPostID, doc.id]);
-                console.log(contextPostID);
             });
         }
         fetchPostID();
