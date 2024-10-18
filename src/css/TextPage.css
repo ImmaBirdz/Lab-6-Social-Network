@@ -7,10 +7,8 @@ body {
     position: static;
     width: 100%;
     display: flex;
-    justify-content: center;
     flex-direction: column;
     align-items: center;
-    overflow-y: scroll;
     height: 800px;
 }
 
@@ -19,9 +17,7 @@ body {
     flex-direction: column;
     justify-content: center;
     background-color: #E2DAD6;
-    min-height: 23vh;
     width: 100%;
-    max-width: 700px;
     border-radius: 5px;
     margin-bottom: 15px;
 }
@@ -30,28 +26,49 @@ body {
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    padding: 0 0 10px 15px;
+    padding: 0 0 0 15px;
 }
 
 .userProf {
     display: flex;
     flex-direction: row;
+    div{
+        display: flex;
+        justify-content: center;
+    }
 }
 
 .userProf img {
     width: 65px;
-    height: 55px;
+    height: 65px;
     border-radius: 50%;
-    padding-right: 10px;
+}
+
+.userPics {
+    width: 65px;
+    height: 65px;
 }
 
 .infoPost {
+    padding-left: 10px;
     display: flex;
+    flex-direction: column;
+    span {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        a{
+            margin: 0;
+            padding: 0;
+            font-size: 19.2px;
+        }
+    }
 }
 
-.userProf p.postName {
-    font-weight: 500;
+.postDisplayName {
     font-size: 1.2rem;
+    font-weight: 500;
 }
 
 .postUsername{
