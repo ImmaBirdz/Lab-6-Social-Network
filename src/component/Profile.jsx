@@ -1,8 +1,9 @@
 import '../css/Profile.css';
 import React, { useState, useEffect, useContext } from 'react';
 import { LoginContext } from '../variable/LoginContext';
-import { db } from '../backend/firebaseConfig';
+import { db, storage } from '../backend/firebaseConfig';
 import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
+import { getDownloadURL, ref as storageRef, uploadBytes } from 'firebase/storage';
 import { TabTitle } from './TabTitle';
 import TextPage from './TextPage';
 import MediaPage from './mediaPage';
@@ -12,8 +13,8 @@ const Profile = () => {
     const { loginID, profileID } = useContext(LoginContext);
     const [profileData, setProfileData] = useState({});
     const [showModal, setShowModal] = useState(false); // Modal state
-    const [editProfileData, setEditProfileData] = useState({}); // Editable profile uplode
-    const [profilePic, setProfilePic] = useState(null); // State uploaded file
+    const [editProfileData, setEditProfileData] = useState({}); // Editable profile upload
+    const [newPassword, setNewPassword] = useState(''); // New pass
     const [confirmPassword, setConfirmPassword] = useState(''); // Confirm pass
     const [error, setError] = useState(''); // Error pass not match
 
@@ -26,7 +27,7 @@ const Profile = () => {
             userSnapshot.forEach(doc => {
                 if (doc.data().username === profileID) {
                     setProfileData(doc.data());
-                    setEditProfileData(doc.data().display_name); // Set initial name
+                    setEditProfileData(doc.data());
                 }
             });
         }
@@ -40,48 +41,70 @@ const Profile = () => {
 
     // Handle input change in modal 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setEditProfileData(prevData => ({
-            ...prevData,
-            [name]: value
-        }));
+        const newDisplayName = document.getElementById('display_name').value;
+        const newEmail = document.getElementById('email').value;
+        const newPassword = document.getElementById('password').value;
+        const newBirthday = document.getElementById('birthday').value;
+        if (newDisplayName !== '') {
+            setEditProfileData(prevData => ({
+                ...prevData,
+                display_name: newDisplayName
+            }));
+        }
+        if (newEmail !== '') {
+            setEditProfileData(prevData => ({
+                ...prevData,
+                email: newEmail
+            }));
+        }
+        
+        if (newPassword !== '') {
+            if (newPassword !== confirmPassword) {
+                setError("Password does not match.");
+                return;
+            } else {
+                setEditProfileData(prevData => ({
+                    ...prevData,
+                    password: newPassword
+                }));
+            }
+        }
+        if (newBirthday !== '') {
+            setEditProfileData(prevData => ({
+                ...prevData,
+                birthday: newBirthday
+            }));
+        }
     };
 
     // Handle file input change
     const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setProfilePic(file);
-        
-        // Preview image
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
+        const uploadedImg = storageRef(storage, `profile_pics/${loginID}`);
+        uploadBytes(uploadedImg, e.target.files[0]).then((snapshot) => {
+            getDownloadURL(uploadedImg).then((url) => {
                 setEditProfileData(prevData => ({
                     ...prevData,
-                    profile_pic: reader.result 
+                    profile_pic: url
                 }));
-            };
-            reader.readAsDataURL(file);
-        }
+            });
+        });
     };
 
     // Handle saving edited profile data
     const handleSaveChanges = async () => {
         
-        if (editProfileData.password || confirmPassword) {
-            if (editProfileData.password !== confirmPassword) {
-                setError("PASSWORD NOT MATCH!!!!!.");
+        if (newPassword || confirmPassword) {
+            if (newPassword !== confirmPassword) {
+                setError("Password does not match.");
                 return;
             }
         }
     
         setError(''); 
     
-       
         const userRef = doc(db, 'user_data', loginID); // Assume loginID is the doc ID
         await updateDoc(userRef, editProfileData);
     
-        
         setProfileData(editProfileData);
         handleClose();
     };
@@ -110,7 +133,7 @@ const Profile = () => {
                             </div>
 
                             <div className="accBox">
-                                <div className="accProf"><a href="#" className='accProfName'>{`@${profileData.username}`}</a></div>
+                                <div className="accProf" onClick={() => window.location.href = `/${profileID}`}><a className='accProfName'>{`@${profileData.username}`}</a></div>
                             </div>
                         </div>
                     </div>
@@ -118,11 +141,13 @@ const Profile = () => {
                     <div className="rightBox">
                         <div className="accNum">
                             {profileData.number_of_posts > 1 ? 
-                                <div className="postNum">{profileData.number_of_posts} posts</div> :
+                                <div className="postNum">{profileData.number_of_posts} posts</div> 
+                                :
                                 <div className="postNum">{profileData.number_of_posts} post</div>
                             }
                             {profileData.number_of_friends > 1 ? 
-                                <div className="followersNum"><a href="#">{profileData.number_of_friends} friends</a></div> :
+                                <div className="followersNum"><a href="#">{profileData.number_of_friends} friends</a></div> 
+                                :
                                 <div className="followersNum"><a href="#">{profileData.number_of_friends} friend</a></div>
                             }
                         </div>
@@ -166,6 +191,7 @@ const Profile = () => {
                                 <input
                                     type="file"
                                     name="profile_pic"
+                                    id='profile_pic'
                                     accept="image/*"
                                     onChange={handleFileChange}
                                 />
@@ -176,6 +202,7 @@ const Profile = () => {
                                 <input
                                     type="text"
                                     name="display_name"
+                                    id='display_name'
                                     value={editProfileData.display_name || ''}
                                     onChange={handleInputChange}
                                 />
@@ -186,6 +213,7 @@ const Profile = () => {
                                 <input
                                     type="email"
                                     name="email"
+                                    id='email'
                                     value={editProfileData.email || ''}
                                     onChange={handleInputChange}
                                 />
@@ -196,8 +224,9 @@ const Profile = () => {
                                 <input
                                     type="password"
                                     name="password"
-                                    value={editProfileData.password || ''}
-                                    onChange={handleInputChange}
+                                    id='password'
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
                                 />
                             </div>
                             
@@ -206,6 +235,7 @@ const Profile = () => {
                                 <input
                                     type="password"
                                     name="confirmPassword"
+                                    id='confirmPassword'
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                 />
@@ -216,6 +246,7 @@ const Profile = () => {
                                 <input
                                     type="date"
                                     name="birthday"
+                                    id='birthday'
                                     value={editProfileData.birthday || ''}
                                     onChange={handleInputChange}
                                 />
