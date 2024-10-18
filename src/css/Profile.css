@@ -366,6 +366,10 @@ body {
     max-width: 500px;
     max-height: 90%; 
     overflow-y: auto; 
+    h2{
+        display: flex;
+        justify-content: center;
+    }
 }
 
   
