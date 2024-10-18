@@ -1,21 +1,61 @@
-import React, { useState, useEffect, useContext } from 'react';
-import '../css/Post.css';  // Separate CSS for styling posts
-import { TabTitle } from './TabTitle';
-import { LoginContext } from '../variable/LoginContext';
+import { addDoc, collection, doc, getDocs, serverTimestamp, updateDoc, deleteDoc } from 'firebase/firestore';
+import React, { useContext, useEffect, useState } from 'react';
 import { db } from '../backend/firebaseConfig';
-import { collection, getDocs, serverTimestamp } from 'firebase/firestore';
+import '../css/Post.css'; // Separate CSS for styling posts
+import { LoginContext } from '../variable/LoginContext';
+import { TabTitle } from './TabTitle';
 
 const Post = () => {
-    const { postID } = useContext(LoginContext);
+    const { postID, loginID } = useContext(LoginContext);
     const { profileID, setProfileID } = useContext(LoginContext);
     const [ postData, setPostData ] = useState({}); // State for post data
     const [ profileData, setProfileData ] = useState({}); // State for profile data
-    const [ commentData, setCommentData ] = useState({}); // State for comment data
+    const [ commentIdData, setCommentIdData ] = useState([]); // State for comment data
+    const [ postInteractionData, setPostInteractionData ] = useState({}); // State for post interaction data
+    const [ showCommentInput, setShowCommentInput ] = useState(false);
+    const [ commentText, setCommentText ] = useState('');
 
-    useEffect(() => {
-        TabTitle('Posts | Black Cat with Bow');
-    }, []);
+        // fetch comment data from post data
+        const fetchCommentIdData = async () => {
+            try {
+                if (!postID) {
+                    return;
+                }
+        
+                const commentCollection = collection(db, 'post', postID, 'comment');
+                const commentSnapshot = await getDocs(commentCollection);
+        
+                if (commentSnapshot.empty) {
+                    console.log('No comment data');
+                    return;
+                } else {
+                    let commentsSet = new Set();
+                    commentSnapshot.forEach(doc => {
+                        commentsSet.add({ id: doc.id, ...doc.data() });
+                    });
+                    // convert set to array
+                    const comments = Array.from(commentsSet);
 
+                    //loop through comments to get user data
+                    for (let i = 0; i < comments.length; i++) {
+                        const userCollection = collection(db, 'user_data');
+                        const userSnapshot = await getDocs(userCollection);
+                        userSnapshot.forEach(doc => {
+                            if (doc.id === comments[i].user_id) {
+                                comments[i].user = doc.data();
+                            }
+                        });
+                    }
+
+                    // filter comment data by timestamp
+                    comments.sort((a, b) => a.comment_time - b.comment_time);
+                    return comments;
+                }
+            } catch (error) {
+                console.error('Error fetching comments data:', error);
+            }
+        };
+    
     // set profileID from profileData
     useEffect(() => {
         if (profileData.username) {
@@ -25,86 +65,191 @@ const Post = () => {
 
     // set commentData from postData
     useEffect(() => {
-
-        if (commentData === null) {
-            setCommentData(commentData);
-            console.log(commentData);
+        if (commentIdData) {
+            setCommentIdData(commentIdData);
         }
     }, []);
+
+    // fetch comment data from post data
+    useEffect(() => {
+
+        if(commentText.length > 0) return;
+        
+        async function load(){
+            const comments = await fetchCommentIdData();
+            if(comments) {
+                setCommentIdData(comments);
+            }
+        }
+
+        load();
+
+    }, [commentText]);
 
     useEffect(() => {
         // Fetch post data from the database
         const fetchPostData = async () => {
+            let postData = {};
             const postCollection = collection(db, 'post');
             const postSnapshot = await getDocs(postCollection);
             postSnapshot.forEach(doc => {
                 if (doc.id === postID) {
                     setPostData(doc.data());
-                    // fetch comment data from post data
-                    fetchCommentData();
+                    postData = doc.data();
                 }
             });
+            //add id to postData
+            postData.id = postID;
+            return postData;
         }
-        fetchPostData();
+
         // fetch profile data from post data
-        const fetchProfileData = async () => {
+        const fetchProfileData = async (postData) => {
             const userCollection = collection(db, 'user_data');
             const userSnapshot = await getDocs(userCollection);
             userSnapshot.forEach(doc => {
                 if (doc.id === postData.user_id) {
                     setProfileData(doc.data());
+                    return doc.data();
                 }
             });
         }
-        fetchProfileData();
 
-        // fetch comment data from post data
-        const fetchCommentData = async () => {
-            const commentCollection = collection(db, 'comment');
-            const commentSnapshot = await getDocs(commentCollection);
-            commentSnapshot.forEach(doc => {
-                if (doc.id === postData.comments) {
-                    setCommentData(doc.data());
+        const load = async () => {
+            const comments = await fetchCommentIdData();
+            if(comments) {
+                setCommentIdData(comments);
+            }
+        }
+
+        // fetch post interacion from post data
+        const fetchPostInteractionData = async (postData) => {
+            const postInteractionCollection = collection(db, 'user_data', loginID, 'post_interaction');
+            const postInteractionSnapshot = await getDocs(postInteractionCollection);
+            postInteractionSnapshot.forEach(doc => {
+                if (doc.id === postData.id) {
+                    setPostInteractionData(doc.data());
+                    return doc.data();
                 }
             });
         }
-        fetchCommentData();
-        console.log(commentData);
+
+        const main = async () => {
+            const postData = await fetchPostData();
+            await fetchProfileData(postData);
+            await load();
+            await fetchPostInteractionData(postData);
+        }
+
+        main();
+        
 
         TabTitle(`Post from ${postData.user_id} | Black Cat with Bow`);
     }, [postID, postData.user_id]);
 
-    const [showCommentInput, setShowCommentInput] = useState(false);
-    const [commentText, setCommentText] = useState('');
-    const [comments, setComments] = useState([
-        {
-            id: 1,
-            user: { name: 'Commenter 1', imgSrc: 'https://via.placeholder.com/30' },
-            text: 'comment num 1 jaaa.',
-        },
-        {
-            id: 2,
-            user: { name: 'Commenter 2', imgSrc: 'https://via.placeholder.com/30' },
-            text: 'comment num 2 jaaa.',
-        },
-    ]);
+    const validateComment = async () => {
+        const commentInput = document.getElementById('comment-input').value;
+        if (commentInput.trim() === ''){
+            setShowCommentInput(false);
+            return;
+        }
 
+        const commentPayload = {
+            comment_input: commentInput,
+            comment_time: serverTimestamp(),
+            user_id: loginID,
+        };
+        
+        const updatePostPayload = {
+            number_of_comments: postData.number_of_comments + 1,
+        };
+
+        // send data to firestore
+        await addDoc(collection(db, 'post', postID, 'comment'), {
+            ...commentPayload,
+        });
+        console.log('payload sent');
+
+        // update number of comments
+        const updatePostRef = doc(db, 'post', postID);
+
+        await updateDoc(updatePostRef, {
+            ...updatePostPayload,
+        });
+        setPostData({
+            ...postData,
+            number_of_comments: postData.number_of_comments + 1,
+        });
+
+        // reset input
+        setCommentText('');
+        setShowCommentInput(false);
+    };
+
+    // Add Comment button handler
     const handleAddCommentClick = () => {
         setShowCommentInput(!showCommentInput);
     };
 
-    const handleCommentSubmit = () => {
-        if (commentText.trim() === '') return;
+    // Like button handler
+    const handleLike = async () => {
+        const postInteractionCollection = collection(db, 'user_data', loginID, 'post_interaction');
+        const postInteractionDoc = doc(postInteractionCollection, postID);
+        if (postInteractionData.isLiked) {
+            await updateDoc(postInteractionDoc, {
+                isLiked: false,
+            });
+            await updateDoc(doc(db, 'post', postID), {
+                number_of_likes: postData.number_of_likes - 1,
+            });
 
-        const newComment = {
-            id: comments.length + 1,
-            user: { name: 'You', imgSrc: 'https://via.placeholder.com/30' },
-            text: commentText,
-        };
+            //update postData
+            setPostData({
+                ...postData,
+                number_of_likes: postData.number_of_likes - 1,
+            });
 
-        setComments([...comments, newComment]);
-        setCommentText('');
-        setShowCommentInput(false);
+            setPostInteractionData({
+                ...postInteractionData,
+                isLiked: false,
+            });
+        } else {
+            await updateDoc(postInteractionDoc, {
+                isLiked: true,
+            });
+            await updateDoc(doc(db, 'post', postID), {
+                number_of_likes: postData.number_of_likes + 1,
+            });
+
+            //update postData
+            setPostData({
+                ...postData,
+                number_of_likes: postData.number_of_likes + 1,
+            });
+
+            setPostInteractionData({
+                ...postInteractionData,
+                isLiked: true,
+            });
+        }
+    }
+
+    // Delete Comment button handler
+    const handleDeleteComment = async (commentID) => {
+        try {
+            await deleteDoc(doc(db, 'post', postID, 'comment', commentID));
+            setCommentIdData(commentIdData.filter(comment => comment.id !== commentID));
+            await updateDoc(doc(db, 'post', postID), {
+                number_of_comments: postData.number_of_comments - 1,
+            });
+            setPostData({
+                ...postData,
+                number_of_comments: postData.number_of_comments - 1,
+            });
+            console.log('Comment deleted successfully');
+        } catch (error) {
+            console.error('Error deleting comment:', error);
+        }
     };
 
     return (
@@ -133,9 +278,26 @@ const Post = () => {
                         <p className="postText">{postData.input}</p>
                         <div className="postAction">
                             <div className="activitiesIcons">
-                            <ion-icon name="heart-outline"></ion-icon>
-                                <a href="#"></a><span className="iconAct">comment <ion-icon name="chatbox-outline"/></span>
-                                <a href="#"><span className="iconAct">repost <ion-icon name="repeat-outline"/></span></a>
+                                <div className='likeGroup'>
+                                    {
+                                        postInteractionData.isLiked ?
+                                        <>
+                                            <ion-icon name="heart" onClick={handleLike} style={{ fill: 'red' }}></ion-icon> {postData.number_of_likes}
+                                        </>
+                                        :
+                                        <>
+                                            <ion-icon name="heart-outline" onClick={handleLike}></ion-icon> {postData.number_of_likes}
+                                        </>
+                                    }
+                                </div>
+                                {
+                                    
+                                    <div className='commentGroup'>
+                                    <ion-icon name="chatbox-outline"></ion-icon> {postData.number_of_comments}
+                                </div>}
+                                {/* <div className='repostGroup'>
+                                    <ion-icon name="repeat-outline"></ion-icon> {postData.number_of_shares}
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -145,13 +307,22 @@ const Post = () => {
 
                     <div className="comment-section">
                         <h4>Comments</h4>
-                        {comments.map(comment => (
+                        {commentIdData.map(comment => (
+                            
                             <div key={comment.id} className="comment">
-                                <div className="comment-header">
-                                    <img src={comment.user.imgSrc} alt="User Pic" className="profile-pic" />
-                                    <h4>{comment.user.name}</h4>
+                                <div className='comment-container'>
+                                    <div className="comment-header">
+                                        <img src={comment.user.profile_pic} alt="User Pic" className="profile-pic" />
+                                        <h4>{comment.user_id}</h4>
+                                    </div>
+                                    <p>{comment.comment_input}</p>
                                 </div>
-                                <p>{comment.text}</p>
+                                        {
+                                            loginID === comment.user_id &&
+                                            <div className="delete-comment" title='Delete your comment' onClick={() => handleDeleteComment(comment.id)}>
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </div>
+                                        }
                             </div>
                         ))}
 
@@ -165,11 +336,12 @@ const Post = () => {
                             <div className="comment-input">
                                 <input
                                     type="text"
+                                    id='comment-input'
                                     value={commentText}
                                     onChange={(e) => setCommentText(e.target.value)}
                                     placeholder="Write a comment..."
                                 />
-                                <button className="submit-comment-btn" onClick={handleCommentSubmit}>Submit</button>
+                                <button className="submit-comment-btn" onClick={validateComment}>Submit</button>
                             </div>
                         )}
                     </div>

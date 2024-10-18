@@ -189,7 +189,7 @@ body {
 
 .comment {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     background-color: #fff;
     padding: 10px;
     border-radius: 8px;
@@ -197,11 +197,25 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.comment-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* gap: 10px; */
+}
+
 .comment-header {
     display: flex;
     justify-content: left;
     align-items: center;
     margin-bottom: 5px;
+}
+
+.delete-comment {
+    align-items: right;
+    font-size: 20px;
+    color: #333;
+    cursor: pointer;
 }
 
 .comment-header .profile-pic {
