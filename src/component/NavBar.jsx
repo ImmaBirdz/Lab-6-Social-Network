@@ -4,7 +4,6 @@ import { useContext } from 'react'
 import { LoginContext } from '../variable/LoginContext'
 import { useNavigate } from 'react-router-dom'
 
-
 const NavBar = () => {
     const { loginID, setLoginID, setIsLogin } = useContext(LoginContext);
     const navigate = useNavigate();
