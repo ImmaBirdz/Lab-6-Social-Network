@@ -34,7 +34,7 @@ function ProfileWrapper() {
 }
 
 function PostWrapper() {
-  const { postID, setPostID, contextPostID } = useContext(LoginContext);
+  const { setPostID, contextPostID } = useContext(LoginContext);
   // set tempPostID to the postID in the URL
   const { postID: tempPostID } = useParams();
   let found = false;
@@ -44,7 +44,6 @@ function PostWrapper() {
     if (tempPostID === contextPostID[i]) { // if the postID in the URL matches the one in the context
       found = true;
       setPostID(tempPostID);
-      console.log('Post ID: ' + postID);
       return <Post />;
     }
   }
