@@ -33,6 +33,27 @@ function ProfileWrapper() {
   }
 }
 
+function PostWrapper() {
+  const { postID, setPostID, contextPostID } = useContext(LoginContext);
+  // set tempPostID to the postID in the URL
+  const { postID: tempPostID } = useParams();
+  let found = false;
+
+  // Redirect to NotFound if the postID in the URL doesn't match the one in the context
+  for (let i = 0; i < contextPostID.length; i++) {
+    if (tempPostID === contextPostID[i]) { // if the postID in the URL matches the one in the context
+      found = true;
+      setPostID(tempPostID);
+      console.log('Post ID: ' + postID);
+      return <Post />;
+    }
+  }
+  // if not found and no post id in context (preventing contextPost unfinished or not load) then redirect to NotFound
+  if (!found && contextPostID.length > 0) {
+    return <NotFound />;
+  }
+}
+
 function App() {
   const { isLogin, isLoaded } = useContext(LoginContext);
   
@@ -55,6 +76,7 @@ function App() {
                 <Route path="/:profileID" element={<ProfileWrapper />} />
                 <Route path="/message" element={<Message />} />
                 <Route path="/post" element={<Post />} />
+                <Route path="/post/:postID" element={<PostWrapper />} />
                 <Route path="*" element={<NotFound />} />
               </>
             ) : (
