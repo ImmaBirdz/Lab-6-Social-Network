@@ -27,7 +27,6 @@ const Post = () => {
     const [postData, setPostData] = useState({}); // State for post data
     const [profileData, setProfileData] = useState({}); // State for profile data
     const [commentData, setCommentData] = useState({}); // State for comment data
-    master
 
     useEffect(() => {
         TabTitle('Posts | Black Cat with Bow');
@@ -125,9 +124,7 @@ const Post = () => {
     };
 
     return (
-
         <div className="main-Content">
-
             <button className="toggle-sidebar-right" onClick={toggleSidebar}>
                 {isSidebarShown ? '✖' : '☰'}
             </button>
@@ -136,9 +133,7 @@ const Post = () => {
                 <SideBarRight isSidebarShown={isSidebarShown} />
             </div>
 
-
             <div className={`container ${isSidebarShown ? 'shifted' : ''}`}>
-
                 <main className="feed">
                     <div className="post">
                         {/* Post Author Information */}
@@ -207,39 +202,47 @@ const Post = () => {
                                                         <div className="comment-header">
                                                             <img src={comment.user.imgSrc} alt="User Pic" className="profile-pic" />
                                                             <h4>{comment.user.name}</h4>
-
-                                                        </div> ))}
-
-                                                        {/* Add Comment Button */}
-                                                        <button className="add-comment-btn" onClick={handleAddCommentClick}>
-                                                            {showCommentInput ? 'Cancel' : 'Add Comment'}
-                                                        </button>
-
-                                                        {/* Comment Input Field */}
-                                                        {showCommentInput && (
-                                                            <div className="comment-input">
-                                                                <input
-                                                                    type="text"
-                                                                    value={commentText}
-                                                                    onChange={(e) => setCommentText(e.target.value)}
-                                                                    placeholder="Write a comment..."
-                                                                />
-                                                                <button className="submit-comment-btn" onClick={handleCommentSubmit}>Submit</button>
-                                                            </div>
-                                                        )}
-
+                                                        </div>
                                                     </div>
+                                                ))}
 
-                </main>
+                                                {/* Add Comment Button */}
+                                                <button className="add-comment-btn" onClick={handleAddCommentClick}>
+                                                    {showCommentInput ? 'Cancel' : 'Add Comment'}
+                                                </button>
+
+                                                {/* Comment Input Field */}
+                                                {showCommentInput && (
+                                                    <div className="comment-input">
+                                                        <input
+                                                            type="text"
+                                                            value={commentText}
+                                                            onChange={(e) => setCommentText(e.target.value)}
+                                                            placeholder="Write a comment..."
+                                                        />
+                                                        <button className="submit-comment-btn" onClick={handleCommentSubmit}>Submit</button>
+                                                    </div>
+                                                )}
+
+                                            </div>
+
+                                        </main>
 
                                     </div>
 
                                 </div>
+                            </div>
+                        ))}
+                    </div>
+                </main>
+            </div>
+        </div>
 
-                                )
+    )
 
         
 
                                 
 };
-                                export default Post;
+
+export default Post;
