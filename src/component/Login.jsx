@@ -2,25 +2,14 @@ import React from 'react'
 import { useEffect, useContext } from 'react'
 import '../css/Login.css'
 import { TabTitle } from './TabTitle'
-import { db } from '../backend/firebaseConfig'
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { db, storage } from '../backend/firebaseConfig'
+import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
+import { ref, getDownloadURL } from 'firebase/storage'
 import { LoginContext } from '../variable/LoginContext';
 
 const Login = () => {
 
-    const {isLogin, setIsLogin, setLoginID} = useContext(LoginContext);
-
-    // redirect to home if you are out of path location
-    // useEffect(() => {
-    //     if(window.location.pathname !== '/'){
-    //         setUrlToHome();
-    //     }
-    // }, []);
-
-    // set url to /
-    // function setUrlToHome(){
-    //     window.location.href = '/';
-    // }
+    const {isLogin, setIsLogin, setLoginID, isLoaded} = useContext(LoginContext);
 
     useEffect(() => {
         if (isLogin) {
@@ -31,6 +20,10 @@ const Login = () => {
 
     // Trigger panel switching for registration and login
     useEffect(() => {
+        if (!isLoaded) return;
+        TabTitle("Sign in | Black Cat with Bow");
+        dynamicTitle();
+
         const registerButton = document.getElementById("register");
         const loginButton = document.getElementById("login");
         const container = document.getElementById("licontainer");
@@ -60,13 +53,7 @@ const Login = () => {
             loginButton.removeEventListener("click", handleLoginClick);
             container.removeEventListener("transitionend", handleTransitionEnd);
         };
-    }, []);
-
-    // Change the title of the page when the user switches between login and register
-    useEffect(() => {
-        TabTitle("Sign in | Black Cat with Bow");
-        dynamicTitle();
-    },[]);
+    }, [isLoaded]);
 
     const dynamicTitle = () => {
         let registerButtonTitle = document.getElementById('register');
@@ -97,6 +84,7 @@ const Login = () => {
                         setIsLogin(true);
                         setLoginID(doc.id);
                         localStorage.setItem('loginID', doc.id); // add loginID to localStorage
+                        alert('Login successful');
                     }
                 });
                 if (!found) {
@@ -110,7 +98,7 @@ const Login = () => {
         }
     };
 
-    const handleRegisterSubmit = (event) => {
+    const handleRegisterSubmit = async (event) => {
         event.preventDefault();
         
         const username = document.getElementById("username").value;
@@ -119,6 +107,9 @@ const Login = () => {
         const confirmPassword = document.getElementById("confirmPassword").value;
         const birthday = document.getElementById("birthday").value;
         const gender = document.getElementById("gender").value;
+        // get default profile picture from firebase storage
+        const defaultProfilePicRef = ref(storage, 'default_profile.jpg');
+        const defaultProfilePic = await getDownloadURL(defaultProfilePicRef);
         
         if (password !== confirmPassword) {
             alert("Passwords do not match.");
@@ -132,54 +123,62 @@ const Login = () => {
                 email: email,
                 password: password,
                 birthday: birthday,
-                gender: gender
+                gender: gender,
+                bio : "This is a bio",
+                profile_pic : defaultProfilePic
             };
             // check if some data is already in the database
             let isDuplicate = false;
-            getDocs(collection(db, "user_data")).then((querySnapshot) => {
+
+            const fetchData = async () => {
+                const querySnapshot = await getDocs(collection(db, 'user_data'));
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    // check if the username is already in use
                     if (data.username === username) {
-                        alert("This userame is already in use.");
+                        alert('Username is already in use');
                         isDuplicate = true;
                         // reset the fields
                         document.getElementById("username").value = "";
                         return;
                     }
-                    // check if the email is already in use
                     if (data.email === email) {
-                        alert("Email is already in use.");
+                        alert('Email is already in use');
                         isDuplicate = true;
                         // reset the fields
                         document.getElementById("email").value = "";
-                        document.getElementById("password").value = "";
-                        document.getElementById("confirmPassword").value = "";
                         return;
                     }
                 });
-                // if it is not a duplicate, add the data to the database
-                if (!isDuplicate) {
-                    // Add a new document with a generated id.
-                    addDoc(collection(db, "user_data"), {
-                        ...payload,
-                        number_of_friends: 0,
-                        number_of_posts: 0
-                        // Add more fields here
-                    });
-                    
-                    // delete input fields
-                    document.getElementById("username").value = "";
-                    document.getElementById("email").value = "";
-                    document.getElementById("password").value = "";
-                    document.getElementById("confirmPassword").value = "";
-                    document.getElementById("birthday").value = "";
-                    document.getElementById("gender").value = "";
+            }
+            fetchData();
+            // if it is not a duplicate, add the data to the database
+            if (!isDuplicate) {
+                // fetch the user_data collection
+                fetchData();
 
-                    // Navigate to the profile
-                    window.location.href = "/login"; 
+                // Add a new document with a generated id.
+                const userDoc = doc(db, 'user_data', username);
+                const userPayload = {
+                    ...payload,
+                    number_of_friends: 0,
+                    number_of_posts: 0
+                    // Add more fields here
                 }
-            });
+                // set the document
+                setDoc(userDoc, userPayload);
+                alert("Registration successful.");
+                
+                // delete input fields
+                document.getElementById("username").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("password").value = "";
+                document.getElementById("confirmPassword").value = "";
+                document.getElementById("birthday").value = "";
+                document.getElementById("gender").value = "";
+
+                // ge back to login
+                document.getElementById("login").click();
+            }
         } else {
             alert('Please fill in all fields.');
         }

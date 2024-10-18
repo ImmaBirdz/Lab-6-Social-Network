@@ -1,9 +1,9 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import '../css/Notfound.css'
+import '../css/NotFound.css'
 
-const Notfound = () => {
+const NotFound = () => {
 
     const navigate = useNavigate(); 
   
@@ -22,4 +22,4 @@ const Notfound = () => {
     };
 
     
-export default Notfound;
+export default NotFound;
