@@ -26,16 +26,15 @@ const NavBar = () => {
             </button>
 
             <nav className="nav-center">
-                <img src="https://img.icons8.com/ios-glyphs/30/cat--v1.png" alt="Feed-icon" className="feed-icon" />
-            </nav>
-
-                <div className="nav-right">
-                        <button className="nav-button" onClick={() => window.location.href = `/page`}>Page</button>
-                        <button className="nav-button" onClick={() => window.location.href = `/message`}>Message</button>
-                        <button className="nav-button" onClick={() => window.location.href = `/${loginID}`}>My Profile</button>
+                    <button className="nav-button" onClick={() => window.location.href = `/page`}>Page</button>
+                    <button className="nav-button" onClick={() => window.location.href = `/message`}>Message</button>
+                    <div className="icon"> <img src="https://img.icons8.com/ios-glyphs/30/cat--v1.png" alt="Feed-icon" className="feed-icon" /></div>
+                    <button className="nav-button" onClick={() => window.location.href = `/${loginID}`}>My Profile</button>
                     <button className="nav-button" onClick={handleLogout}>Log Out</button>
-                </div>
-            </header>
+            </nav>
+            {/* <div className="nav-right">
+            </div> */}
+        </header>
 
     )
 }

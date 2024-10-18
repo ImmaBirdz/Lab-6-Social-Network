@@ -128,7 +128,6 @@ const Post = () => {
             <button className="toggle-sidebar-right" onClick={toggleSidebar}>
                 {isSidebarShown ? '✖' : '☰'}
             </button>
-
             <div className={`sidebar-right ${isSidebarShown ? 'show' : ''}`}>
                 <SideBarRight isSidebarShown={isSidebarShown} />
             </div>
@@ -159,38 +158,31 @@ const Post = () => {
                                     <h4>{comment.user.name}</h4>
                                 </div>
                                 <p>{comment.text}</p>
+                            </div>
+                        ))}
 
-                                <div>
-                                    <div className="container">
-                                        <main className="feed">
-                                            <div className="postBox">
-                                                <div className="postedContent">
-                                                    <div className="userProf">
-                                                        <a href="#">
-                                                            <div className="userPics">
-                                                                <img style={{
-                                                                    backgroundImage: `url(${profileData.profile_pic})`,
-                                                                    backgroundSize: '65px 65px',
-                                                                }} />
-                                                            </div>
-                                                        </a>
-                                                        <div>
-                                                            <div className="infoPost">
-                                                                <span className='postDisplayName' onClick={() => window.location.href = `/${profileID}`}><b><a>{profileData.display_name}</a></b></span>
-                                                                <span className='postUsername' onClick={() => window.location.href = `/${profileID}`}>{`@${postData.user_id}`}</span>
-                                                            </div>
-                                                        </div>
+                        <div>
+                            <div className="container">
+                                <main className="feed">
+                                    <div className="postBox">
+                                        <div className="postedContent">
+                                            <div className="userProf">
+                                                <a href="#">
+                                                    <div className="userPics">
+                                                        <img style={{
+                                                            backgroundImage: `url(${profileData.profile_pic})`,
+                                                            backgroundSize: '65px 65px',
+                                                        }} />
                                                     </div>
-                                                </div>
-                                                <p className="postText">{postData.input}</p>
-                                                <div className="postAction">
-                                                    <div className="activitiesIcons">
-                                                        <ion-icon name="heart-outline"></ion-icon>
-                                                        <a href="#"></a><span className="iconAct">comment <ion-icon name="chatbox-outline" /></span>
-                                                        <a href="#"><span className="iconAct">repost <ion-icon name="repeat-outline" /></span></a>
+                                                </a>
+                                                <div>
+                                                    <div className="infoPost">
+                                                        <span className='postDisplayName' onClick={() => window.location.href = `/${profileID}`}><b><a>{profileData.display_name}</a></b></span>
+                                                        <span className='postUsername' onClick={() => window.location.href = `/${profileID}`}>{`@${postData.user_id}`}</span>
                                                     </div>
                                                 </div>
                                             </div>
+<<<<<<< Updated upstream
 
                                             {/* Separator Line */}
                                             <hr className="post-separator" />
@@ -239,10 +231,59 @@ const Post = () => {
         </div>
 
     )
+=======
+                                        </div>
+                                        <p className="postText">{postData.input}</p>
+                                        <div className="postAction">
+                                            <div className="activitiesIcons">
+                                                <ion-icon name="heart-outline"></ion-icon>
+                                                <a href="#"></a><span className="iconAct">comment <ion-icon name="chatbox-outline" /></span>
+                                                <a href="#"><span className="iconAct">repost <ion-icon name="repeat-outline" /></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
 
-        
+                                    {/* Separator Line */}
+                                    <hr className="post-separator" />
 
-                                
+                                    <div className="comment-section">
+                                        <h4>Comments</h4>
+                                        {comments.map(comment => (
+                                            <div key={comment.id} className="comment">
+                                                <div className="comment-header">
+                                                    <img src={comment.user.imgSrc} alt="User Pic" className="profile-pic" />
+                                                    <h4>{comment.user.name}</h4>
+>>>>>>> Stashed changes
+
+                                                </div>
+                                            </div>))}
+
+                                        {/* Add Comment Button */}
+                                        <button className="add-comment-btn" onClick={handleAddCommentClick}>
+                                            {showCommentInput ? 'Cancel' : 'Add Comment'}
+                                        </button>
+
+                                        {/* Comment Input Field */}
+                                        {showCommentInput && (
+                                            <div className="comment-input">
+                                                <input
+                                                    type="text"
+                                                    value={commentText}
+                                                    onChange={(e) => setCommentText(e.target.value)}
+                                                    placeholder="Write a comment..."
+                                                />
+                                                <button className="submit-comment-btn" onClick={handleCommentSubmit}>Submit</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </main>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    );
 };
 
 export default Post;
