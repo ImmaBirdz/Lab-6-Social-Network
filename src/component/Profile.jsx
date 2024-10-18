@@ -133,7 +133,7 @@ const Profile = () => {
                             </div>
 
                             <div className="accBox">
-                                <div className="accProf" onClick={() => window.location.href = `/${profileID}`}><a href="#" className='accProfName'>{`@${profileData.username}`}</a></div>
+                                <div className="accProf" onClick={() => window.location.href = `/${profileID}`}><a className='accProfName'>{`@${profileData.username}`}</a></div>
                             </div>
                         </div>
                     </div>
