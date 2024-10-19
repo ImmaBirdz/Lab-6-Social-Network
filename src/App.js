@@ -23,7 +23,6 @@ function ProfileWrapper() {
     if (tempProfileID === contextProfileID[i]) { // if the profileID in the URL matches the one in the context
       found = true;
       setProfileID(tempProfileID);
-      console.log('Profile ID: ' + profileID);
       return <Profile />;
     }
   }
