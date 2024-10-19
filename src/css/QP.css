@@ -1,0 +1,86 @@
+
+.circle-icon {
+  position: fixed; 
+  bottom: 20px; 
+  right: 20px; 
+  width: 60px; 
+  height: 60px; 
+  cursor: pointer; 
+  border: none; 
+  background: none; 
+  z-index: 10; 
+  padding: 0; 
+}
+
+.circle-icon:hover {
+  transform: scale(1.1); 
+}
+
+.modal-overlay {
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  background: rgba(0, 0, 0, 0.5); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 20; 
+}
+
+.modal {
+  position: relative; 
+  background: white; 
+  padding: 20px; 
+  border-radius: 0px; 
+  width: 800px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  z-index: 30; 
+}
+
+.modal h2 {
+  margin-bottom: 10px; 
+}
+
+.modal textarea {
+  width: 100%; 
+  margin: 10px 0; 
+  padding: 10px; 
+  border: 1px solid #f848f5; 
+  border-radius: 4px; 
+  resize: vertical; 
+}
+
+.close-button {
+  position: absolute; 
+  top: -20px; 
+  right: -75px; 
+  background: none; 
+  border: none; 
+  font-size: 24px; 
+  cursor: pointer; 
+  color: #333; 
+}
+
+.close-button:hover {
+  color: #ff0000; 
+}
+
+.modal button[type="submit"],
+.modal button[type="button"] {
+  margin-top: 10px; 
+  padding: 10px 15px; 
+  border-radius: 4px; 
+  cursor: pointer; 
+}
+
+.modal button[type="submit"] {
+  background-color: #f597f9; 
+  color: white; 
+  border: none; 
+}
+
+.modal button[type="submit"]:hover {
+  background-color: #660786; 
+}
