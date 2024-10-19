@@ -43,24 +43,35 @@ p {
   text-shadow: 0 0 10px rgba(16, 64, 74, 0.5);
 }
 
-a {
-  color: #333;
-  font-size: 14px;
-  text-decoration: none;
-  margin: 15px 0;
-  transition: 0.3s ease-in-out;
-}
-
-a:hover {
-  color: #C39898;
-}
-
 .content {
   display: flex;
   width: 100%;
   height: 50px;
   align-items: center;
   justify-content: space-around;
+}
+
+.forget-password {
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+  margin: 15px 0;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+  a:hover {
+    color: #C39898;
+  }
+}
+
+.forget-password a, .social-links a {
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+  margin: 15px 0;
+  transition: 0.3s ease-in-out;
+  a:hover {
+    color: #C39898;
+  }
 }
 
 .content .checkbox {
@@ -357,7 +368,7 @@ input {
  */
 
 
- .recent-login-box {
+.recent-login-box {
   position: absolute;
   left: 20px;
   top: 30%;

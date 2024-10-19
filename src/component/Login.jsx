@@ -225,9 +225,7 @@ const Login = () => {
                     <input type="email" id="email" name="email" placeholder="Email" />
                     <input type="password" id="password" name="password" placeholder="Password" />
                     <div className="content">
-                        <div className="pass-link"> 
-                            <a href="#">Forgot password?</a>
-                        </div>
+                        <div className='forget-password' onClick={() => alert("Don't ask us, ask yourself...")}><a href="#">Forgot password?</a></div>
                     </div>
                     <button type='submit'>Login</button>
                     <span>or use your account</span>
@@ -235,13 +233,13 @@ const Login = () => {
                     {/* add social link */}
                     <div className="social-container">
                         <div className="social-links">
-                            <a href="#" className="social-button-google">
+                            <a href="#" className="social-button-google" onClick={() => alert("We don't pay for it...")}>
                                 <img src="https://pngimg.com/d/google_PNG19635.png" alt="Google" />
                             </a>
-                            <a href="#" className="social-button-facebook">
+                            <a href="#" className="social-button-facebook" onClick={() => alert("We don't pay for it...")}>
                                 <img src="https://static.vecteezy.com/system/resources/previews/018/930/698/original/facebook-logo-facebook-icon-transparent-free-png.png" alt="Facebook" />
                             </a>
-                            <a href="#" className="social-button-instagram">
+                            <a href="#" className="social-button-instagram" onClick={() => alert("We don't pay for it...")}>
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1200px-Instagram_icon.png" alt="Instagram" />
                             </a>
                         </div>
