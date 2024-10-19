@@ -6,8 +6,11 @@ import '../css/Post.css'; // Separate CSS for styling posts
 import SideBarRight from './SideBarRight';
 import { LoginContext } from '../variable/LoginContext';
 import { TabTitle } from './TabTitle';
+import { useNavigate } from 'react-router-dom';
 
 const Post = () => {
+    const navigate = useNavigate();
+
     const [isSidebarShown, setSidebarShow] = useState(false);
 
     const toggleSidebar = () => {
@@ -208,8 +211,7 @@ const Post = () => {
         postInteractionDocSnapshot.forEach(doc => {
             if (doc.id === postID) {
                 isLikedDocExists = true;
-            } else {
-                isLikedDocExists = false;
+                console.log("found postID: ", postID);
             }
         });
 
@@ -272,6 +274,23 @@ const Post = () => {
         }
     }
 
+    // Delete Post button handler
+    const handleDeletePost = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this post?')) {
+            return;
+        } else {
+            try {
+                await deleteDoc(doc(db, 'post', id));
+                console.log('Post deleted successfully');
+                setPostData(null);
+                alert('Post deleted successfully');
+                navigate(-1);
+            } catch (error) {
+                console.error('Error deleting post:', error);
+            }
+        }
+    }
+
     // Delete Comment button handler
     const handleDeleteComment = async (commentID) => {
         try {
@@ -302,9 +321,10 @@ const Post = () => {
             <div className={`container ${isSidebarShown ? 'shifted' : ''}`}>
                 <main className="feed">
                     <div className="postBox">
+                        {/* <div className="postPageContainer"></div> */}
                         <div className="postedContent">
                             <div className="userProf">
-                                <a href="#">
+                                <a href={`/${postData.user_id}`}>
                                     <div className="userPics">
                                         <img style={{ 
                                             backgroundImage: `url(${profileData.profile_pic})`, 
@@ -312,15 +332,19 @@ const Post = () => {
                                             }} />
                                     </div>
                                 </a>
-                                <div>
                                     <div className="infoPost">
                                         <span className='postDisplayName' onClick={() => window.location.href = `/${profileID}`}><b><a>{profileData.display_name}</a></b></span>
                                         <span className='postUsername' onClick={() => window.location.href = `/${profileID}`}>{`@${postData.user_id}`}</span>
                                     </div>
-                                </div>
+                                    {
+                                        <div className='delete-post-button' title='Delete this post' onClick={() => handleDeletePost(postID)}>
+                                            <ion-icon name="trash-outline"></ion-icon>
+                                        </div>
+                                    }
                             </div>
                         </div>
                         <p className="postText">{postData.input}</p>
+                        <div className='postTime'> Posted at {postData.last_modified ? new Date(postData.last_modified.seconds * 1000).toLocaleString() : ''}</div>
                         <div className="postAction">
                             <div className="activitiesIcons">
                                 <div className='likeGroup'>
@@ -336,19 +360,14 @@ const Post = () => {
                                     }
                                 </div>
                                 {
-                                    
                                     <div className='commentGroup'>
                                     <ion-icon name="chatbox-outline"></ion-icon> {postData.number_of_comments}
                                 </div>}
                                 {/* <div className='repostGroup'>
-                                    <ion-icon name="repeat-outline"></ion-icon> {postData.number_of_shares}
+                                    <ion-icon name="repeat-outline"></ion-icon> {postData.number_of_reposts}
                                 </div> */}
                             </div>
                         </div>
-
-                        {/* <p>This is the content of the post. hehehehehehehhehehehe.</p> */}
-                        {/* Display Post Date and Time */}
-                        {/* <p className="post-date">{postDate}</p> */}
                     </div>
 
                     {/* Separator Line */}
