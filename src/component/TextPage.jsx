@@ -1,221 +1,199 @@
-import React from 'react';
+import { collection, doc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
+import React, { useContext, useEffect, useState } from 'react';
+import { db } from '../backend/firebaseConfig';
 import '../css/Profile.css';
 import '../css/TextPage.css';
+import { LoginContext } from '../variable/LoginContext';
 
 const TextPage = () => {
+    const [isSidebarShown, setSidebarShow] = useState(false);
+
+    const toggleSidebar = () => {
+        setSidebarShow(!isSidebarShown);
+    };
+    const { postID, loginID } = useContext(LoginContext);
+    const { profileID, setProfileID } = useContext(LoginContext);
+    const [ postData, setPostData ] = useState([]); // State for post data
+    const [ profileData, setProfileData ] = useState({}); // State for profile data
+    const [ postInteractionData, setPostInteractionData ] = useState([]); // State for post interaction data
+
+    // Fetch profile id
+    useEffect(() => {
+        const fetchProfileData = async () => {
+            const userCollection = collection(db, 'user_data');
+            const userSnapshot = await getDocs(userCollection);
+            userSnapshot.forEach(doc => {
+                if (doc.id === profileID) {
+                    setProfileData(doc.data());
+                }
+            });
+        }
+        fetchProfileData();
+    }, [profileID]);
+
+    // Fetch all post data from this profileID
+    useEffect(() => {
+        const fetchPostData = async () => {
+            const postCollection = collection(db, 'post');
+            const postSnapshot = await getDocs(postCollection);
+            const posts = [];
+            postSnapshot.forEach(doc => {
+                if (doc.data().user_id === profileID) {
+                    posts.push({...doc.data(), id: doc.id});
+                    // push posts id to post data
+                    setPostData(postData => [...postData, { id: doc.id }]);
+                }
+            });
+            // sort post data by timestamp (latest first)
+            posts.sort((a, b) => b.last_modified - a.last_modified);
+            setPostData(posts);
+        }
+        fetchPostData()
+    }, [profileID]);
+
+    // Fetch post interaction data
+    useEffect(() => {
+        const fetchPostInteractionData = async () => {
+            const postInteractionCollection = collection(db, 'user_data', loginID, 'post_interaction');
+            const postInteractionSnapshot = await getDocs(postInteractionCollection)
+            let postInteraction = [];
+            postInteractionSnapshot.forEach(doc => {
+                postInteraction.push({...doc.data(), id: doc.id });
+            })
+            setPostInteractionData(postInteraction);
+        }
+        fetchPostInteractionData();
+    }, [profileID]);
+
+    // Like button handler
+    const handleLike = async () => {
+        const postInteractionCollection = collection(db, 'user_data', loginID, 'post_interaction');
+        const postInteractionDoc = doc(postInteractionCollection, postID);
+        // if you don't have post interaction data, create one
+        const postInteractionDocSnapshot = await getDocs(postInteractionCollection);
+        let isLikedDocExists = false;
+
+        postInteractionDocSnapshot.forEach(doc => {
+            if (doc.id === postID) {
+                isLikedDocExists = true;
+            }
+        });
+
+        if (!isLikedDocExists) {
+            await setDoc(postInteractionDoc, {
+                isLiked: true,
+            });
+            await updateDoc(doc(db, 'post', postID), {
+                number_of_likes: postData.number_of_likes + 1,
+            });
+
+            //update postData
+            setPostData({
+                ...postData,
+                number_of_likes: postData.number_of_likes + 1,
+            });
+
+            setPostInteractionData({
+                ...postInteractionData,
+                isLiked: true,
+            });
+        }
+
+        if (postInteractionData.isLiked && isLikedDocExists) {
+            await updateDoc(postInteractionDoc, {
+                isLiked: false,
+            });
+            await updateDoc(doc(db, 'post', postID), {
+                number_of_likes: postData.number_of_likes - 1,
+            });
+
+            //update postData
+            setPostData({
+                ...postData,
+                number_of_likes: postData.number_of_likes - 1,
+            });
+
+            setPostInteractionData({
+                ...postInteractionData,
+                isLiked: false,
+            });
+        } else {
+            await updateDoc(postInteractionDoc, {
+                isLiked: true,
+            });
+            await updateDoc(doc(db, 'post', postID), {
+                number_of_likes: postData.number_of_likes + 1,
+            });
+
+            //update postData
+            setPostData({
+                ...postData,
+                number_of_likes: postData.number_of_likes + 1,
+            });
+
+            setPostInteractionData({
+                ...postInteractionData,
+                isLiked: true,
+            });
+        }
+    }
+
+
     return (
-
         <div className="postContainer">
-
-            <div className="postBox">
-
-                <div className="postedContent">
-
-                    <div className="userProf">
-
-                        <a href="#">
-                            <div className="userPics">
-                                <img width="40" height="40"
-                                    src="https://img.icons8.com/office/40/circled-user-female-skin-type-1-2.png"
-                                    alt="User Profile" />
-                            </div>
-                        </a>
-
-                        <div className="infoPost">
-                            <p className='postName'>nAme_user</p>
-                            {/* <p className='postDate'>Sep 35 3042, 00.01 am</p> */}
+            {postData.length === 0 ? (
+                <p>No post found</p>
+            ) : (
+                postData.map((post, index) => (
+                    post.user_id === profileID ? (
+                        <div className="postBox" key={index} onClick={() => window.location.href = `/post/${post.id}`}>
+                            <a href={`/post/${post.id}`}>
+                                <div className="postedContent">
+                                    <div className="userProf">
+                                        <div>
+                                            <div className="userPics" onClick={() => window.location.href = `/${post.user_id}`}>
+                                                <img style={{ 
+                                                    backgroundImage: `url(${profileData.profile_pic})`, 
+                                                    backgroundSize: '65px 65px',
+                                                }} />
+                                            </div>
+                                        </div>
+                                        <div className="infoPost">
+                                            <span className='postDisplayName' onClick={() => window.location.href = `/${profileID}`}><b><a href={`/${post.user_id}`}>{profileData.display_name}</a></b></span>
+                                            <span className='postUsername' onClick={() => window.location.href = `/${profileID}`}>{`@${post.user_id}`}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p className="postText">{post.input}</p>
+                                <div className='postTime'>{post.last_modified ? new Date(post.last_modified.seconds * 1000).toLocaleString() : ''}</div>
+                                <div className="postAction">
+                                    <div className="activitiesIcons">
+                                        <div className='likeGroup' onClick={() => handleLike}>
+                                            {
+                                                postInteractionData.find(interaction => interaction.id === post.id)?.isLiked ? 
+                                                <>
+                                                    <ion-icon name="heart" onClick={handleLike} style={{ fill: 'red' }}></ion-icon> {post.number_of_likes}
+                                                </>
+                                                :
+                                                <>
+                                                    <ion-icon name="heart-outline" onClick={handleLike}></ion-icon> {post.number_of_likes}
+                                                </>
+                                            }
+                                        </div>
+                                        <div className='commentGroup'>
+                                            <ion-icon name="chatbox-outline"></ion-icon> {post.number_of_comments}
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-
-                    </div>
-
-                </div>
-
-                <p className="postText">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, labore.
-                </p>
-
-                <div className="postAction">
-
-                    <div className="activitiesIcons">
-
-                        <a href="#"><span className="iconAct">like <ion-icon name="heart-outline"></ion-icon></span></a>
-                        <a href="#"></a><span className="iconAct">comment <ion-icon name="chatbox-outline"></ion-icon></span>
-                        <a href="#"><span className="iconAct">repost <ion-icon name="repeat-outline"></ion-icon></span></a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div className="postBox">
-
-                <div className="postedContent">
-
-                    <div className="userProf">
-
-                        <a href="#">
-                            <div className="userPics">
-                                <img width="40" height="40"
-                                    src="https://img.icons8.com/office/40/circled-user-female-skin-type-1-2.png"
-                                    alt="User Profile" />
-                            </div>
-                        </a>
-
-                        <div className="infoPost">
-                            <p className='postName'>nAme_user</p>
-                            {/* <p className='postDate'>Sep 35 3042, 00.01 am</p> */}
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <p className="postText">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, labore.
-                </p>
-
-                <div className="postAction">
-
-                    <div className="activitiesIcons">
-
-                        <a href="#"><span className="iconAct">like <ion-icon name="heart-outline"></ion-icon></span></a>
-                        <a href="#"></a><span className="iconAct">comment <ion-icon name="chatbox-outline"></ion-icon></span>
-                        <a href="#"><span className="iconAct">repost <ion-icon name="repeat-outline"></ion-icon></span></a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div className="postBox">
-
-                <div className="postedContent">
-
-                    <div className="userProf">
-
-                        <a href="#">
-                            <div className="userPics">
-                                <img width="40" height="40"
-                                    src="https://img.icons8.com/office/40/circled-user-female-skin-type-1-2.png"
-                                    alt="User Profile" />
-                            </div>
-                        </a>
-
-                        <div className="infoPost">
-                            <p className='postName'>nAme_user</p>
-                            {/* <p className='postDate'>Sep 35 3042, 00.01 am</p> */}
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <p className="postText">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, labore.
-                </p>
-
-                <div className="postAction">
-
-                    <div className="activitiesIcons">
-
-                        <a href="#"><span className="iconAct">like <ion-icon name="heart-outline"></ion-icon></span></a>
-                        <a href="#"></a><span className="iconAct">comment <ion-icon name="chatbox-outline"></ion-icon></span>
-                        <a href="#"><span className="iconAct">repost <ion-icon name="repeat-outline"></ion-icon></span></a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div className="postBox">
-
-                <div className="postedContent">
-
-                    <div className="userProf">
-
-                        <a href="#">
-                            <div className="userPics">
-                                <img width="40" height="40"
-                                    src="https://img.icons8.com/office/40/circled-user-female-skin-type-1-2.png"
-                                    alt="User Profile" />
-                            </div>
-                        </a>
-
-                        <div className="infoPost">
-                            <p className='postName'>nAme_user</p>
-                            {/* <p className='postDate'>Sep 35 3042, 00.01 am</p> */}
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <p className="postText">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, labore.
-                </p>
-
-                <div className="postAction">
-
-                    <div className="activitiesIcons">
-
-                        <a href="#"><span className="iconAct">like <ion-icon name="heart-outline"></ion-icon></span></a>
-                        <a href="#"></a><span className="iconAct">comment <ion-icon name="chatbox-outline"></ion-icon></span>
-                        <a href="#"><span className="iconAct">repost <ion-icon name="repeat-outline"></ion-icon></span></a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div className="postBox">
-
-                <div className="postedContent">
-
-                    <div className="userProf">
-
-                        <a href="#">
-                            <div className="userPics">
-                                <img width="40" height="40"
-                                    src="https://img.icons8.com/office/40/circled-user-female-skin-type-1-2.png"
-                                    alt="User Profile" />
-                            </div>
-                        </a>
-
-                        <div className="infoPost">
-                            <p className='postName'>nAme_user</p>
-                            {/* <p className='postDate'>Sep 35 3042, 00.01 am</p> */}
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <p className="postText">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum, labore.
-                </p>
-
-                <div className="postAction">
-
-                    <div className="activitiesIcons">
-
-                        <a href="#"><span className="iconAct">like <ion-icon name="heart-outline"></ion-icon></span></a>
-                        <a href="#"></a><span className="iconAct">comment <ion-icon name="chatbox-outline"></ion-icon></span>
-                        <a href="#"><span className="iconAct">repost <ion-icon name="repeat-outline"></ion-icon></span></a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+                    )
+                    :
+                    null
+                ))
+            )}
         </div>
-
     );
-
 };
 
 export default TextPage;
