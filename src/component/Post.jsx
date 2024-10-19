@@ -1,5 +1,5 @@
 
-import { addDoc, collection, doc, getDocs, serverTimestamp, updateDoc, deleteDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, serverTimestamp, updateDoc, deleteDoc, setDoc } from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react';
 import { db } from '../backend/firebaseConfig';
 import '../css/Post.css'; // Separate CSS for styling posts
@@ -201,7 +201,39 @@ const Post = () => {
     const handleLike = async () => {
         const postInteractionCollection = collection(db, 'user_data', loginID, 'post_interaction');
         const postInteractionDoc = doc(postInteractionCollection, postID);
-        if (postInteractionData.isLiked) {
+        // if you don't have post interaction data, create one
+        const postInteractionDocSnapshot = await getDocs(postInteractionCollection);
+        let isLikedDocExists = false;
+
+        postInteractionDocSnapshot.forEach(doc => {
+            if (doc.id === postID) {
+                isLikedDocExists = true;
+            } else {
+                isLikedDocExists = false;
+            }
+        });
+
+        if (!isLikedDocExists) {
+            await setDoc(postInteractionDoc, {
+                isLiked: true,
+            });
+            await updateDoc(doc(db, 'post', postID), {
+                number_of_likes: postData.number_of_likes + 1,
+            });
+
+            //update postData
+            setPostData({
+                ...postData,
+                number_of_likes: postData.number_of_likes + 1,
+            });
+
+            setPostInteractionData({
+                ...postInteractionData,
+                isLiked: true,
+            });
+        }
+
+        if (postInteractionData.isLiked && isLikedDocExists) {
             await updateDoc(postInteractionDoc, {
                 isLiked: false,
             });
