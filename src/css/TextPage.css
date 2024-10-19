@@ -120,13 +120,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 40%;
-    padding-left: 5%;
+    padding: 10px;
+    padding-left: 15px;
+    gap: 10px;
 }
 
-.activitiesIcons .iconAct {
-    font-size: 1.1rem;
-    display: inline-flex;
+.likeGroup, .commentGroup {
+    display: flex;
     align-items: center;
-    gap: 7px;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
+}
+
+ion-icon {
+    font-size: 1.5rem;
 }
