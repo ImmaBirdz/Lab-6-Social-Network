@@ -11,14 +11,14 @@
 }
 
 body {
-    background-color: #FFF8F8;
+    background-color: #F9F5F6;
     font-family: "Itim", cursive;
 }
 
 .profileContainer {
     width: 65%;
     height: 100vh;
-    background-color: hsl(300, 53%, 94%);
+    background-color: #F9F5F6;
     padding: 20px;
     border-radius: 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

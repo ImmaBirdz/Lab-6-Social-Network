@@ -182,7 +182,7 @@ body {
     border-bottom: none;
     display: flex; 
     align-items: center; 
-    background-color: rgb(176, 150, 172);
+    background-color:#e6c7ce;
     margin: 0;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
@@ -229,7 +229,7 @@ body {
 .chats {
     height: 435px;
     padding: 30px 15px 0 25px;
-    background-color: #efefef;
+    background-color: #F9F5F6;
     overflow-y: auto;
 }
 
@@ -245,8 +245,8 @@ body {
 }
 
 .my-message .message {
-    background-color: #3a12ff;
-    background-image: linear-gradient(45deg, #ee087f, #DD2A7B, #9858ac, #515BD4);
+    background-color: #E6A4B4;
+    /* background-image: linear-gradient(45deg, #ee087f, #DD2A7B, #9858ac, #515BD4); */
     color: white;
     padding: 10px 15px;
     border-radius: 15px;
@@ -262,7 +262,7 @@ body {
 }
 
 .friend-message .message {
-    background-color: #efefef;
+    background-color: #FDEFF4;
     color: #333;
     padding: 10px 15px;
     border-radius: 15px;
@@ -275,7 +275,7 @@ body {
 .msg-bottom {
     border-top: 1px solid #e8e5e5;
     position: relative;
-    background-color: rgb(176, 150, 172);
+    background-color: #e6c7ce;
     padding: 10px;
     
 }
