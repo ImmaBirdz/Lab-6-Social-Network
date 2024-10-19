@@ -15,46 +15,46 @@ const Post = () => {
     const [ showCommentInput, setShowCommentInput ] = useState(false);
     const [ commentText, setCommentText ] = useState('');
 
-        // fetch comment data from post data
-        const fetchCommentIdData = async () => {
-            try {
-                if (!postID) {
-                    return;
-                }
-        
-                const commentCollection = collection(db, 'post', postID, 'comment');
-                const commentSnapshot = await getDocs(commentCollection);
-        
-                if (commentSnapshot.empty) {
-                    console.log('No comment data');
-                    return;
-                } else {
-                    let commentsSet = new Set();
-                    commentSnapshot.forEach(doc => {
-                        commentsSet.add({ id: doc.id, ...doc.data() });
-                    });
-                    // convert set to array
-                    const comments = Array.from(commentsSet);
-
-                    //loop through comments to get user data
-                    for (let i = 0; i < comments.length; i++) {
-                        const userCollection = collection(db, 'user_data');
-                        const userSnapshot = await getDocs(userCollection);
-                        userSnapshot.forEach(doc => {
-                            if (doc.id === comments[i].user_id) {
-                                comments[i].user = doc.data();
-                            }
-                        });
-                    }
-
-                    // filter comment data by timestamp
-                    comments.sort((a, b) => a.comment_time - b.comment_time);
-                    return comments;
-                }
-            } catch (error) {
-                console.error('Error fetching comments data:', error);
+    // fetch comment data from post data
+    const fetchCommentIdData = async () => {
+        try {
+            if (!postID) {
+                return;
             }
-        };
+            
+            const commentCollection = collection(db, 'post', postID, 'comment');
+            const commentSnapshot = await getDocs(commentCollection);
+            
+            if (commentSnapshot.empty) {
+                console.log('No comment data');
+                return;
+            } else {
+                let commentsSet = new Set();
+                commentSnapshot.forEach(doc => {
+                    commentsSet.add({ id: doc.id, ...doc.data() });
+                });
+                // convert set to array
+                const comments = Array.from(commentsSet);
+                
+                //loop through comments to get user data
+                for (let i = 0; i < comments.length; i++) {
+                    const userCollection = collection(db, 'user_data');
+                    const userSnapshot = await getDocs(userCollection);
+                    userSnapshot.forEach(doc => {
+                        if (doc.id === comments[i].user_id) {
+                            comments[i].user = doc.data();
+                        }
+                    });
+                }
+
+                // filter comment data by timestamp
+                comments.sort((a, b) => a.comment_time - b.comment_time);
+                return comments;
+            }
+        } catch (error) {
+            console.error('Error fetching comments data:', error);
+        }
+    };
     
     // set profileID from profileData
     useEffect(() => {
@@ -72,8 +72,7 @@ const Post = () => {
 
     // fetch comment data from post data
     useEffect(() => {
-
-        if(commentText.length > 0) return;
+        if (commentText.length > 0) return;
         
         async function load(){
             const comments = await fetchCommentIdData();
@@ -81,9 +80,7 @@ const Post = () => {
                 setCommentIdData(comments);
             }
         }
-
         load();
-
     }, [commentText]);
 
     useEffect(() => {
@@ -142,24 +139,27 @@ const Post = () => {
         }
 
         main();
-        
 
         TabTitle(`Post from ${postData.user_id} | Black Cat with Bow`);
     }, [postID, postData.user_id]);
 
+    // Validate and send comment to firestore
     const validateComment = async () => {
+        // check if comment input is empty
         const commentInput = document.getElementById('comment-input').value;
         if (commentInput.trim() === ''){
             setShowCommentInput(false);
             return;
         }
 
+        // create comment payload
         const commentPayload = {
             comment_input: commentInput,
             comment_time: serverTimestamp(),
             user_id: loginID,
         };
         
+        // update post payload
         const updatePostPayload = {
             number_of_comments: postData.number_of_comments + 1,
         };
@@ -168,7 +168,6 @@ const Post = () => {
         await addDoc(collection(db, 'post', postID, 'comment'), {
             ...commentPayload,
         });
-        console.log('payload sent');
 
         // update number of comments
         const updatePostRef = doc(db, 'post', postID);
