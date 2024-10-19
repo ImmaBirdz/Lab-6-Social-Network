@@ -15,7 +15,7 @@ const TextPage = () => {
     const { profileID, setProfileID } = useContext(LoginContext);
     const [ postData, setPostData ] = useState([]); // State for post data
     const [ profileData, setProfileData ] = useState({}); // State for profile data
-    const [ postInteractionData, setPostInteractionData ] = useState({}); // State for post interaction data
+    const [ postInteractionData, setPostInteractionData ] = useState([]); // State for post interaction data
 
     // Fetch profile id
     useEffect(() => {
@@ -39,11 +39,9 @@ const TextPage = () => {
             const posts = [];
             postSnapshot.forEach(doc => {
                 if (doc.data().user_id === profileID) {
-                    // posts.push(doc.data());
                     posts.push({...doc.data(), id: doc.id});
                     // push posts id to post data
                     setPostData(postData => [...postData, { id: doc.id }]);
-                    console.log(doc.id);
                 }
             });
             // sort post data by timestamp (latest first)
@@ -51,6 +49,20 @@ const TextPage = () => {
             setPostData(posts);
         }
         fetchPostData()
+    }, [profileID]);
+
+    // Fetch post interaction data
+    useEffect(() => {
+        const fetchPostInteractionData = async () => {
+            const postInteractionCollection = collection(db, 'user_data', loginID, 'post_interaction');
+            const postInteractionSnapshot = await getDocs(postInteractionCollection)
+            let postInteraction = [];
+            postInteractionSnapshot.forEach(doc => {
+                postInteraction.push({...doc.data(), id: doc.id });
+            })
+            setPostInteractionData(postInteraction);
+        }
+        fetchPostInteractionData();
     }, [profileID]);
 
     // Like button handler
@@ -64,8 +76,6 @@ const TextPage = () => {
         postInteractionDocSnapshot.forEach(doc => {
             if (doc.id === postID) {
                 isLikedDocExists = true;
-            } else {
-                isLikedDocExists = false;
             }
         });
 
@@ -137,46 +147,49 @@ const TextPage = () => {
                 postData.map((post, index) => (
                     post.user_id === profileID ? (
                         <div className="postBox" key={index} onClick={() => window.location.href = `/post/${post.id}`}>
-                            <div className="postedContent">
-                                <div className="userProf">
-                                    <a href="#">
-                                        <div className="userPics">
-                                            <img style={{ 
-                                                backgroundImage: `url(${profileData.profile_pic})`, 
-                                                backgroundSize: '65px 65px',
-                                            }} />
+                            <a href={`/post/${post.id}`}>
+                                <div className="postedContent">
+                                    <div className="userProf">
+                                        <div>
+                                            <div className="userPics" onClick={() => window.location.href = `/${post.user_id}`}>
+                                                <img style={{ 
+                                                    backgroundImage: `url(${profileData.profile_pic})`, 
+                                                    backgroundSize: '65px 65px',
+                                                }} />
+                                            </div>
                                         </div>
-                                    </a>
-                                    <div className="infoPost">
-                                        <span className='postDisplayName' onClick={() => window.location.href = `/${profileID}`}><b><a>{profileData.display_name}</a></b></span>
-                                        <span className='postUsername' onClick={() => window.location.href = `/${profileID}`}>{`@${post.user_id}`}</span>
+                                        <div className="infoPost">
+                                            <span className='postDisplayName' onClick={() => window.location.href = `/${profileID}`}><b><a href={`/${post.user_id}`}>{profileData.display_name}</a></b></span>
+                                            <span className='postUsername' onClick={() => window.location.href = `/${profileID}`}>{`@${post.user_id}`}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <p className="postText">{post.input}</p>
-                            <div className='postTime'>{post.last_modified ? new Date(post.last_modified.seconds * 1000).toLocaleString() : ''}</div>
-                            <div className="postAction">
-                                <div className="activitiesIcons">
-                                    <div className='likeGroup'>
-                                        {
-                                            postInteractionData.isLiked ? (
+                                <p className="postText">{post.input}</p>
+                                <div className='postTime'>{post.last_modified ? new Date(post.last_modified.seconds * 1000).toLocaleString() : ''}</div>
+                                <div className="postAction">
+                                    <div className="activitiesIcons">
+                                        <div className='likeGroup' onClick={() => handleLike}>
+                                            {
+                                                postInteractionData.find(interaction => interaction.id === post.id)?.isLiked ? 
                                                 <>
                                                     <ion-icon name="heart" onClick={handleLike} style={{ fill: 'red' }}></ion-icon> {post.number_of_likes}
                                                 </>
-                                            ) : (
+                                                :
                                                 <>
                                                     <ion-icon name="heart-outline" onClick={handleLike}></ion-icon> {post.number_of_likes}
                                                 </>
-                                            )
-                                        }
-                                    </div>
-                                    <div className='commentGroup'>
-                                        <ion-icon name="chatbox-outline"></ion-icon> {post.number_of_comments}
+                                            }
+                                        </div>
+                                        <div className='commentGroup'>
+                                            <ion-icon name="chatbox-outline"></ion-icon> {post.number_of_comments}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                    ) : null
+                    )
+                    :
+                    null
                 ))
             )}
         </div>
