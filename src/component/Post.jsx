@@ -1,11 +1,18 @@
+
 import { addDoc, collection, doc, getDocs, serverTimestamp, updateDoc, deleteDoc } from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react';
 import { db } from '../backend/firebaseConfig';
 import '../css/Post.css'; // Separate CSS for styling posts
+import SideBarRight from './SideBarRight';
 import { LoginContext } from '../variable/LoginContext';
 import { TabTitle } from './TabTitle';
 
 const Post = () => {
+    const [isSidebarShown, setSidebarShow] = useState(false);
+
+    const toggleSidebar = () => {
+        setSidebarShow(!isSidebarShown);
+    };
     const { postID, loginID } = useContext(LoginContext);
     const { profileID, setProfileID } = useContext(LoginContext);
     const [ postData, setPostData ] = useState({}); // State for post data
@@ -252,8 +259,15 @@ const Post = () => {
     };
 
     return (
-        <div>
-            <div className="container">
+        <div className="main-Content">
+            <button className="toggle-sidebar-right" onClick={toggleSidebar}>
+                {isSidebarShown ? '✖' : '☰'}
+            </button>
+            <div className={`sidebar-right ${isSidebarShown ? 'show' : ''}`}>
+                <SideBarRight isSidebarShown={isSidebarShown} />
+            </div>
+
+            <div className={`container ${isSidebarShown ? 'shifted' : ''}`}>
                 <main className="feed">
                     <div className="postBox">
                         <div className="postedContent">
@@ -299,9 +313,13 @@ const Post = () => {
                                 </div> */}
                             </div>
                         </div>
+
+                        {/* <p>This is the content of the post. hehehehehehehhehehehe.</p> */}
+                        {/* Display Post Date and Time */}
+                        {/* <p className="post-date">{postDate}</p> */}
                     </div>
 
-                        {/* Separator Line */ }
+                    {/* Separator Line */}
                     <hr className="post-separator" />
 
                     <div className="comment-section">

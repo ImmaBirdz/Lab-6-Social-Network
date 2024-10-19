@@ -1,0 +1,166 @@
+.navbar {
+    background-color: #e1b5db;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end; /* Space between elements */
+    align-items: center; 
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: auto;
+}
+
+.back {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    position: fixed; 
+}
+
+.back-arrow {
+    left: 10;
+    width: 30px;
+    height: 30px;
+}
+
+.nav-center {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    padding: 10px 0;
+}
+
+/* .navbar .logo {
+    font-size: 30px;
+} */
+
+.icon {
+    margin: 0 10px;
+}
+
+.icon img {
+    width: 40px;
+    height: 40px;
+}
+
+.navbar .nav-links a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+}
+
+/* .nav-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: static;
+} */
+
+.nav-button {
+    position: relative;
+    padding: 10px 30px;
+    margin: 0 10px;
+    letter-spacing: 1px;
+    border-radius: 15px;
+    border: 1px solid #EED6D3;
+    background-color: #f8f5f4;
+    color: #695A5B;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    transition: 0.3s ease-in-out;
+  }
+  
+.nav-button:hover {
+    letter-spacing: 3px;
+  }
+
+@media (min-width: 1025px) {
+
+    .sidebar-right {
+        width: 20%;
+        background-color: hsl(0, 0%, 100%);
+        padding: 20px;
+        border-radius: 0;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: calc(100vh - 60px);
+        overflow-y: auto;
+        position: fixed;
+        top: 60px;
+        right: 0;
+    }
+
+    .toggle-sidebar-right {
+        display: none;
+    }
+
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    /* ------------------- Responsive's Nav Start ------------------ */
+    .navbar {
+        display: flex;
+        padding: 10px 0px 10px 10px;
+    }
+
+    .nav-right {
+        gap: 0px;
+        right: 0;
+    }
+
+    .nav-button {
+        font-size: 0.9rem;
+        margin: 0 5px;
+        padding: 5px 10px;
+    }
+
+    /* ------------------- Responsive's Nav End ------------------ */
+
+    /* ------------------- Responsive's Nav-Left End ------------------ */
+    .sidebar-left {
+        width: 20%;
+        display: block;
+    }
+
+    .sidebar-right {
+        position: fixed;
+        top: 60px;
+        right: 0;
+        width: 20%;
+        height: calc(100vh - 60px);
+        /* use calc for calculate the height of the sidebar in responsive */
+        overflow-y: auto;
+        transform: translateX(100%);
+        /* hide the sidebarR (set it in hidden as default) */
+        transition: transform 0.3s ease-in-out;
+        z-index: 1000;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: hsl(0, 0%, 100%);
+    }
+
+    .sidebar-right.show {
+        transform: translateX(0);
+        /* bring sidebar back */
+    }
+
+    .sidebar-right.show .sidebar-right-content {
+        width: 30%;
+    }
+
+    .toggle-sidebar-right {
+        position: fixed;
+        color: rgb(0, 0, 0);
+        border: none;
+        font-size: 1.5rem;
+        background: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        z-index: 1001;
+    }
+
+}

@@ -9,7 +9,7 @@ body {
     background-color: #f0f2f5;
 }
 
-.navbar {
+/* .navbar {
     background-color: #4e6455;
     color: white;
     display: flex;
@@ -18,9 +18,9 @@ body {
     position: fixed;
     width: 100%;
     top: 0;
-}
+} */
 
-.navbar .logo {
+/* .navbar .logo {
     font-size: 24px;
 }
 
@@ -28,7 +28,7 @@ body {
     color: white;
     margin-left: 20px;
     text-decoration: none;
-}
+} */
 
 .container {
     display: flex;
@@ -37,19 +37,22 @@ body {
     gap: 20px;
 }
 
-.sidebar-left, .sidebar-right {
+.sidebar-left,
+.sidebar-right {
     width: 20%;
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.sidebar-left ul, .sidebar-right ul {
+.sidebar-left ul,
+.sidebar-right ul {
     list-style-type: none;
 }
 
-.sidebar-left ul li, .sidebar-right ul li {
+.sidebar-left ul li,
+.sidebar-right ul li {
     padding: 10px 0;
 }
 
@@ -59,7 +62,7 @@ body {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .new-post {
@@ -114,3 +117,112 @@ body {
     font-size: 12px;
     color: gray;
 }
+
+@media (min-width: 1025px) {
+
+    .sidebar-right {
+        width: 20%;
+        background-color: hsl(0, 0%, 100%);
+        padding: 20px;
+        border-radius: 0;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: calc(100vh - 60px);
+        overflow-y: auto;
+        position: fixed;
+        top: 60px;
+        right: 0;
+    }
+
+    .toggle-sidebar-right {
+        display: none;
+    }
+
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    /* ------------------- Responsive's Nav Start ------------------ */
+    .navbar {
+        display: flex;
+        padding: 10px 0px 10px 10px;
+    }
+
+    .nav-right {
+        gap: 0px;
+        right: 0;
+    }
+
+    .nav-button {
+        font-size: 0.9rem;
+        margin: 0 5px;
+        padding: 5px 10px;
+    }
+
+    /* ------------------- Responsive's Nav End ------------------ */
+
+    /* ------------------- Responsive's Nav-Left Start ------------------ */
+    .sidebar-left {
+        width: 20%;
+        display: block;
+    }
+    /* ------------------- Responsive's Nav-Left End ------------------ */
+
+    /* ------------------- Responsive's Container Start ------------------ */
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 60px;
+        padding: 20px;
+        gap: 20px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .container.shifted {
+        margin-right: 80%;
+    }
+
+    /* ------------------- Responsive's Container End ------------------ */
+
+    /* ------------------- Responsive's Nav-Right Start ------------------ */
+    .sidebar-right {
+        position: fixed;
+        top: 60px;
+        right: 0;
+        width: 80%;
+        height: calc(100vh - 60px);
+        /* use calc for calculate the height of the sidebar in responsive */
+        overflow-y: auto;
+        transform: translateX(100%);
+        /* hide the sidebarR (set it in hidden as default) */
+        transition: transform 0.3s ease-in-out;
+        z-index: 1000;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: hsl(0, 0%, 100%);
+    }
+
+    .sidebar-right.show {
+        transform: translateX(0);
+        /* bring sidebar back */
+    }
+
+    .sidebar-right.show .sidebar-right-content {
+        width: 30%;
+    }
+
+    .toggle-sidebar-right {
+        position: fixed;
+        right: 0;
+        padding-top: 0;
+        margin-top: 0;
+        color: rgb(0, 0, 0);
+        border: none;
+        font-size: 1.5rem;
+        background: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        z-index: 1001;
+    }
+
+};
+/* move it to NavBar.css */
