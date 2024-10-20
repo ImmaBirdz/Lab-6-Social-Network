@@ -87,6 +87,7 @@ const QuickPost = () => {
       user_id: loginID,
       input: input,
       post_time: serverTimestamp(),
+      last_modified: serverTimestamp(),
       number_of_comments: 0,
       number_of_likes: 0,
       number_of_repost: 0,
