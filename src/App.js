@@ -73,10 +73,8 @@ function App() {
             {isLogin ? (
               <>
                 <Route path="/" element={<Page />} />
-                <Route path="/page" element={<Page />} />
                 <Route path="/:profileID" element={<ProfileWrapper />} />
-                <Route path="/message" element={<Message />} />
-                <Route path="/post" element={<Post />} />
+                <Route path="/message/chat" element={<Message />} />
                 <Route path="/post/:postID" element={<PostWrapper />} />
                 <Route path="*" element={<NotFound />} />
               </>
