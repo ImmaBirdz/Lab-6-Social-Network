@@ -64,6 +64,9 @@
     position: relative;
     padding: 10px 30px;
     margin: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     letter-spacing: 1px;
     border-radius: 15px;
     border: 1px solid #EED6D3;
@@ -73,11 +76,11 @@
     font-weight: 700;
     text-transform: capitalize;
     transition: 0.3s ease-in-out;
-  }
-  
+}
+
 .nav-button:hover {
     letter-spacing: 3px;
-  }
+}
 
 @media (min-width: 1025px) {
 
