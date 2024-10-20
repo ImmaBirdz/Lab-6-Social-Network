@@ -45,7 +45,7 @@ const TextPage = () => {
                 }
             });
             // sort post data by timestamp (latest first)
-            posts.sort((a, b) => b.last_modified - a.last_modified);
+            posts.sort((a, b) => b.post_time - a.post_time);
             setPostData(posts);
         }
         fetchPostData()
@@ -165,7 +165,7 @@ const TextPage = () => {
                                     </div>
                                 </div>
                                 <p className="postText">{post.input}</p>
-                                <div className='postTime'>{post.last_modified ? new Date(post.last_modified.seconds * 1000).toLocaleString() : ''}</div>
+                                <div className='postTime'>{post.post_time ? new Date(post.post_time.seconds * 1000).toLocaleString() : ''}</div>
                                 <div className="postAction">
                                     <div className="activitiesIcons">
                                         <div className='likeGroup' onClick={() => handleLike}>
