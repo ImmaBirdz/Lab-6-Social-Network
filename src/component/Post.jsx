@@ -16,7 +16,7 @@ const Post = () => {
     const toggleSidebar = () => {
         setSidebarShow(!isSidebarShown);
     };
-    const { postID, loginID } = useContext(LoginContext);
+    const { postID, loginID, isEditPostModalOpen, setIsEditPostModalOpen } = useContext(LoginContext);
     const { profileID, setProfileID } = useContext(LoginContext);
     const [ postData, setPostData ] = useState({}); // State for post data
     const [ profileData, setProfileData ] = useState({}); // State for profile data
@@ -203,7 +203,6 @@ const Post = () => {
 
     // Post Sidebar button handler
     const togglePostSidebar = () => {
-        console.log('Post Sidebar button clicked');
         setPostSidebarShown(!isPostSidebarShown);
     }
 
@@ -218,7 +217,6 @@ const Post = () => {
         postInteractionDocSnapshot.forEach(doc => {
             if (doc.id === postID) {
                 isLikedDocExists = true;
-                console.log("found postID: ", postID);
             }
         });
 
@@ -282,8 +280,8 @@ const Post = () => {
     }
 
     // Edit Post button handler
-    const handleEditPost = (input) => {
-        
+    const handleEditPost = () => {
+        setIsEditPostModalOpen(!isEditPostModalOpen);
     }
 
     // Delete Post button handler
@@ -393,7 +391,7 @@ const Post = () => {
                             </button>
                             {isPostSidebarShown ? (
                                 <>
-                                    <button className='post-sidebar-item' onClick={() => handleEditPost(postData.input)}>
+                                    <button className='post-sidebar-item' onClick={() => handleEditPost()}>
                                         <ion-icon name="create-outline"></ion-icon>
                                     </button>
                                     <button className='post-sidebar-item' title='Delete this post' onClick={() => handleDeletePost(postID)}>
