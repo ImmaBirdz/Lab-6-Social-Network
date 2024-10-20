@@ -385,25 +385,28 @@ const Post = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="post-sidebar">
-                            <button className='post-sidebar-option' onClick={() => togglePostSidebar()}>
-                                <ion-icon name="ellipsis-horizontal"></ion-icon>
-                            </button>
-                            {isPostSidebarShown ? (
-                                <>
-                                    <button className='post-sidebar-item' onClick={() => handleEditPost()}>
-                                        <ion-icon name="create-outline"></ion-icon>
-                                    </button>
-                                    <button className='post-sidebar-item' title='Delete this post' onClick={() => handleDeletePost(postID)}>
-                                        <ion-icon name="trash-outline"></ion-icon>
-                                    </button>
-                                    <button className="post-sidebar-item">
-                                        <ion-icon name="close-outline" onClick={() => togglePostSidebar()}></ion-icon>
-                                    </button>
-                                </>
-                            ) : null
-                            }
+                        {
+                            loginID === postData.user_id &&
+                            <div className="post-sidebar">
+                                <button className='post-sidebar-option' onClick={() => togglePostSidebar()}>
+                                    <ion-icon name="ellipsis-horizontal"></ion-icon>
+                                </button>
+                                {isPostSidebarShown ? (
+                                    <>
+                                        <button className='post-sidebar-item' onClick={() => handleEditPost()}>
+                                            <ion-icon name="create-outline"></ion-icon>
+                                        </button>
+                                        <button className='post-sidebar-item' title='Delete this post' onClick={() => handleDeletePost(postID)}>
+                                            <ion-icon name="trash-outline"></ion-icon>
+                                        </button>
+                                        <button className="post-sidebar-item">
+                                            <ion-icon name="close-outline" onClick={() => togglePostSidebar()}></ion-icon>
+                                        </button>
+                                    </>
+                                ) : null
+                                }
                         </div>
+                        }
                     </div>
 
                     {/* Separator Line */}
