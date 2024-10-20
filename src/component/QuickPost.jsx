@@ -5,7 +5,7 @@ import { db } from '../backend/firebaseConfig';
 import { collection, doc, getDocs, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 const QuickPost = () => {
-  const { profileID } = useContext(LoginContext);
+  const { loginID } = useContext(LoginContext);
   const [ profileData, setProfileData ] = useState({}); // State profile data
   const [ profilePic, setProfilePic ] = useState(null); // State profile pic
   const [isPostModalOpen, setIsPostModalOpen] = useState(false); // State main modal
@@ -19,7 +19,7 @@ const QuickPost = () => {
       const userCollection = collection(db, 'user_data');
       const userSnapshot = await getDocs(userCollection);
       userSnapshot.forEach(doc => {
-        if (doc.id === profileID) {
+        if (doc.id === loginID) {
           setProfileData(doc.data());
           setProfilePic(doc.data().profile_pic);
         }
@@ -84,16 +84,16 @@ const QuickPost = () => {
 
     // Add post info to payload
     const newPostPayload = {
-      user_id: profileID,
+      user_id: loginID,
       input: input,
-      last_modified: serverTimestamp(),
+      post_time: serverTimestamp(),
       number_of_comments: 0,
       number_of_likes: 0,
       number_of_repost: 0,
       media: selectedImage ? selectedImage : ''
     };
     // Update the number of posts in user_data
-    const userDoc = doc(db, 'user_data', profileID);
+    const userDoc = doc(db, 'user_data', loginID);
     await updateDoc(userDoc, {
       number_of_posts: profileData.number_of_posts + 1
     });
