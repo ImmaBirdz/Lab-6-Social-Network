@@ -44,6 +44,7 @@ const Profile = () => {
     const handleInputChange = (e) => {
         const newDisplayName = document.getElementById('display_name').value;
         const newEmail = document.getElementById('email').value;
+        const newBio = document.getElementById('bio').value; 
         const newPassword = document.getElementById('password').value;
         const newBirthday = document.getElementById('birthday').value;
         if (newDisplayName !== '') {
@@ -56,6 +57,12 @@ const Profile = () => {
             setEditProfileData(prevData => ({
                 ...prevData,
                 email: newEmail
+            }));
+        }
+        if (newBio !== '') { //  bio
+            setEditProfileData(prevData => ({
+                ...prevData,
+                bio: newBio
             }));
         }
         
@@ -216,6 +223,17 @@ const Profile = () => {
                                     name="email"
                                     id='email'
                                     value={editProfileData.email || ''}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+
+                            <div className="formGroup">
+                                <label>Bio:</label>
+                                <input
+                                    type="text"
+                                    name="bio"
+                                    id="bio"
+                                    value={editProfileData.bio || ''}
                                     onChange={handleInputChange}
                                 />
                             </div>
