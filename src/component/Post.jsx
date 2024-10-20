@@ -16,6 +16,7 @@ const Post = () => {
     const toggleSidebar = () => {
         setSidebarShow(!isSidebarShown);
     };
+
     const { postID, loginID, isEditPostModalOpen, setIsEditPostModalOpen } = useContext(LoginContext);
     const { profileID, setProfileID } = useContext(LoginContext);
     const [ postData, setPostData ] = useState({}); // State for post data
@@ -326,9 +327,7 @@ const Post = () => {
 
     return (
         <div className="main-Content">
-            <button className="toggle-sidebar-right" onClick={toggleSidebar}>
-                {isSidebarShown ? '✖' : '☰'}
-            </button>
+            
             <div className={`sidebar-right ${isSidebarShown ? 'show' : ''}`}>
                 <SideBarRight isSidebarShown={isSidebarShown} />
             </div>

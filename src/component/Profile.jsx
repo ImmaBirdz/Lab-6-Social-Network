@@ -5,6 +5,7 @@ import { db, storage } from '../backend/firebaseConfig';
 import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref as storageRef, uploadBytes } from 'firebase/storage';
 import { TabTitle } from './TabTitle';
+import SideBarRight from './SideBarRight';
 import TextPage from './TextPage';
 import MediaPage from './mediaPage';
 
