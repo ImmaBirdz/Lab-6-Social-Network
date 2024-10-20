@@ -11,6 +11,7 @@ import SideBarLeft from './component/SideBarLeft';
 import SideBarRight from './component/SideBarRight';
 import Post from './component/Post';
 import NotFound from './component/NotFound';
+import QuickPost from './component/QuickPost';
 
 function ProfileWrapper() {
   const { profileID, setProfileID, contextProfileID } = useContext(LoginContext);
@@ -64,6 +65,8 @@ function App() {
               <NavBar />
               <SideBarLeft />
               <SideBarRight />
+              <QuickPost />
+              
             </>
           )}
           <Routes>
