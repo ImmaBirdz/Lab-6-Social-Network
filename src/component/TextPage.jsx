@@ -150,13 +150,11 @@ const TextPage = () => {
                             <a href={`/post/${post.id}`}>
                                 <div className="postedContent">
                                     <div className="userProf">
-                                        <div>
-                                            <div className="userPics" onClick={() => window.location.href = `/${post.user_id}`}>
-                                                <img style={{ 
-                                                    backgroundImage: `url(${profileData.profile_pic})`, 
-                                                    backgroundSize: '65px 65px',
-                                                }} />
-                                            </div>
+                                        <div className="userPics" onClick={() => window.location.href = `/${post.user_id}`}>
+                                            <img style={{ 
+                                                backgroundImage: `url(${profileData.profile_pic})`, 
+                                                backgroundSize: '65px 65px',
+                                            }} />
                                         </div>
                                         <div className="infoPost">
                                             <span className='postDisplayName' onClick={() => window.location.href = `/${profileID}`}><b><a href={`/${post.user_id}`}>{profileData.display_name}</a></b></span>
