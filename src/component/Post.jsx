@@ -388,20 +388,20 @@ const Post = () => {
                             </div>
                         </div>
                         <div className="post-sidebar">
-                            <div className='post-sidebar-option' onClick={() => togglePostSidebar()}>
+                            <button className='post-sidebar-option' onClick={() => togglePostSidebar()}>
                                 <ion-icon name="ellipsis-horizontal"></ion-icon>
-                            </div>
+                            </button>
                             {isPostSidebarShown ? (
                                 <>
-                                    <div className='post-sidebar-item' onClick={() => handleEditPost(postData.input)}>
+                                    <button className='post-sidebar-item' onClick={() => handleEditPost(postData.input)}>
                                         <ion-icon name="create-outline"></ion-icon>
-                                    </div>
-                                    <div className='post-sidebar-item' title='Delete this post' onClick={() => handleDeletePost(postID)}>
+                                    </button>
+                                    <button className='post-sidebar-item' title='Delete this post' onClick={() => handleDeletePost(postID)}>
                                         <ion-icon name="trash-outline"></ion-icon>
-                                    </div>
-                                    <div className="post-sidebar-item">
+                                    </button>
+                                    <button className="post-sidebar-item">
                                         <ion-icon name="close-outline" onClick={() => togglePostSidebar()}></ion-icon>
-                                    </div>
+                                    </button>
                                 </>
                             ) : null
                             }

@@ -115,6 +115,7 @@
   resize: none;
   min-height: 100px;
   margin-bottom: 15px;
+  white-space: pre-line;
 }
 
 .options-section {
@@ -124,14 +125,14 @@
   margin-bottom: 15px;
 }
 
-.icon {
+.emoji-icon, .add-image-icon {
   width: 30px;
   height: 30px;
   cursor: pointer;
   filter: invert(100%);
 }
 
-.icon:hover {
+.emoji-icon:hover, .add-image-icon:hover {
   filter: invert(80%);
 }
 

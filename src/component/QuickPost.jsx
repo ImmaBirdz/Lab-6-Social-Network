@@ -168,7 +168,7 @@ const QuickPost = () => {
             {/* Icon options (image, EMOJI etc.if have time) */}
             <div className="options-section">
               <label htmlFor="image-upload">
-                <img src="https://img.icons8.com/parakeet-line/48/FAB005/stack-of-photos.png" alt="Add image" className="icon" />
+                <img src="https://img.icons8.com/parakeet-line/48/FAB005/stack-of-photos.png" alt="Add image" className="add-image-icon" />
                 <input 
                   type="file" 
                   id="image-upload" 
@@ -180,7 +180,7 @@ const QuickPost = () => {
               <img 
                 src="https://img.icons8.com/pulsar-color/48/cat-profile.png" 
                 alt="Add emoji" 
-                className="icon" 
+                className="emoji-icon" 
                 onClick={toggleEmojiPickerModal} 
               />
             </div>
