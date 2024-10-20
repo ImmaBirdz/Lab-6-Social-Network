@@ -283,7 +283,7 @@ const Post = () => {
 
     // Edit Post button handler
     const handleEditPost = (input) => {
-
+        
     }
 
     // Delete Post button handler
@@ -362,7 +362,7 @@ const Post = () => {
                                     backgroundSize: '65px 65px',
                                 }} />
                             </div> */}
-                            <div className='postTime'> Posted at {postData.last_modified ? new Date(postData.last_modified.seconds * 1000).toLocaleString() : ''}</div>
+                            <div className='postTime'> Posted at {postData.post_time ? new Date(postData.post_time.seconds * 1000).toLocaleString() : ''}</div>
                             <div className="postAction">
                                 <div className="activitiesIcons">
                                     <div className='likeGroup'>
