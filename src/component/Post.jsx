@@ -24,6 +24,7 @@ const Post = () => {
     const [ postInteractionData, setPostInteractionData ] = useState({}); // State for post interaction data
     const [ showCommentInput, setShowCommentInput ] = useState(false);
     const [ commentText, setCommentText ] = useState('');
+    const [ isPostSidebarShown, setPostSidebarShown ] = useState(false);
 
     // fetch comment data from post data
     const fetchCommentIdData = async () => {
@@ -200,6 +201,12 @@ const Post = () => {
         setShowCommentInput(!showCommentInput);
     };
 
+    // Post Sidebar button handler
+    const togglePostSidebar = () => {
+        console.log('Post Sidebar button clicked');
+        setPostSidebarShown(!isPostSidebarShown);
+    }
+
     // Like button handler
     const handleLike = async () => {
         const postInteractionCollection = collection(db, 'user_data', loginID, 'post_interaction');
@@ -274,6 +281,11 @@ const Post = () => {
         }
     }
 
+    // Edit Post button handler
+    const handleEditPost = (input) => {
+
+    }
+
     // Delete Post button handler
     const handleDeletePost = async (id) => {
         if (!window.confirm('Are you sure you want to delete this post?')) {
@@ -282,6 +294,11 @@ const Post = () => {
             try {
                 await deleteDoc(doc(db, 'post', id));
                 console.log('Post deleted successfully');
+                // Update the number of posts in user_data
+                const userDoc = doc(db, 'user_data', loginID);
+                await updateDoc(userDoc, {
+                    number_of_posts: profileData.number_of_posts - 1
+                });
                 setPostData(null);
                 alert('Post deleted successfully');
                 navigate(-1);
@@ -320,53 +337,74 @@ const Post = () => {
 
             <div className={`container ${isSidebarShown ? 'shifted' : ''}`}>
                 <main className="feed">
-                    <div className="postBox">
-                        {/* <div className="postPageContainer"></div> */}
-                        <div className="postedContent">
-                            <div className="userProf">
-                                <a href={`/${postData.user_id}`}>
-                                    <div className="userPics">
-                                        <img style={{ 
-                                            backgroundImage: `url(${profileData.profile_pic})`, 
-                                            backgroundSize: '65px 65px',
-                                            }} />
-                                    </div>
-                                </a>
-                                    <div className="infoPost">
-                                        <span className='postDisplayName' onClick={() => window.location.href = `/${profileID}`}><b><a>{profileData.display_name}</a></b></span>
-                                        <span className='postUsername' onClick={() => window.location.href = `/${profileID}`}>{`@${postData.user_id}`}</span>
+                    <div className="postBoxMain">
+                        <div className="postMain">
+                            <div className="postedContent">
+                                <div className="userProf">
+                                    <a href={`/${postData.user_id}`}>
+                                        <div className="userPics">
+                                            <img style={{ 
+                                                backgroundImage: `url(${profileData.profile_pic})`, 
+                                                backgroundSize: '65px 65px',
+                                                }} />
+                                        </div>
+                                    </a>
+                                        <div className="infoPost">
+                                            <span className='postDisplayName' onClick={() => window.location.href = `/${profileID}`}><b><a>{profileData.display_name}</a></b></span>
+                                            <span className='postUsername' onClick={() => window.location.href = `/${profileID}`}>{`@${postData.user_id}`}</span>
+                                        </div>
+                                </div>
+                            </div>
+                            <p className="postText">{postData.input}</p>
+                            {/* <div className="postImage">
+                                <img style={{ 
+                                    backgroundImage: `url(${profileData.profile_pic})`, 
+                                    backgroundSize: '65px 65px',
+                                }} />
+                            </div> */}
+                            <div className='postTime'> Posted at {postData.last_modified ? new Date(postData.last_modified.seconds * 1000).toLocaleString() : ''}</div>
+                            <div className="postAction">
+                                <div className="activitiesIcons">
+                                    <div className='likeGroup'>
+                                        {
+                                            postInteractionData.isLiked ?
+                                            <>
+                                                <ion-icon name="heart" onClick={handleLike} style={{ fill: 'red' }}></ion-icon> {postData.number_of_likes}
+                                            </>
+                                            :
+                                            <>
+                                                <ion-icon name="heart-outline" onClick={handleLike}></ion-icon> {postData.number_of_likes}
+                                            </>
+                                        }
                                     </div>
                                     {
-                                        <div className='delete-post-button' title='Delete this post' onClick={() => handleDeletePost(postID)}>
-                                            <ion-icon name="trash-outline"></ion-icon>
-                                        </div>
-                                    }
+                                        <div className='commentGroup'>
+                                        <ion-icon name="chatbox-outline"></ion-icon> {postData.number_of_comments}
+                                    </div>}
+                                    {/* <div className='repostGroup'>
+                                        <ion-icon name="repeat-outline"></ion-icon> {postData.number_of_reposts}
+                                    </div> */}
+                                </div>
                             </div>
                         </div>
-                        <p className="postText">{postData.input}</p>
-                        <div className='postTime'> Posted at {postData.last_modified ? new Date(postData.last_modified.seconds * 1000).toLocaleString() : ''}</div>
-                        <div className="postAction">
-                            <div className="activitiesIcons">
-                                <div className='likeGroup'>
-                                    {
-                                        postInteractionData.isLiked ?
-                                        <>
-                                            <ion-icon name="heart" onClick={handleLike} style={{ fill: 'red' }}></ion-icon> {postData.number_of_likes}
-                                        </>
-                                        :
-                                        <>
-                                            <ion-icon name="heart-outline" onClick={handleLike}></ion-icon> {postData.number_of_likes}
-                                        </>
-                                    }
-                                </div>
-                                {
-                                    <div className='commentGroup'>
-                                    <ion-icon name="chatbox-outline"></ion-icon> {postData.number_of_comments}
-                                </div>}
-                                {/* <div className='repostGroup'>
-                                    <ion-icon name="repeat-outline"></ion-icon> {postData.number_of_reposts}
-                                </div> */}
+                        <div className="post-sidebar">
+                            <div className='post-sidebar-option' onClick={() => togglePostSidebar()}>
+                                <ion-icon name="ellipsis-horizontal"></ion-icon>
                             </div>
+                            {isPostSidebarShown ? (
+                                <>
+                                    <div className='post-sidebar-item' onClick={() => handleEditPost(postData.input)}>
+                                        <ion-icon name="create-outline"></ion-icon>
+                                    </div>
+                                    <div className='post-sidebar-item' title='Delete this post' onClick={() => handleDeletePost(postID)}>
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                    </div>
+                                    <div className="post-sidebar-item">
+                                        <ion-icon name="close-outline" onClick={() => togglePostSidebar()}></ion-icon>
+                                    </div>
+                                </>
+                            ) : null
+                            }
                         </div>
                     </div>
 

@@ -173,6 +173,24 @@ body {
     margin-top: 0.5em;
 }
 
+.postBoxMain {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.postMain{
+    width: 100%;
+}
+
+.post-sidebar {
+    padding: 20px;
+}
+
+.post-sidebar-item {
+    position: static;
+}
+
 .post-separator {
     border: none;
     height: 1px;
@@ -198,7 +216,6 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
-    /* gap: 10px; */
 }
 
 .comment-header {
