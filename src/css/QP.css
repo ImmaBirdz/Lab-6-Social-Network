@@ -85,6 +85,25 @@
   color: white;
 }
 
+.profile-info{
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  .postDisplayName{
+    font-size: 19.2px;
+    font-weight: bold;
+    margin: 0;
+    width: fit-content;
+    color: white;
+  }
+  .postUsername{
+    font-size: 16px;
+    margin: 0;
+    width: fit-content;
+    color: white;
+  }
+}
+
 .post-input {
   width: 100%;
   background-color: #1b1b1b;
@@ -146,8 +165,8 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   color: white;
   z-index: 30;
-  top: 500px;   
-  right: 380px;   
+  top: 60vh;  
+  right: 28vw;   
 }
 
 .emoji-picker span {
@@ -156,15 +175,38 @@
   margin: 5px;
 }
 
+.image-preview {
+  display: flex;
+  flex-direction: column;
+  object-position: center;
+  margin-bottom: fit-content;
+  img{
+    border-radius: 20px;
+    max-width: 150px;
+    max-height: 150px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
 .remove-image-button {
   background-color: rgb(255, 255, 255); 
+  max-width: 25px;
+  max-height: 25px;
+  aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* text-align: center; */
   font-size: 10px;
   color: rgb(243, 0, 0); 
   border: none; 
-  padding: 5px 10px; 
-  border-radius: 20px; 
+  padding: 0; 
+  border-radius: 100%; 
   cursor: pointer; 
-  transition: background-color 0.3s; 
+  transition: background-color 0.3s;
 }
 
 .remove-image-button:hover {
