@@ -13,6 +13,7 @@ import Post from './component/Post';
 import NotFound from './component/NotFound';
 import QuickPost from './component/QuickPost';
 import EditPost from './component/EditPost';
+import Search from './component/Search';
 
 function ProfileWrapper() {
   const { profileID, setProfileID, contextProfileID } = useContext(LoginContext);
@@ -75,6 +76,10 @@ function App() {
               <>
                 <Route path="/" element={<Page />} />
                 <Route path="/:profileID" element={<ProfileWrapper />} />
+
+                <Route path="/search" element={<Search />} />
+
+
                 <Route path="/message/chat" element={<Message />} />
                 <Route path="/post/:postID" element={<PostWrapper />} />
                 <Route path="*" element={<NotFound />} />
