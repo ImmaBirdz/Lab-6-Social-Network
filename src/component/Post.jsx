@@ -419,17 +419,23 @@ const Post = () => {
                             <div key={comment.id} className="comment">
                                 <div className='comment-container'>
                                     <div className="comment-header">
-                                        <img src={comment.user.profile_pic} alt="User Pic" className="profile-pic" />
-                                        <h4>{comment.user_id}</h4>
+                                        <a href={`/${comment.user_id}`}>
+                                            <img src={comment.user.profile_pic} alt="User Pic" className="profile-pic" />
+                                        </a>
+                                        <div className="comment-user">
+                                            <a href={`/${comment.user_id}`} className='comment-user-display'>{comment.user.display_name}</a>
+                                            <a href={`/${comment.user_id}`} className='comment-user-id'>{`@${comment.user_id}`}</a>
+                                        </div>
                                     </div>
                                     <p>{comment.comment_input}</p>
+                                    <div className='comment-time'>Commented at {comment.comment_time ? new Date(comment.comment_time.seconds * 1000).toLocaleString() : ''}</div>
                                 </div>
-                                        {
-                                            loginID === comment.user_id &&
-                                            <div className="delete-comment" title='Delete your comment' onClick={() => handleDeleteComment(comment.id)}>
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </div>
-                                        }
+                                    {
+                                        loginID === comment.user_id &&
+                                        <div className="delete-comment" title='Delete your comment' onClick={() => handleDeleteComment(comment.id)}>
+                                            <ion-icon name="trash-outline"></ion-icon>
+                                        </div>
+                                    }
                             </div>
                         ))}
 

@@ -1,20 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import '../css/Search.css';
+import { LoginContext } from '../variable/LoginContext';
+import { TabTitle } from './TabTitle';
+import { db } from '../backend/firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
 
 const Search = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  
+  const { loginID } = useContext(LoginContext);
+  const [ searchTerm, setSearchTerm ] = useState('');
+  const [ profileData, setProfileData ] = useState([]); // State for profile data
 
-//   delete if want only search bar
-  const exampleContent = [
-    'POST 1',
-    'POST 2',
-    'POST 3',
-    'POST 4',
-    'POST 5',
-    'POST 6',
-    'POST 7'
-  ];
+  useEffect(() => {
+    TabTitle('Search | Black Cat with Bow');
+  }, []);
+
+  // fetch every profile data
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      const userCollection = collection(db, 'user_data');
+      const userSnapshot = await getDocs(userCollection);
+      const profileData = [];
+      userSnapshot.forEach(doc => {
+        profileData.push({...doc.data(), id: doc.id});
+      });
+      setProfileData(profileData);
+    };
+    fetchProfileData();
+  }, []);
 
   const Search = (event) => {
     setSearchTerm(event.target.value);
@@ -26,22 +38,55 @@ const Search = () => {
       <div className="searchContainer">
         <input
           type="text"
-          placeholder="Search"
+          placeholder="Search Profile by Username"
           value={searchTerm}
           onChange={Search}
           className="search-bar"
         />
-        <ul className="search-results">
-          {exampleContent
-            .filter((content) =>
-              content.toLowerCase().includes(searchTerm.toLowerCase())
+        {
+          searchTerm.length === 0 ? <p className="search-info">Search for profile...</p>
+          :
+          <ul className="search-results">
+          {
+          profileData
+            .filter((profile) =>
+              profile.username.toLowerCase().includes(searchTerm.toLowerCase())
             )
-            .map((filteredContent, index) => (
-              <li key={index}>
-                {filteredContent}
-              </li>
-            ))}
+            .map((filteredProfileData, index) => (
+              <div key={index} className='search-profile-box'>
+                <div className="search-profile-content">
+                  <a href={`/${filteredProfileData.username}`} className="search-profile-pic">
+                  {
+                    !filteredProfileData.profile_pic ? null
+                    : <img src={filteredProfileData.profile_pic} alt="Profile" className="search-profile-pic" />
+                  }
+                  </a>
+                  <div className="search-profile-info">
+                    <a href={`/${filteredProfileData.username}`} className="search-profile-display">
+                      {filteredProfileData.display_name}
+                    </a>
+                    <a href={`/${filteredProfileData.username}`} className="search-profile-id">
+                      {`@${filteredProfileData.username}`}
+                    </a>
+                  </div>
+                  <div className="search-profile-bio">{filteredProfileData.bio}</div>
+                  {
+                    filteredProfileData.id === loginID ? null
+                    :
+                    <button className='add-friend-button'>Add Friend</button>
+                  }
+                </div>
+              </div>
+            ))
+            .concat(
+              profileData.filter((profile) =>
+                profile.username.toLowerCase().includes(searchTerm.toLowerCase())
+              ).length === 0 ? <p className="search-info">Profile not found</p> : []
+            )
+            }
         </ul>
+        }
+        
       </div>
     </div>
   );
