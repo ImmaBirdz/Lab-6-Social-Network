@@ -17,6 +17,7 @@ const LoginProvider = (props) => {
     const [contextPostID, setContextPostID] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isEditPostModalOpen, setIsEditPostModalOpen] = useState(false);
+    const [isPostModalOpen, setIsPostModalOpen] = useState(false);
 
     // check if the user is already login
     useEffect(() => {
@@ -87,7 +88,9 @@ const LoginProvider = (props) => {
             isLoaded,
             setIsLoaded,
             isEditPostModalOpen,
-            setIsEditPostModalOpen
+            setIsEditPostModalOpen,
+            isPostModalOpen,
+            setIsPostModalOpen
         }}>
             {props.children}
         </LoginContext.Provider>
