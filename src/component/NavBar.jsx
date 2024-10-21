@@ -42,7 +42,7 @@ const NavBar = () => {
             </button>
 
             <nav className="nav-center">
-                    <button className="nav-button" onClick={() => window.location.href = `/search/find`}>Search</button>
+                    <button className="nav-button" onClick={() => window.location.href = `/search/profile`}>Search</button>
                     <button className="nav-button" onClick={() => window.location.href = `/message/chat`}>Message</button>
                     <a href='/' className="icon" onClick={() => window.location.href = `/search/find`}>
                         <img src="https://img.icons8.com/ios-glyphs/30/cat--v1.png" alt="Feed-icon" className="feed-icon" />
