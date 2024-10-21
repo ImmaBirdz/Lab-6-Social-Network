@@ -9,13 +9,6 @@ import { TabTitle } from './TabTitle';
 import { useNavigate } from 'react-router-dom';
 
 const Post = () => {
-    const navigate = useNavigate();
-
-    const [isSidebarShown, setSidebarShow] = useState(false);
-
-    const toggleSidebar = () => {
-        setSidebarShow(!isSidebarShown);
-    };
     const { postID, loginID, isEditPostModalOpen, setIsEditPostModalOpen } = useContext(LoginContext);
     const { profileID, setProfileID } = useContext(LoginContext);
     const [ postData, setPostData ] = useState({}); // State for post data
@@ -25,6 +18,13 @@ const Post = () => {
     const [ showCommentInput, setShowCommentInput ] = useState(false);
     const [ commentText, setCommentText ] = useState('');
     const [ isPostSidebarShown, setPostSidebarShown ] = useState(false);
+    const [isSidebarShown, setSidebarShow] = useState(false);
+
+    const navigate = useNavigate();
+
+    const toggleSidebar = () => {
+        setSidebarShow(!isSidebarShown);
+    };
 
     // fetch comment data from post data
     const fetchCommentIdData = async () => {
