@@ -76,10 +76,7 @@ function App() {
               <>
                 <Route path="/" element={<Page />} />
                 <Route path="/:profileID" element={<ProfileWrapper />} />
-
-                <Route path="/search" element={<Search />} />
-
-
+                <Route path="/search/find" element={<Search />} />
                 <Route path="/message/chat" element={<Message />} />
                 <Route path="/post/:postID" element={<PostWrapper />} />
                 <Route path="*" element={<NotFound />} />
