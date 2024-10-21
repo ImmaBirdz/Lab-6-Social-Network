@@ -5,13 +5,12 @@ import { db } from '../backend/firebaseConfig';
 import { collection, doc, getDocs, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 const QuickPost = () => {
-  const { loginID } = useContext(LoginContext);
+  const { loginID, isPostModalOpen, setIsPostModalOpen } = useContext(LoginContext);
   const [ profileData, setProfileData ] = useState({}); // State profile data
   const [ profilePic, setProfilePic ] = useState(null); // State profile pic
-  const [isPostModalOpen, setIsPostModalOpen] = useState(false); // State main modal
-  const [postInput, setPostInput] = useState('');
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [isEmojiPickerModalOpen, setIsEmojiPickerModalOpen] = useState(false); // State emoji modal
+  const [ postInput, setPostInput ] = useState('');
+  const [ selectedImage, setSelectedImage ] = useState(null);
+  const [ isEmojiPickerModalOpen, setIsEmojiPickerModalOpen ] = useState(false); // State emoji modal
 
   // fetch profile id from context
   useEffect(() => {
@@ -118,7 +117,7 @@ const QuickPost = () => {
   ];
 
   return (
-    <div>
+    <div className="quick-post-modal" style={{display: isPostModalOpen && 'flex'}}>
       {/* Profile Icon */}
       <img
         className="circle-icon"
