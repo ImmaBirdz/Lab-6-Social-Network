@@ -7,10 +7,11 @@ import '../css/TextPage.css'
 import { TabTitle } from './TabTitle'
 
 const Page = () => {
-    const { loginID } = useContext(LoginContext);
+    const { loginID, isPostModalOpen, setIsPostModalOpen } = useContext(LoginContext);
     const [ postData, setPostData ] = useState([]); // State for post data
     const [ profileData, setProfileData ] = useState([]); // State for profile data
     const [ postInteractionData, setPostInteractionData ] = useState([]); // State for post interaction data
+    // const [ isPostModalOpen, setIsPostModalOpen ] = useState(false); // State main modal
 
     useEffect(() => {
         TabTitle("Feed | Black Cat with Bow");
@@ -132,14 +133,21 @@ const Page = () => {
         }
     }
 
+    const handlePostModal = () => {
+        setIsPostModalOpen(!isPostModalOpen);
+    }
+
     return (
         <div>
             <body>
                 <div className="container">
                     <main className="feed">
                         <div className="new-post">
-                            <textarea placeholder="What's on your mind?" rows="3"></textarea>
-                            <button>Post</button>
+                            <button>
+                                <div onClick={handlePostModal}>
+                                    Create A New Post
+                                </div>
+                            </button>
                         </div>
                         {postData.map((post, index) => {
                             const tempProfileData = profileData.find(profile => profile.id === post.user_id);
