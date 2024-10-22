@@ -250,6 +250,22 @@ body {
 
 @media (max-width: 768px) {
 
+    .navbar {
+        position: static;
+    }
+
+    .sidebar-right {
+        position: relative;
+        right: 0;
+        top: 0;
+    }
+
+    .profileContainer {
+        position: relative;
+        top: 0px;
+        right: 90px;
+    }
+
     /*for small screen (mobile)*/
     .bioBox {
         flex-direction: column;
@@ -277,10 +293,11 @@ body {
     .actionPart {
         margin-top: 1px;
     }
+
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
-
+    
     /*for medium screen (tablet)*/
     .profileContainer {
         width: 90%;
@@ -413,4 +430,3 @@ body {
     border-radius: 50%;
     object-fit: cover;
   }
-  

@@ -11,6 +11,7 @@
         position: fixed;
         top: 60px;
         right: 0;
+        transform: none;
     }
 
     .toggle-sidebar-right {
@@ -27,11 +28,6 @@
         padding: 10px 0px 10px 10px;
     }
 
-    /* .nav-center {
-        padding: 0;
-        margin: 0;
-    } */
-
     .nav-right {
         gap: 0px;
         right: 0;
@@ -42,15 +38,18 @@
         margin: 0 5px;
         padding: 5px 10px;
     }
-
     /* ------------------- Responsive's Nav End ------------------ */
 
     /* ------------------- Responsive's Nav-Left End ------------------ */
+
+    /* ------------------- Responsive's Side-Left Start ------------------ */
     .sidebar-left {
         width: 20%;
         display: block;
     }
+    /* ------------------- Responsive's Side-Left End ------------------ */
 
+    /* ------------------- Responsive's Side-Right Start ------------------ */
     .sidebar-right {
         position: fixed;
         top: 60px;
@@ -78,6 +77,8 @@
 
     .toggle-sidebar-right {
         position: fixed;
+        top: 20px;
+        right: 20px;
         color: rgb(0, 0, 0);
         border: none;
         font-size: 1.5rem;
@@ -86,5 +87,6 @@
         transition: background-color 0.3s ease;
         z-index: 1001;
     }
+    /* ------------------- Responsive's Side-Right End ------------------ */
 
 }

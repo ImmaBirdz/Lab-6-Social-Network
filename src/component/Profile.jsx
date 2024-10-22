@@ -6,6 +6,7 @@ import '../css/Profile.css';
 import { LoginContext } from '../variable/LoginContext';
 import MediaPage from './MediaPage';
 import { TabTitle } from './TabTitle';
+import SideBarRight from './SideBarRight';
 import TextPage from './TextPage';
 
 const Profile = () => {
