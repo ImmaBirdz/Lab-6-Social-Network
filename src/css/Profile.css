@@ -148,12 +148,17 @@ body {
 }
 
 .rightBox .editBtn {
-    background-color: #D9D9D9;
     position: relative;
     top: 50%;
     width: 20vmin;
     height: 5vmin;
     border-radius: 3px;
+}
+
+.group-respond-friend-request-button {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 }
 
 .editBtn {

@@ -1,48 +1,102 @@
-import React from 'react'
-import '../css/Page.css'
-import { useState, useEffect } from 'react';
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import React, { useContext, useEffect, useState } from 'react';
+import { db } from '../backend/firebaseConfig';
+import '../css/Page.css';
+import { LoginContext } from '../variable/LoginContext';
 
 const SideBarLeft = () => {
+    const { loginID } = useContext(LoginContext);
+    const [ friends, setFriends ] = useState([]);
 
-    const [selectedFriend, setSelectedFriend] = useState({
-        name: 'User Name',
-        imgSrc: 'https://via.placeholder.com/40',
-    });
+    const getFriendsOfUser = async (loginID) => {
+        try {
+            const friendsRef = collection(db, 'friends'); // Reference to the friends collection
 
-    const [postDate, setPostDate] = useState(new Date().toLocaleString()); // State for date and time
+            // Create two queries to find friend requests involving the loginID
+            const q1 = query(friendsRef, where('user1', '==', loginID));
+            const q2 = query(friendsRef, where('user2', '==', loginID));
+            
+            // Fetch the matching documents for both queries
+            const querySnapshot1 = await getDocs(q1);
+            const querySnapshot2 = await getDocs(q2);
+            
+            // Combine both query results
+            const allFriendDocs = [...querySnapshot1.docs, ...querySnapshot2.docs];
+            
+            // Extract friend IDs and details
+            const friends = allFriendDocs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id, // Friend request ID (if needed)
+                user1: data.user1,
+                user2: data.user2,
+            };
+        });
 
-    // Updated friends array with isOnline property
-    const friends = [
-        { id: 'chat1', name: 'Friend 1', imgSrc: 'https://via.placeholder.com/40', isOnline: true },
-        { id: 'chat2', name: 'Friend 2', imgSrc: 'https://via.placeholder.com/40', isOnline: false },
-        { id: 'chat3', name: 'Friend 3', imgSrc: 'https://via.placeholder.com/40', isOnline: true },
-        { id: 'chat4', name: 'Friend 4', imgSrc: 'https://via.placeholder.com/40', isOnline: false },
-        { id: 'chat5', name: 'Friend 5', imgSrc: 'https://via.placeholder.com/40', isOnline: true },
-        { id: 'chat6', name: 'Friend 6', imgSrc: 'https://via.placeholder.com/40', isOnline: false },
-        { id: 'chat7', name: 'Friend 7', imgSrc: 'https://via.placeholder.com/40', isOnline: true },
-        { id: 'chat8', name: 'Friend 8', imgSrc: 'https://via.placeholder.com/40', isOnline: false },
-        { id: 'chat9', name: 'Friend 9', imgSrc: 'https://via.placeholder.com/40', isOnline: true },
-    ];
+        // Optional: filter out duplicates and format the output if necessary
+        const uniqueFriends = Array.from(new Set(friends.map(friend => {
+            return friend.user1 === loginID ? friend.user2 : friend.user1;
+        })));
 
-    const handleFriendClick = (friendId) => {
-        // Link to that friend's message page that online, route based on their ID
-        window.location.href = `/messages/${friendId}`;
+        return uniqueFriends; // Return an array of friend IDs (or objects)
+        } catch (error) {
+            console.error("Error fetching friends: ", error);
+            return []; // Return an empty array in case of error
+        }
     };
+
+    const getFriendDetails = async (friendIds) => {
+        try {
+            // Create an array of promises to fetch each friend's details
+            const friendDetailPromises = friendIds.map(async (friendId) => {
+            const friendDocRef = doc(db, 'user_data', friendId);
+            const friendDoc = await getDoc(friendDocRef);
+
+            // Check if the friend exists
+            if (friendDoc.exists()) {
+                return { id: friendId, ...friendDoc.data() }; // Return friend ID and details
+            } else {
+                console.warn(`Friend with ID ${friendId} does not exist.`);
+                return null; // Return null if the friend does not exist
+            }
+        });
+
+            // Wait for all friend detail fetches to complete
+            const friendDetails = await Promise.all(friendDetailPromises);
+
+            // Filter out null values (friends that do not exist)
+            return friendDetails.filter(detail => detail !== null);
+        } catch (error) {
+            console.error("Error fetching friend details: ", error);
+            return []; // Return an empty array in case of error
+        }
+    };
+
+    useEffect(() => {
+        // Fetch friends for the current user
+        getFriendsOfUser(loginID).then((friends) => {
+            // Fetch details for each friend
+            getFriendDetails(friends).then((friendDetails) => {
+                // Update the state with the friend details
+                setFriends(friendDetails);
+            });
+        });
+    }, [loginID]);
 
     return (
         <aside className="sidebar-left">
             <ul>
                 {friends.map(friend => (
-                    <li key={friend.id} onClick={() => handleFriendClick(friend.id)}>
-                    <img src={friend.imgSrc} alt={friend.name} className="profile-pic" />
-                    <span>{friend.name}</span>
-                    {friend.isOnline && (
+                    <li key={friend.username} onClick={() => window.location.href = `/${friend.username}`}>
+                    <img src={friend.profile_pic} alt={friend.username} className="profile-pic" />
+                    <span>{friend.display_name}</span>
+                    {/* {friend.isOnline && ( */}
                         <img 
                             src="https://img.icons8.com/color-glass/48/cat.png" 
                             alt="Online" 
                             className="online-icon" 
                         />
-                    )}
+                    {/* )} */}
                 </li>
                 ))}
             </ul>

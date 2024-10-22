@@ -11,11 +11,11 @@ const TextPage = () => {
     const toggleSidebar = () => {
         setSidebarShow(!isSidebarShown);
     };
-    const { postID, loginID } = useContext(LoginContext);
-    const { profileID, setProfileID } = useContext(LoginContext);
+    const { postID, loginID, profileID } = useContext(LoginContext);
     const [ postData, setPostData ] = useState([]); // State for post data
     const [ profileData, setProfileData ] = useState({}); // State for profile data
     const [ postInteractionData, setPostInteractionData ] = useState([]); // State for post interaction data
+    const [loading, setLoading] = useState(true);
 
     // Fetch profile id
     useEffect(() => {
@@ -39,7 +39,7 @@ const TextPage = () => {
             const posts = [];
             postSnapshot.forEach(doc => {
                 if (doc.data().user_id === profileID) {
-                    posts.push({...doc.data(), id: doc.id});
+                    posts.push({ ...doc.data(), id: doc.id });
                     // push posts id to post data
                     setPostData(postData => [...postData, { id: doc.id }]);
                 }
@@ -47,6 +47,7 @@ const TextPage = () => {
             // sort post data by timestamp (latest first)
             posts.sort((a, b) => b.post_time - a.post_time);
             setPostData(posts);
+            setLoading(false);
         }
         fetchPostData()
     }, [profileID]);
@@ -58,7 +59,7 @@ const TextPage = () => {
             const postInteractionSnapshot = await getDocs(postInteractionCollection)
             let postInteraction = [];
             postInteractionSnapshot.forEach(doc => {
-                postInteraction.push({...doc.data(), id: doc.id });
+                postInteraction.push({ ...doc.data(), id: doc.id });
             })
             setPostInteractionData(postInteraction);
         }
@@ -140,6 +141,7 @@ const TextPage = () => {
 
 
     return (
+        loading ? <p className='postContainer'>Loading...</p> :
         <div className="postContainer">
             {postData.length === 0 ? (
                 <p>No post found</p>
@@ -151,8 +153,8 @@ const TextPage = () => {
                                 <div className="postedContent">
                                     <div className="userProf">
                                         <div className="userPics" onClick={() => window.location.href = `/${post.user_id}`}>
-                                            <img style={{ 
-                                                backgroundImage: `url(${profileData.profile_pic})`, 
+                                            <img style={{
+                                                backgroundImage: `url(${profileData.profile_pic})`,
                                                 backgroundSize: '65px 65px',
                                             }} />
                                         </div>
@@ -163,19 +165,51 @@ const TextPage = () => {
                                     </div>
                                 </div>
                                 <p className="postText">{post.input}</p>
+                                    {post.media && post.media.length > 0 &&
+                                    
+                                        <div className='group-postImage'>
+                                        {post.media.length > 2 && post.media.length < 5 ?
+                                        post.media.map((media, index) => (
+                                            <>
+                                                {index < 2 &&
+                                                    <div className="postImage-top">
+                                                        <div className="postImage" key={media}>
+                                                            <img src={media} />
+                                                        </div>
+                                                    </div>
+                                                }
+                                                {index >= 2 &&
+                                                    <div className="postImage-bottom">
+                                                        <div className="postImage" key={media}>
+                                                            <img src={media} />
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </>
+                                        ))
+                                        :
+                                        post.media && post.media.map((media, index) => (
+                                            <div className='group-postImage'>
+                                                <div className="postImage" key={media}>
+                                                    <img src={media} />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    }
                                 <div className='postTime'>{post.post_time ? new Date(post.post_time.seconds * 1000).toLocaleString() : ''}</div>
                                 <div className="postAction">
                                     <div className="activitiesIcons">
                                         <div className='likeGroup' onClick={() => handleLike}>
                                             {
-                                                postInteractionData.find(interaction => interaction.id === post.id)?.isLiked ? 
-                                                <>
-                                                    <ion-icon name="heart" onClick={handleLike} style={{ fill: 'red' }}></ion-icon> {post.number_of_likes}
-                                                </>
-                                                :
-                                                <>
-                                                    <ion-icon name="heart-outline" onClick={handleLike}></ion-icon> {post.number_of_likes}
-                                                </>
+                                                postInteractionData.find(interaction => interaction.id === post.id)?.isLiked ?
+                                                    <>
+                                                        <ion-icon name="heart" onClick={handleLike} style={{ fill: 'red' }}></ion-icon> {post.number_of_likes}
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <ion-icon name="heart-outline" onClick={handleLike}></ion-icon> {post.number_of_likes}
+                                                    </>
                                             }
                                         </div>
                                         <div className='commentGroup'>
@@ -186,8 +220,8 @@ const TextPage = () => {
                             </a>
                         </div>
                     )
-                    :
-                    null
+                        :
+                        null
                 ))
             )}
         </div>

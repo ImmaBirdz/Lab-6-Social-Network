@@ -1,16 +1,18 @@
-import React, { useState, useContext, useEffect } from 'react';
+import { addDoc, collection, doc, getDocs, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { getDownloadURL, ref as storageRef, uploadBytes } from 'firebase/storage';
+import React, { useContext, useEffect, useState } from 'react';
+import { db, storage } from '../backend/firebaseConfig';
 import '../css/QP.css';
 import { LoginContext } from '../variable/LoginContext'; // Adjust this xxx
-import { db } from '../backend/firebaseConfig';
-import { collection, doc, getDocs, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 const QuickPost = () => {
   const { loginID, isPostModalOpen, setIsPostModalOpen } = useContext(LoginContext);
-  const [ profileData, setProfileData ] = useState({}); // State profile data
-  const [ profilePic, setProfilePic ] = useState(null); // State profile pic
-  const [ postInput, setPostInput ] = useState('');
-  const [ selectedImage, setSelectedImage ] = useState(null);
-  const [ isEmojiPickerModalOpen, setIsEmojiPickerModalOpen ] = useState(false); // State emoji modal
+  const [profileData, setProfileData] = useState({}); // State profile data
+  const [profilePic, setProfilePic] = useState(null); // State profile pic
+  const [postInput, setPostInput] = useState('');
+  const [selectedImage, setSelectedImage] = useState([]);
+  const [imageURL, setImageURL] = useState([]);
+  const [isEmojiPickerModalOpen, setIsEmojiPickerModalOpen] = useState(false); // State emoji modal
 
   // fetch profile id from context
   useEffect(() => {
@@ -30,6 +32,9 @@ const QuickPost = () => {
   // Main modal
   const togglePostModal = () => {
     setIsPostModalOpen(!isPostModalOpen);
+    if (!isPostModalOpen) {
+      setSelectedImage([]);
+    }
   };
 
   // Post input
@@ -39,26 +44,41 @@ const QuickPost = () => {
   };
 
   // Image upload
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+  const handleMediaAdd = (e) => {
+    const fileArray = Array.from(e.target.files); 
+
+    //not more than 4 images
+    if (selectedImage.length + fileArray.length > 4) {
+      alert('You can only upload up to 4 images!');
+      return;
     }
+
+    const imagePromises = fileArray.map((file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(imagePromises).then((imageArray) => {
+      //set of images prevet duplicate
+      setSelectedImage((prevImage) => [...new Set([...prevImage, ...imageArray])]);
+    });
   };
 
   // Remove image
-  const handleRemoveImage = () => {
-    setSelectedImage(null); // Remove the selected image
+  const handleMediaRemove = (data) => {
+    //remove by url
+    setSelectedImage((prevImage) => prevImage.filter((_, i) => _ !== data));
   };
 
   // Emoji picker
   const handleEmojiClick = (emoji) => {
     setPostInput((prevPost) => prevPost + emoji);
-    setIsEmojiPickerModalOpen(false); 
+    setIsEmojiPickerModalOpen(false);
   };
 
   // Emoji picker modal
@@ -67,7 +87,7 @@ const QuickPost = () => {
   };
 
   // Submit post
-  const handleSubmit =  async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Check if the input is empty
@@ -83,41 +103,88 @@ const QuickPost = () => {
 
     // Add post info to payload
     const newPostPayload = {
-      user_id: loginID,
-      input: input,
-      post_time: serverTimestamp(),
-      last_modified: serverTimestamp(),
-      number_of_comments: 0,
-      number_of_likes: 0,
-      number_of_repost: 0,
-      media: selectedImage ? selectedImage : ''
-    };
-    // Update the number of posts in user_data
+        user_id: loginID,
+        input: input,
+        post_time: serverTimestamp(),
+        last_modified: serverTimestamp(),
+        number_of_comments: 0,
+        number_of_likes: 0,
+        number_of_repost: 0,
+        media: imageURL ? imageURL : null
+      };
+      // Update the number of posts in user_data
     const userDoc = doc(db, 'user_data', loginID);
     await updateDoc(userDoc, {
-      number_of_posts: profileData.number_of_posts + 1
-    });
-    // Add post to firestore
-    addDoc(postCollection, newPostPayload).then((docRef) => {
-      alert('Post upload successfully!');
+        number_of_posts: profileData.number_of_posts + 1
+      });
+      // Add post to firestore
+      addDoc(postCollection, newPostPayload).then((docRef) => {
+        console.log('Document written with ID: ', docRef.id);
+        handleUploads(docRef.id);
+        alert('Post upload successfully!');
+
     }).catch((error) => {
-      alert('Error adding document: ', error);
+        alert('Error adding document: ', error);
+      });
+      setPostInput('');
+      setSelectedImage(null);
+      setIsEmojiPickerModalOpen(false);
+      setImageURL([]);
+      setIsPostModalOpen(false);
+    };
+
+  const handleUploads = async (postID) => {
+    console.log("postID", postID);
+    const urls = [];
+    console.log("Uploading images");
+  
+    // Create an array to hold promises for each upload
+    const uploadPromises = selectedImage.map(async (blobUrl) => {
+      // Fetch the Blob from the Blob URL
+      const response = await fetch(blobUrl);
+      const blob = await response.blob();
+      
+      const timestamp = Date.now(); // Current timestamp
+      const randomString = Math.random().toString(36).substring(2, 15); // Random string for uniqueness
+      const fileName = `${postID}_${timestamp}_${randomString}.png`; // Unique file name
+
+      // Create a File object from the Blob
+      const file = new File([blob], fileName, { type: blob.type });
+  
+      // Create a reference to the storage location
+      const uploadedImg = storageRef(storage, `post/${postID}/${file.name}`); // Use file.name for proper file naming
+  
+      // Upload the file and get the download URL
+      await uploadBytes(uploadedImg, file);
+      const url = await getDownloadURL(uploadedImg);
+      urls.push(url); // Add URL to the urls array
     });
-    setPostInput('');
-    setSelectedImage(null);
-    setIsPostModalOpen(false);
-    setIsEmojiPickerModalOpen(false); 
+  
+    try {
+      // Wait for all uploads to finish
+      await Promise.all(uploadPromises);
+      setImageURL(urls); // Set the URLs in your state
+
+      //update post with array of urls
+      const docRef = doc(db, 'post', postID);
+      await updateDoc(docRef, {
+        media: urls
+      });
+      console.log("Images uploaded");
+    } catch (e) {
+      console.error("Error uploading images:", e);
+    }
   };
 
   // List 
   const emojis = [
-    '😀', '😁', '😆', '😅', '🤣', '😊', '😇', '🥰', '😍', '😎', 
-    '😜', '🤪', '😝', '🤑', '🤖', '👻', '💀', '🤯', '😺', '😸', 
+    '😀', '😁', '😆', '😅', '🤣', '😊', '😇', '🥰', '😍', '😎',
+    '😜', '🤪', '😝', '🤑', '🤖', '👻', '💀', '🤯', '😺', '😸',
     '😻', '😼', '😽', '😿', '🙀', '🤔', '😤', '😢', '😥'
   ];
 
   return (
-    <div className="quick-post-modal" style={{display: isPostModalOpen && 'flex'}}>
+    <div className="quick-post-modal" style={{ display: isPostModalOpen && 'flex' }}>
       {/* Profile Icon */}
       <img
         className="circle-icon"
@@ -129,16 +196,16 @@ const QuickPost = () => {
       {/* Main Post Modal */}
       {isPostModalOpen && (
         <div className="modal-overlay">
-          <div className="post-modal"> 
+          <div className="post-modal">
             <button className="close-button" onClick={togglePostModal}>
-              Close 
+              Close
             </button>
-            
+
             {/* Profile info and post input */}
             <div className="profile-section">
               <img
                 className="profile-pic"
-                src={profilePic} 
+                src={profilePic}
                 alt="Profile"
               />
               <div className="profile-info">
@@ -146,7 +213,7 @@ const QuickPost = () => {
                 <span className='postUserName'>{`@${profileData.username}`}</span>
               </div>
             </div>
-            
+
             <textarea
               className="post-input"
               placeholder="What's happening?"
@@ -156,32 +223,38 @@ const QuickPost = () => {
             />
 
             {/* Display selected image with a delete button */}
-            {selectedImage && (
-              <div className="image-preview">
-                <img src={selectedImage} alt="Selected" className="preview-image" style={{}} />
-                <button className="remove-image-button" onClick={handleRemoveImage}>
-                  &#10006;
-                </button>
-              </div>
-            )}
+
+            <div className="image-preview">
+              {selectedImage && selectedImage.map((image, index) => {
+                return (
+                  <div key={index} >
+                    <img src={image} alt="Selected" className="preview-image" style={{}} />
+                    <button className="remove-image-button" onClick={e => handleMediaRemove(image)}>
+                      &#10006;
+                    </button>
+                  </div>
+                )
+              })}
+            </div>
 
             {/* Icon options (image, EMOJI etc.if have time) */}
             <div className="options-section">
               <label htmlFor="image-upload">
                 <img src="https://img.icons8.com/parakeet-line/48/FAB005/stack-of-photos.png" alt="Add image" className="add-image-icon" />
-                <input 
-                  type="file" 
-                  id="image-upload" 
-                  accept="image/*" 
-                  onChange={handleImageChange} 
+                <input
+                  type="file"
+                  id="image-upload"
+                  accept="image/*"
+                  onChange={handleMediaAdd}
+                  multiple
                   style={{ display: 'none' }} // Hide the file input
                 />
               </label>
-              <img 
-                src="https://img.icons8.com/pulsar-color/48/cat-profile.png" 
-                alt="Add emoji" 
-                className="emoji-icon" 
-                onClick={toggleEmojiPickerModal} 
+              <img
+                src="https://img.icons8.com/pulsar-color/48/cat-profile.png"
+                alt="Add emoji"
+                className="emoji-icon"
+                onClick={toggleEmojiPickerModal}
               />
             </div>
 
@@ -196,16 +269,16 @@ const QuickPost = () => {
       {/* Emoji Picker Modal */}
       {isEmojiPickerModalOpen && (
         <div className="modal-overlay">
-          <div className="emoji-picker-modal"> 
+          <div className="emoji-picker-modal">
             <button className="close-button" onClick={toggleEmojiPickerModal}>
-              Close 
+              Close
             </button>
             <h2>Select an Emoji</h2>
             <div className="emoji-picker">
               {emojis.map((emoji, index) => (
-                <span 
-                  key={index} 
-                  onClick={() => handleEmojiClick(emoji)} 
+                <span
+                  key={index}
+                  onClick={() => handleEmojiClick(emoji)}
                   style={{ cursor: 'pointer', fontSize: '24px', margin: '5px' }}
                 >
                   {emoji}
