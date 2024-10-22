@@ -78,7 +78,6 @@ const SideBarLeft = () => {
             // Fetch details for each friend
             getFriendDetails(friends).then((friendDetails) => {
                 // Update the state with the friend details
-                console.log(friendDetails);
                 setFriends(friendDetails);
             });
         });
