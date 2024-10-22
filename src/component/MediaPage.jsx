@@ -1,18 +1,19 @@
-import '../css/Profile.css';
-import '../css/MediaPage.css';
-import React, { useState, useEffect, useContext } from 'react';
-import { LoginContext } from '../variable/LoginContext';
-import { db, storage } from '../backend/firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
+import React, { useContext, useEffect, useState } from 'react';
+import { db } from '../backend/firebaseConfig';
+import '../css/MediaPage.css';
+import '../css/Profile.css';
+import { LoginContext } from '../variable/LoginContext';
 import { TabTitle } from './TabTitle';
 
 const MediaPage = () => {
     TabTitle("Media | Black Cat with Bow");
     const { profileID } = useContext(LoginContext);
-    const [ profileData, setProfileData ] = useState({});
-    const [ postData, setPostData ] = useState([]);
+    const [profileData, setProfileData] = useState({});
+    const [postData, setPostData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // fetch profile data
+    // Fetch profile id
     useEffect(() => {
         const fetchProfileData = async () => {
             const userCollection = collection(db, 'user_data');
@@ -26,67 +27,50 @@ const MediaPage = () => {
         fetchProfileData();
     }, [profileID]);
 
-    // fetch post data
+    // Fetch all post data from this profileID
     useEffect(() => {
         const fetchPostData = async () => {
             const postCollection = collection(db, 'post');
             const postSnapshot = await getDocs(postCollection);
             const posts = [];
             postSnapshot.forEach(doc => {
-                if (doc.data().profile_id === profileID) {
-                    posts.push({...doc.data(), id: doc.id});
+                if (doc.data().user_id === profileID) {
+                    posts.push({ ...doc.data(), id: doc.id });
+                    // push posts id to post data
+                    setPostData(postData => [...postData, { id: doc.id }]);
                 }
             });
+            // sort post data by timestamp (latest first)
             posts.sort((a, b) => b.post_time - a.post_time);
             setPostData(posts);
+            setLoading(false);
         }
-        fetchPostData();
+        fetchPostData()
     }, [profileID]);
 
     return (
-        <div>
+        loading ? <p className="postContainer">Loading...</p> :
+        <div className="mediaContain">
+            <div className="mediaContainer">
+                {
+                    postData &&
+                    //check if post has media some
+                    postData && postData.some(post => Array.isArray(post.media) && post.media.length > 0) ? 
+                    postData.map((post, index) => (
+                        post.media && post.media.map((media, index) => (
+                            <div className="mediaContent" key={media} onClick={() => window.location.href = `post/${post.id}`}>
+                                <a href="#"><img src={media} alt="media"></img></a>
+                            </div>
+                        ))
 
-            <div className="mediaContain">
-
-                <div class="mediaContainer">
-
-                    <div class="mediaContent">
-                        <a href="#"><img src="frogMeme.jpg" alt="frogMeme"></img></a>
-                    </div>
-
-                    <div class="mediaContent">
-                        <a href="#"><img src="frogMeme.jpg" alt="frogMeme"></img></a>
-                    </div>
-
-                    <div class="mediaContent">
-                        <a href="#"><img src="frogMeme.jpg" alt="frogMeme"></img></a>
-                    </div>
-
-                    <div class="mediaContent">
-                        <a href="#"><img src="frogMeme.jpg" alt="frogMeme"></img></a>
-                    </div>
-
-                    <div class="mediaContent">
-                        <a href="#"><img src="frogMeme.jpg" alt="frogMeme"></img></a>
-                    </div>
-
-                    <div class="mediaContent">
-                        <a href="#"><img src="frogMeme.jpg" alt="frogMeme"></img></a>
-                    </div>
-
-                    <div class="mediaContent">
-                        <a href="#"><img src="frogMeme.jpg" alt="frogMeme"></img></a>
-                    </div>
-
-                    <div class="mediaContent">
-                        <a href="#"><img src="frogMeme.jpg" alt="frogMeme"></img></a>
-                    </div>
-
-                </div>
-
+                    )) 
+                    : 
+                    <>No Media Post</>
+                    
+                }
             </div>
-
-        </div>);
+        </div>
+    );
 };
 
 export default MediaPage;   
