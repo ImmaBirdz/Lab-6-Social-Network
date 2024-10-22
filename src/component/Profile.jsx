@@ -1,12 +1,12 @@
-import '../css/Profile.css';
-import React, { useState, useEffect, useContext } from 'react';
-import { LoginContext } from '../variable/LoginContext';
-import { db, storage } from '../backend/firebaseConfig';
-import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import { getDownloadURL, ref as storageRef, uploadBytes } from 'firebase/storage';
+import React, { useContext, useEffect, useState } from 'react';
+import { db, storage } from '../backend/firebaseConfig';
+import '../css/Profile.css';
+import { LoginContext } from '../variable/LoginContext';
+import MediaPage from './MediaPage';
 import { TabTitle } from './TabTitle';
 import TextPage from './TextPage';
-import MediaPage from './mediaPage';
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('Text'); // Set default tab to Text Page
@@ -17,6 +17,9 @@ const Profile = () => {
     const [newPassword, setNewPassword] = useState(''); // New pass
     const [confirmPassword, setConfirmPassword] = useState(''); // Confirm pass
     const [error, setError] = useState(''); // Error pass not match
+    const [friendStatus, setFriendStatus] = useState(false); // Friend status
+    const [friendRequest, setFriendRequest] = useState(false); // Friend request status
+    const [showFriendRequest, setShowFriendRequest] = useState(false); // Show friend request
 
 
     useEffect(() => {
@@ -43,7 +46,7 @@ const Profile = () => {
     const handleInputChange = (e) => {
         const newDisplayName = document.getElementById('display_name').value;
         const newEmail = document.getElementById('email').value;
-        const newBio = document.getElementById('bio').value; 
+        const newBio = document.getElementById('bio').value;
         const newPassword = document.getElementById('password').value;
         const newBirthday = document.getElementById('birthday').value;
         if (newDisplayName !== '') {
@@ -64,7 +67,7 @@ const Profile = () => {
                 bio: newBio
             }));
         }
-        
+
         if (newPassword !== '') {
             if (newPassword !== confirmPassword) {
                 setError("Password does not match.");
@@ -99,22 +102,233 @@ const Profile = () => {
 
     // Handle saving edited profile data
     const handleSaveChanges = async () => {
-        
         if (newPassword || confirmPassword) {
             if (newPassword !== confirmPassword) {
                 setError("Password does not match.");
                 return;
             }
         }
-    
-        setError(''); 
-    
+        setError('');
         const userRef = doc(db, 'user_data', loginID); // Assume loginID is the doc ID
         await updateDoc(userRef, editProfileData);
-    
         setProfileData(editProfileData);
         handleClose();
     };
+
+    // Handle adding friend
+    const handleAddFriend = async () => {
+        const friendRequestsRef = collection(db, 'friend_requests'); // Reference to the collection
+
+        const requestFriendPayload = {
+            from: loginID,   // ID of the user sending the request
+            to: profileID,   // ID of the user receiving the request
+            when: serverTimestamp()  // Timestamp of when the request was made
+        };
+
+        try {
+            // Add a new document to the 'friend_requests' collection
+            await addDoc(friendRequestsRef, requestFriendPayload);
+            setFriendRequest(true);
+            console.log("Friend request sent");
+        } catch (error) {
+            console.error("Error sending friend request: ", error);
+        }
+    };
+
+    // Handle undoing friend request
+    const handleUndoRequest = async () => {
+        try {
+            const friendRequestsRef = collection(db, 'friend_requests'); // Reference to the collection
+
+            // Create two queries to find requests between loginID and profileID (in both directions)
+            const q1 = query(friendRequestsRef, where('from', '==', loginID), where('to', '==', profileID));
+            const q2 = query(friendRequestsRef, where('from', '==', profileID), where('to', '==', loginID));
+
+            // Fetch the matching documents for both queries
+            const querySnapshot1 = await getDocs(q1);
+            const querySnapshot2 = await getDocs(q2);
+
+            // Combine both query results and loop through them to delete
+            const allSnapshots = [...querySnapshot1.docs, ...querySnapshot2.docs];
+
+            if (allSnapshots.length === 0) {
+                console.log("No matching friend request found");
+                return;
+            }
+
+            // Loop through each document and delete it
+            allSnapshots.forEach(async (doc) => {
+                await deleteDoc(doc.ref); // Delete the document
+                setFriendRequest(false);
+                setShowFriendRequest(false);
+                console.log("Friend request rejected/undone");
+            });
+        } catch (error) {
+            console.error("Error rejecting friend request: ", error);
+        }
+    };
+
+    // Handle accepting friend request
+    const handleAcceptRequest = async () => {
+        try {
+            const friendRequestsRef = collection(db, 'friend_requests'); // Reference to the collection
+
+            // Create two queries to find requests between loginID and profileID (in both directions)
+            const q1 = query(friendRequestsRef, where('from', '==', loginID), where('to', '==', profileID));
+            const q2 = query(friendRequestsRef, where('from', '==', profileID), where('to', '==', loginID));
+
+            // Fetch the matching documents for both queries
+            const querySnapshot1 = await getDocs(q1);
+            const querySnapshot2 = await getDocs(q2);
+
+            // Combine both query results and loop through them to delete
+            const allSnapshots = [...querySnapshot1.docs, ...querySnapshot2.docs];
+
+            if (allSnapshots.length === 0) {
+                console.log("No matching friend request found");
+                return;
+            }
+
+            // Loop through each document and delete it
+            allSnapshots.forEach(async (doc) => {
+                await deleteDoc(doc.ref); // Delete the document
+                setFriendStatus(true);
+                setShowFriendRequest(false);
+                console.log("Friend request accepted");
+            });
+
+            const friendsRef = collection(db, 'friends'); // Reference to the collection
+            const friendPayload = {
+                user1: loginID,
+                user2: profileID,
+                when: serverTimestamp()
+            };
+
+            // References to the user documents
+            const user1DocRef = doc(db, 'user_data', loginID);
+            const user2DocRef = doc(db, 'user_data', profileID);
+
+            // Fetch user data
+            const user1Data = await getDoc(user1DocRef);
+            const user2Data = await getDoc(user2DocRef);
+
+            // Check if both users exist
+            if (!user1Data.exists() || !user2Data.exists()) {
+                console.error("One or both user documents do not exist.");
+                return;
+            }
+
+            const user1Friends = user1Data.data().number_of_friends;
+            const user2Friends = user2Data.data().number_of_friends;
+
+            console.log({ user1Friends, user2Friends });
+
+            // Update number of friends for both users
+            await updateDoc(user1DocRef, {
+                number_of_friends: user1Friends + 1
+            });
+
+            await updateDoc(user2DocRef, {
+                number_of_friends: user2Friends + 1
+            });
+
+            await addDoc(friendsRef, friendPayload);
+            console.log("Friendship created");
+        } catch (error) {
+            console.error("Error accepting friend request: ", error);
+        }
+    };
+
+    // Handle unfriending
+    const handleUnfriend = async () => {
+        try {
+            const friendsRef = collection(db, 'friends'); // Reference to the collection
+
+            // Create two queries to find the friendship between loginID and profileID (in both directions)
+            const q1 = query(friendsRef, where('user1', '==', loginID), where('user2', '==', profileID));
+            const q2 = query(friendsRef, where('user1', '==', profileID), where('user2', '==', loginID));
+
+            // Fetch the matching documents for both queries
+            const querySnapshot1 = await getDocs(q1);
+            const querySnapshot2 = await getDocs(q2);
+
+            // Combine both query results and loop through them to delete
+            const allSnapshots = [...querySnapshot1.docs, ...querySnapshot2.docs];
+
+            if (allSnapshots.length === 0) {
+                console.log("No matching friendship found");
+                return;
+            }
+
+            // References to the user documents
+            const user1DocRef = doc(db, 'user_data', loginID);
+            const user2DocRef = doc(db, 'user_data', profileID);
+
+            // Fetch user data
+            const user1Data = await getDoc(user1DocRef);
+            const user2Data = await getDoc(user2DocRef);
+
+            // Check if both users exist
+            if (!user1Data.exists() || !user2Data.exists()) {
+                console.error("One or both user documents do not exist.");
+                return;
+            }
+
+            const user1Friends = user1Data.data().number_of_friends;
+            const user2Friends = user2Data.data().number_of_friends;
+
+            console.log({ user1Friends, user2Friends });
+
+            // Update number of friends for both users
+            await updateDoc(user1DocRef, {
+                number_of_friends: user1Friends - 1
+            });
+
+            await updateDoc(user2DocRef, {
+                number_of_friends: user2Friends - 1
+            });
+
+            // Loop through each document and delete it
+            allSnapshots.forEach(async (doc) => {
+                await deleteDoc(doc.ref); // Delete the document
+                setFriendStatus(false);
+                console.log("Friendship deleted");
+            });
+        } catch (error) {
+            console.error("Error deleting friendship: ", error);
+        }
+    }
+
+    // Check if the user is already friends with the profile or has sent a friend request
+    useEffect(() => {
+        if (loginID && profileID) {
+            const friendRequestsRef = collection(db, 'friend_requests'); // Reference to the collection
+            const querySnapshot = getDocs(friendRequestsRef);
+
+            querySnapshot.then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    const request = doc.data();
+                    if (request.from === loginID && request.to === profileID) {
+                        setFriendRequest(true);
+                    } else if (request.from === profileID && request.to === loginID) {
+                        setShowFriendRequest(true);
+                    }
+                });
+            });
+
+            const friendsRef = collection(db, 'friends'); // Reference to the collection
+            const querySnapshot2 = getDocs(friendsRef);
+
+            querySnapshot2.then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    const friend = doc.data();
+                    if ((friend.user1 === loginID && friend.user2 === profileID) || (friend.user1 === profileID && friend.user2 === loginID)) {
+                        setFriendStatus(true);
+                    }
+                });
+            });
+        }
+    }, [loginID, profileID]);
 
     return (
         <div className="profileContainer">
@@ -147,22 +361,54 @@ const Profile = () => {
 
                     <div className="rightBox">
                         <div className="accNum">
-                            {profileData.number_of_posts > 1 ? 
-                                <div className="postNum">{profileData.number_of_posts} posts</div> 
+                            {profileData.number_of_posts > 1 ?
+                                <div className="postNum">{profileData.number_of_posts} posts</div>
                                 :
                                 <div className="postNum">{profileData.number_of_posts} post</div>
                             }
-                            {profileData.number_of_friends > 1 ? 
-                                <div className="followersNum"><a href="#">{profileData.number_of_friends} friends</a></div> 
+                            {profileData.number_of_friends > 1 ?
+                                <div className="followersNum"><a href="#">{profileData.number_of_friends} friends</a></div>
                                 :
                                 <div className="followersNum"><a href="#">{profileData.number_of_friends} friend</a></div>
                             }
                         </div>
                         { // Show edit button if the profile is the user's own profile
-                            profileID === loginID &&
-                            <div className="editBtn">
-                                <button onClick={handleShow}>Edit Profile</button>
-                            </div>
+                            profileID === loginID ? (
+                                <div className="editBtn">
+                                    <button onClick={handleShow}>Edit Profile</button>
+                                </div>
+                            )
+                                :
+                                (
+                                    friendStatus ?
+                                        <>
+                                            <div className="editBtn">
+                                                <button>Friend</button>
+                                            </div>
+                                            <div className="editBtn">
+                                                <button onClick={handleUnfriend}>Unfriend</button>
+                                            </div>
+                                        </>
+                                        :
+                                        showFriendRequest ?
+                                            <>
+                                                <div className="editBtn">
+                                                    <button onClick={handleAcceptRequest}>Accept Request</button>
+                                                </div>
+                                                <div className="editBtn">
+                                                    <button onClick={handleUndoRequest}>Reject Request</button>
+                                                </div>
+                                            </>
+                                            :
+                                            friendRequest ?
+                                                <div className="editBtn">
+                                                    <button onClick={handleUndoRequest}>Undo Request</button>
+                                                </div>
+                                                :
+                                                <div className="editBtn">
+                                                    <button onClick={handleAddFriend}>Add Friend</button>
+                                                </div>
+                                )
                         }
                     </div>
                 </div>
@@ -247,7 +493,7 @@ const Profile = () => {
                                     onChange={(e) => setNewPassword(e.target.value)}
                                 />
                             </div>
-                            
+
                             <div className="formGroup">
                                 <label>Confirm Password:</label>
                                 <input
