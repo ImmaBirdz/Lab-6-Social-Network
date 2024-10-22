@@ -1,4 +1,3 @@
-
 import { addDoc, collection, doc, getDocs, serverTimestamp, updateDoc, deleteDoc, setDoc } from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react';
 import { db } from '../backend/firebaseConfig';
@@ -326,9 +325,7 @@ const Post = () => {
 
     return (
         <div className="main-Content">
-            <button className="toggle-sidebar-right" onClick={toggleSidebar}>
-                {isSidebarShown ? '✖' : '☰'}
-            </button>
+            
             <div className={`sidebar-right ${isSidebarShown ? 'show' : ''}`}>
                 <SideBarRight isSidebarShown={isSidebarShown} />
             </div>

@@ -68,7 +68,7 @@
     justify-content: center;
     align-items: center;
     letter-spacing: 1px;
-    border-radius: 15px;
+    border-radius: 12px;
     border: 1px solid #EED6D3;
     background-color: #f8f5f4;
     color: #695A5B;
@@ -108,7 +108,7 @@
     /* ------------------- Responsive's Nav Start ------------------ */
     .navbar {
         display: flex;
-        padding: 10px 0px 10px 10px;
+        padding: 0 0 10px 0;
     }
 
     .nav-right {
@@ -157,6 +157,7 @@
 
     .toggle-sidebar-right {
         position: fixed;
+        top: 12%;
         color: rgb(0, 0, 0);
         border: none;
         font-size: 1.5rem;
