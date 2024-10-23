@@ -1,11 +1,12 @@
 .navbar {
-    background-color: #e7b2d0;
+    background: linear-gradient(45deg, #FAD3E7, #E8A0BF, #C5A4C9, #C0DBEA);
     color: white;
     display: flex;
     flex-direction: row;
-    justify-content: flex-end; /* Space between elements */
+    justify-content: center; /* Space between elements */
     align-items: center; 
     position: fixed;
+    bottom: 680px;
     width: 100%;
     top: 0;
     left: 0;
@@ -39,8 +40,8 @@
 }
 
 .icon img {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
 }
 
 .navbar .nav-links a {
@@ -52,6 +53,7 @@
 .nav-button {
     position: relative;
     padding: 10px 30px;
+    bottom: 3px;
     margin: 0 10px;
     display: flex;
     justify-content: center;
