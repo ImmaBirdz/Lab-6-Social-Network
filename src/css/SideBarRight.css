@@ -18,30 +18,6 @@
         display: none;
     }
 
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-
-    /* ------------------- Responsive's Nav Start ------------------ */
-    .navbar {
-        display: flex;
-        padding: 10px 0px 10px 10px;
-    }
-
-    .nav-right {
-        gap: 0px;
-        right: 0;
-    }
-
-    .nav-button {
-        font-size: 0.9rem;
-        margin: 0 5px;
-        padding: 5px 10px;
-    }
-    /* ------------------- Responsive's Nav End ------------------ */
-
-    /* ------------------- Responsive's Nav-Left End ------------------ */
-
     /* ------------------- Responsive's Side-Left Start ------------------ */
     .sidebar-left {
         width: 20%;
@@ -50,20 +26,22 @@
     /* ------------------- Responsive's Side-Left End ------------------ */
 
     /* ------------------- Responsive's Side-Right Start ------------------ */
+
     .sidebar-right {
+        width: 20%;
+        background-color: hsl(0, 0%, 100%);
+        padding: 20px;
+        border-radius: 0;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: calc(100vh - 60px);
+        overflow-y: auto;
         position: fixed;
         top: 60px;
         right: 0;
-        width: 20%;
-        height: calc(100vh - 60px);
-        /* use calc for calculate the height of the sidebar in responsive */
-        overflow-y: auto;
-        transform: translateX(100%);
-        /* hide the sidebarR (set it in hidden as default) */
-        transition: transform 0.3s ease-in-out;
-        z-index: 1000;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        background-color: hsl(0, 0%, 100%);
+    }
+
+    .toggle-sidebar-right {
+        display: none;
     }
 
     .sidebar-right.show {

@@ -12,20 +12,6 @@ body {
     padding: 0;
 }
 
-
-/* .navbar {
-    background-color: #e1b5db;
-    color: white;
-    display: flex;
-    justify-content: flex-end;  Space between elements
-    align-items: center; 
-    padding: 10px;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-} */
-
 .back {
     background: none;
     border: none;
@@ -39,12 +25,6 @@ body {
     left: 10;
     width: 30px;
     height: 30px;
-}
-
-.nav-center {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center; 
 }
 
 .message-icon {
@@ -101,36 +81,6 @@ body {
     height: calc(100vh - 60px); 
     width: 185vh;
     overflow-y: auto; 
-}
-
-
-.sidebar-left {
-    width: 20%;
-    background-color: hsl(0, 0%, 100%);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    height: 100%; 
-    overflow-y: auto; /* scroll */
-   
-    
-}
-
-.sidebar-left ul li {
-    display: flex;
-    align-items: center; 
-    padding: 20px 0; 
-    cursor: pointer;
-    border-bottom: 2px solid #ddd; 
-    margin-bottom: 0; 
-}
-
-.sidebar-left ul li:last-child {
-    border-bottom: none; 
-}
-
-.sidebar-left ul li:hover {
-    background-color: #f0f2f5; 
 }
 
 .profile-pic {
