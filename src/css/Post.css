@@ -163,6 +163,11 @@ button.post-sidebar-item {
     background-color: #f08ab4;
 }
 
+.group-postImage{
+    padding: 20px;
+    display: flex;
+}
+
 .post-separator {
     border: none;
     height: 1px;
