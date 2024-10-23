@@ -1,7 +1,7 @@
 import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react';
 import { db } from '../backend/firebaseConfig';
-import '../css/Page.css';
+import '../css/SideBarLeft.css';
 import { LoginContext } from '../variable/LoginContext';
 
 const SideBarLeft = () => {

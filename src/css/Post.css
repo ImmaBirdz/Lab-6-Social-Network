@@ -25,36 +25,6 @@ body {
     overflow-y: auto;
 }
 
-.sidebar-left {
-    width: 15%;
-    background-color: #F9F5F6;
-    padding: 20px;
-    border-radius: 0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    height: calc(100vh - 60px);
-    overflow-y: auto;
-    position: fixed;
-    top: 60px;
-    left: 0;
-}
-
-.sidebar-left ul li {
-    display: flex;
-    align-items: center;
-    padding: 20px 0;
-    cursor: pointer;
-    border-bottom: 2px solid #ddd;
-    margin-bottom: 0;
-}
-
-.sidebar-left ul li:last-child {
-    border-bottom: none;
-}
-
-.sidebar-left ul li:hover {
-    background-color: #F9F5F6;
-}
-
 .profile-pic {
     width: 40px;
     height: 40px;

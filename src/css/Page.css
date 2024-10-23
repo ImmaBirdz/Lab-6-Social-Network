@@ -9,27 +9,6 @@ body {
     background-color: #f0f2f5;
 }
 
-/* .navbar {
-    background-color: #4e6455;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 20px;
-    position: fixed;
-    width: 100%;
-    top: 0;
-} */
-
-/* .navbar .logo {
-    font-size: 24px;
-}
-
-.navbar .nav-links a {
-    color: white;
-    margin-left: 20px;
-    text-decoration: none;
-} */
-
 .container {
     display: flex;
     margin-top: 60px;
@@ -37,7 +16,6 @@ body {
     gap: 20px;
 }
 
-.sidebar-left,
 .sidebar-right {
     width: 20%;
     background-color: #fff;
@@ -46,12 +24,10 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.sidebar-left ul,
 .sidebar-right ul {
     list-style-type: none;
 }
 
-.sidebar-left ul li,
 .sidebar-right ul li {
     padding: 10px 0;
 }
@@ -142,29 +118,10 @@ body {
 @media (min-width: 769px) and (max-width: 1024px) {
 
     /* ------------------- Responsive's Nav Start ------------------ */
-    .navbar {
-        display: flex;
-        padding: 10px 0px 10px 10px;
-    }
-
-    .nav-right {
-        gap: 0px;
-        right: 0;
-    }
-
-    .nav-button {
-        font-size: 0.9rem;
-        margin: 0 5px;
-        padding: 5px 10px;
-    }
 
     /* ------------------- Responsive's Nav End ------------------ */
 
     /* ------------------- Responsive's Nav-Left Start ------------------ */
-    .sidebar-left {
-        width: 20%;
-        display: block;
-    }
     /* ------------------- Responsive's Nav-Left End ------------------ */
 
     /* ------------------- Responsive's Container Start ------------------ */

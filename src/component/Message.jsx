@@ -102,34 +102,9 @@ const Message = () => {
 
 
     return (
-        <div>   
-
-            {/* Top Navbar */}
-            <header className="navbar">
-
-                {/* link back to page */}
-                <button className="back" onClick={() => window.location.href = 'http://localhost:3000/page'}>
-                    <img src="https://img.icons8.com/parakeet-line/48/FFFFFF/circled-left.png" alt="Back-arrow" className="back-arrow" />
-                </button>
-
-                <nav className="nav-center">
-                    <img src="https://img.icons8.com/ios-filled/50/FFFFFF/chat.png" alt="Message-icon" className="message-icon" />
-                </nav>
-            </header>
+        <div>
 
             <div className="container">
-
-                {/* Left Sidebar (Friends List) */}
-                <aside className="sidebar-left">
-                    <ul>
-                        {friends.map(friend => (
-                            <li key={friend.id} onClick={() => openChat(friend.id, friend)}>
-                                <img src={friend.imgSrc} alt={friend.name} className="profile-pic" />
-                                <span>{friend.name}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </aside>
 
                 {/* Chat Area (Middle Section) */}
                 <main className="feed">
