@@ -21,7 +21,7 @@ body {
     gap: 20px;
     justify-content: flex-start;
     margin-top: 60px;
-    height: calc(100vh - 60px);
+    height: 90vh;
     overflow-y: auto;
 }
 
@@ -54,7 +54,7 @@ body {
     padding: 20px;
     border-radius: 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    height: calc(100vh - 60px);
+    height: 90vh;
     overflow-y: auto;
     position: fixed;
     top: 10vh;
