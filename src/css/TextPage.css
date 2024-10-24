@@ -108,10 +108,11 @@ body {
 
 .postText {
     color: #000000;
-    margin: 0 15px 0 15px;
+    margin: 15px 15px 0 15px;
     font-size: 1rem;
     font-weight: 300;
     text-align: left;
+    line-height: 1.5rem;
 }
 
 /* in case it appears */
