@@ -170,6 +170,17 @@ const Page = () => {
                                             </div>
                                         </div>
                                         <p className="postText">{post.input}</p>
+                                        {post.media &&
+                                        <div className='group-postImage'>
+                                        {
+                                            post.media.map((media, index) => (
+                                                <div className="postImage" key={media}>
+                                                    <img src={media} />
+                                                </div>
+                                            ))
+                                        }
+                                        </div>
+                                    }
                                         <div className='postTime'>{post.post_time ? new Date(post.post_time.seconds * 1000).toLocaleString() : ''}</div>
                                         <div className="postAction">
                                     <div className="activitiesIcons">
