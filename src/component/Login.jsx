@@ -212,7 +212,7 @@ const Login = () => {
                         <option value="LGBTQ A+" />
                         <option value="Unicon" />
                         <option value="Thai">I am Thai and Thai means Freedom...</option>
-                        <option value="Suuuuuuu">Don't wanna tell...</option>
+                        <option value="Shuuuuuuu">Don't wanna tell...</option>
                         <option value="Other" />
                     </datalist>
                     <button type='submit'>Register</button>
