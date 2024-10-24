@@ -13,6 +13,7 @@ import Post from './component/Post';
 import NotFound from './component/NotFound';
 import QuickPost from './component/QuickPost';
 import EditPost from './component/EditPost';
+import SideBarPost from './component/SideBarPost';
 import Search from './component/Search';
 
 function ProfileWrapper() {
@@ -69,6 +70,7 @@ function App() {
               <SideBarRight />
               <QuickPost />
               <EditPost />
+              <SideBarPost />
             </>
           )}
           <Routes>
