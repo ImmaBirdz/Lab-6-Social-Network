@@ -15,6 +15,7 @@ import QuickPost from './component/QuickPost';
 import EditPost from './component/EditPost';
 import SideBarPost from './component/SideBarPost';
 import Search from './component/Search';
+import MediaDialog from './component/MediaDialog';
 
 function ProfileWrapper() {
   const { profileID, setProfileID, contextProfileID } = useContext(LoginContext);
@@ -69,6 +70,7 @@ function App() {
               <SideBarLeft />
               <SideBarRight />
               <QuickPost />
+              <MediaDialog />
               <EditPost />
               <SideBarPost />
             </>

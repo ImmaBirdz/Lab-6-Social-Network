@@ -9,7 +9,7 @@ import SideBarRight from './SideBarRight';
 import { TabTitle } from './TabTitle';
 
 const Post = () => {
-    const { postID, loginID, profileID, setProfileID, isPostSidebarShown, setIsPostSidebarShown } = useContext(LoginContext);
+    const { postID, loginID, profileID, setProfileID, isPostSidebarShown, setIsPostSidebarShown, isMediaDialogOpen, setIsMediaDialogOpen, selectedImage, setSelectedImage } = useContext(LoginContext);
     const [postData, setPostData] = useState({}); // State for post data
     const [profileData, setProfileData] = useState({}); // State for profile data
     const [commentIdData, setCommentIdData] = useState([]); // State for comment data
@@ -17,7 +17,6 @@ const Post = () => {
     const [showCommentInput, setShowCommentInput] = useState(false);
     const [commentText, setCommentText] = useState('');
     const [isSidebarShown, setSidebarShow] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
 
     const toggleSidebar = () => {
         setSidebarShow(!isSidebarShown);
@@ -201,6 +200,7 @@ const Post = () => {
     // Post Sidebar button handler
     const togglePostSidebar = () => {
         setIsPostSidebarShown(!isPostSidebarShown);
+        console.log('Post Sidebar button clicked');
     }
 
     // Like button handler
@@ -295,15 +295,13 @@ const Post = () => {
         }
     };
 
+    const handleOpenMediaDialog = (media) => {
+        setSelectedImage(media);
+        setIsMediaDialogOpen(true);
+    };
+
     return (
         <>
-            <dialog id='img' style={{ position: 'absolute', top: '0', left: '0', width: '100vw', height: '100vh' }}>
-                <img src={selectedImage} alt='Post Image' />
-                <form method="dialog">
-                    <button className="btn">Close</button>
-                </form>
-            </dialog>
-
             <div className="main-Content">
                 <button className="toggle-sidebar-right" onClick={toggleSidebar}>
                     {isSidebarShown ? '✖' : '☰'}
@@ -346,7 +344,7 @@ const Post = () => {
                                         {
                                             postData.media.map((media, index) => (
                                                 <div className="postImage" key={media}>
-                                                    <img onClick={() => { setSelectedImage(media); document.getElementById('img').showModal() }} src={media} />
+                                                    <img src={media} onClick={() => handleOpenMediaDialog(media)} />
                                                 </div>
                                             ))
                                         }
