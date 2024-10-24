@@ -21,6 +21,7 @@ const LoginProvider = (props) => {
     const [isPostSidebarShown, setIsPostSidebarShown] = useState(false);
     const [isMediaDialogOpen, setIsMediaDialogOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
+    const [selectedFriend, setSelectedFriend] = useState('');
 
     // check if the user is already login
     useEffect(() => {
@@ -99,7 +100,9 @@ const LoginProvider = (props) => {
             isMediaDialogOpen,
             setIsMediaDialogOpen,
             selectedImage,
-            setSelectedImage
+            setSelectedImage,
+            selectedFriend,
+            setSelectedFriend
         }}>
             {props.children}
         </LoginContext.Provider>
