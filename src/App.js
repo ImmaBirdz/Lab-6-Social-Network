@@ -18,7 +18,7 @@ import Search from './component/Search';
 import MediaDialog from './component/MediaDialog';
 
 function ProfileWrapper() {
-  const { profileID, setProfileID, contextProfileID } = useContext(LoginContext);
+  const { setProfileID, contextProfileID } = useContext(LoginContext);
   // set tempProfileID to the profileID in the URL
   const { profileID: tempProfileID } = useParams();
   let found = false;

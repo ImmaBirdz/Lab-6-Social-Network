@@ -7,7 +7,7 @@ import SideBarRight from './SideBarRight';
 import { TabTitle } from './TabTitle';
 
 const Post = () => {
-    const { postID, loginID, profileID, setProfileID, isPostSidebarShown, setIsPostSidebarShown, isMediaDialogOpen, setIsMediaDialogOpen, selectedImage, setSelectedImage } = useContext(LoginContext);
+    const { postID, loginID, profileID, setProfileID, isPostSidebarShown, setIsPostSidebarShown, setIsMediaDialogOpen, setSelectedImage } = useContext(LoginContext);
     const [postData, setPostData] = useState({}); // State for post data
     const [profileData, setProfileData] = useState({}); // State for profile data
     const [commentIdData, setCommentIdData] = useState([]); // State for comment data
@@ -31,7 +31,6 @@ const Post = () => {
             const commentSnapshot = await getDocs(commentCollection);
 
             if (commentSnapshot.empty) {
-                console.log('No comment data');
                 return;
             } else {
                 let commentsSet = new Set();
