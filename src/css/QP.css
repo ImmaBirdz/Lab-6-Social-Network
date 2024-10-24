@@ -123,12 +123,20 @@
   margin-bottom: 15px;
 }
 
-.emoji-icon, .add-image-icon {
+.add-image-icon {
   width: 30px;
   height: 30px;
   cursor: pointer;
   filter: invert(100%);
 }
+
+.emoji-icon{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+
 
 .emoji-icon:hover, .add-image-icon:hover {
   filter: invert(80%);
