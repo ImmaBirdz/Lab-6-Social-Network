@@ -146,10 +146,10 @@ button.post-sidebar-item {
     max-height: 40vh;
     max-width: 40vw;
     aspect-ratio: auto;
-    border: 2px solid #F7B5CA;
     border-radius: 8%;
-    background-color: #FFEBD4;
     img{
+        border: 2px solid #F7B5CA;
+        background-color: #FFEBD4;
         border-radius: 8%;
         position: relative;
         max-height: 30vh;
@@ -251,7 +251,7 @@ button.post-sidebar-item {
 .comment p {
     font-size: 14px;
     color: #333;
-    margin-top: 5px;
+    margin: 5px 0 10px 0;
 }
 
 .add-comment-btn {

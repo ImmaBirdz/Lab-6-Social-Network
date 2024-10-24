@@ -47,12 +47,6 @@ const QuickPost = () => {
   const handleMediaAdd = (e) => {
     const fileArray = Array.from(e.target.files); 
 
-    //not more than 4 images
-    if (selectedImage.length + fileArray.length > 4) {
-      alert('You can only upload up to 4 images!');
-      return;
-    }
-
     const imagePromises = fileArray.map((file) => {
       return new Promise((resolve) => {
         const reader = new FileReader();
@@ -108,10 +102,15 @@ const QuickPost = () => {
         post_time: serverTimestamp(),
         last_modified: serverTimestamp(),
         number_of_comments: 0,
-        number_of_likes: 0,
-        number_of_repost: 0,
-        media: imageURL ? imageURL : null
+        number_of_likes: 0
       };
+
+      console.log("imageURL", imageURL.length);
+
+    if (imageURL.length > 0) {
+      newPostPayload.media = imageURL;
+    }
+
       // Update the number of posts in user_data
     const userDoc = doc(db, 'user_data', loginID);
     await updateDoc(userDoc, {
@@ -120,7 +119,10 @@ const QuickPost = () => {
       // Add post to firestore
       addDoc(postCollection, newPostPayload).then((docRef) => {
         console.log('Document written with ID: ', docRef.id);
-        handleUploads(docRef.id);
+        console.log('selectedImage', selectedImage.length);
+        if (selectedImage.length > 0) {
+          handleUploads(docRef.id);
+        }
         alert('Post upload successfully!');
 
     }).catch((error) => {
