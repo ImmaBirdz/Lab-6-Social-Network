@@ -433,13 +433,6 @@ const Profile = () => {
                         <h2>Edit Profile</h2>
                         <form>
 
-                            {/* if want current profile pic it here */}
-
-                            {/* <div className="formGroup">
-                                <label>Current Profile Picture:</label>
-                                <img src={profileData.profile_pic} alt="Current Profile" style={{ width: '100px', height: '100px' }} />
-                            </div> */}
-
                             <div className="formGroup">
                                 <label>Upload New Profile Picture:</label>
                                 <input

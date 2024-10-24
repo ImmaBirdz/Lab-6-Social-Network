@@ -165,38 +165,18 @@ const TextPage = () => {
                                     </div>
                                 </div>
                                 <p className="postText">{post.input}</p>
-                                    {post.media && post.media.length > 0 &&
-                                    
-                                        <div className='group-postImage'>
-                                        {post.media.length > 2 && post.media.length < 5 ?
+                                {
+                                    post.media &&
+                                    <div className='group-postImage'>
+                                    {
                                         post.media.map((media, index) => (
-                                            <>
-                                                {index < 2 &&
-                                                    <div className="postImage-top">
-                                                        <div className="postImage" key={media}>
-                                                            <img src={media} />
-                                                        </div>
-                                                    </div>
-                                                }
-                                                {index >= 2 &&
-                                                    <div className="postImage-bottom">
-                                                        <div className="postImage" key={media}>
-                                                            <img src={media} />
-                                                        </div>
-                                                    </div>
-                                                }
-                                            </>
-                                        ))
-                                        :
-                                        post.media && post.media.map((media, index) => (
-                                            <div className='group-postImage'>
-                                                <div className="postImage" key={media}>
-                                                    <img src={media} />
-                                                </div>
+                                            <div className="postImage" key={media}>
+                                                <img src={media} />
                                             </div>
-                                        ))}
-                                    </div>
+                                        ))
                                     }
+                                    </div>
+                                }
                                 <div className='postTime'>{post.post_time ? new Date(post.post_time.seconds * 1000).toLocaleString() : ''}</div>
                                 <div className="postAction">
                                     <div className="activitiesIcons">
