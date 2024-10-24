@@ -335,12 +335,7 @@ const Profile = () => {
         <div className="profileContainer">
 
             <div className="bioPart">
-                <div className="goBackTab">
-                    <span className="icon">
-                        <ion-icon name="caret-back-outline"></ion-icon>
-                    </span>
-                </div>
-
+                
                 <div className="bioBox">
                     <div className="leftBox">
                         <div className="profPic" style={{ backgroundImage: `url(${profileData.profile_pic})` }}></div>
