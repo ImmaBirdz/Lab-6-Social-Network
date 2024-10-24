@@ -251,7 +251,7 @@ button.post-sidebar-item {
 .comment p {
     font-size: 14px;
     color: #333;
-    margin-top: 5px;
+    margin: 5px 0 10px 0;
 }
 
 .add-comment-btn {

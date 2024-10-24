@@ -341,15 +341,17 @@ const Post = () => {
                                     }
                                 </div>
                                 <p className="postText">{postData.input}</p>
-                                <div className='group-postImage'>
                                     {postData.media &&
-                                        postData.media.map((media, index) => (
-                                            <div className="postImage" key={media}>
-                                                <img onClick={() => { setSelectedImage(media); document.getElementById('img').showModal() }} src={media} />
-                                            </div>
-                                        ))
+                                        <div className='group-postImage'>
+                                        {
+                                            postData.media.map((media, index) => (
+                                                <div className="postImage" key={media}>
+                                                    <img onClick={() => { setSelectedImage(media); document.getElementById('img').showModal() }} src={media} />
+                                                </div>
+                                            ))
+                                        }
+                                        </div>
                                     }
-                                </div>
 
                                 <div className='postTime'> Posted at {postData.post_time ? new Date(postData.post_time.seconds * 1000).toLocaleString() : ''}</div>
                                 <div className="postAction">
@@ -369,10 +371,8 @@ const Post = () => {
                                         {
                                             <div className='commentGroup'>
                                                 <ion-icon name="chatbox-outline"></ion-icon> {postData.number_of_comments}
-                                            </div>}
-                                        {/* <div className='repostGroup'>
-                                        <ion-icon name="repeat-outline"></ion-icon> {postData.number_of_reposts}
-                                    </div> */}
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
