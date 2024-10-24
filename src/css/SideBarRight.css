@@ -9,7 +9,7 @@
         height: calc(100vh - 60px);
         overflow-y: auto;
         position: fixed;
-        top: 60px;
+        top: 10vh;
         right: 0;
         transform: none;
     }
@@ -36,7 +36,7 @@
         height: calc(100vh - 60px);
         overflow-y: auto;
         position: fixed;
-        top: 60px;
+        top: 10vh;
         right: 0;
     }
 
@@ -55,7 +55,7 @@
 
     .toggle-sidebar-right {
         position: fixed;
-        top: 20px;
+        top: 10vh;
         right: 20px;
         color: rgb(0, 0, 0);
         border: none;
