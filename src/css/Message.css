@@ -100,10 +100,6 @@ body {
     align-items: center; 
 }
 
-
-
-
-
 .feed {
     flex-grow: 1;
     background-color: hsl(300, 53%, 94%);
@@ -111,9 +107,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     height: 100%; 
-   
 }
-
 
 /* General Image */
 

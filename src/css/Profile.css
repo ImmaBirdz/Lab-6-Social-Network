@@ -17,14 +17,13 @@ body {
 
 .profileContainer {
     width: 65%;
-    height: 100vh;
     background-color: #F8E8EE;
     padding: 20px;
     border-radius: 0;
-    height: calc(100vh - 60px);
+    max-height: 90vh;
     overflow-y: scroll;
     position: fixed;
-    top: 60px;
+    top: 10vh;
     left: 15%;
     overflow-x: hidden;
 }
@@ -33,6 +32,7 @@ body {
     display: flex;
     flex-direction: column;
     position: sticky;
+    max-height: 40vh;
 }
 
 .goBackTab {
@@ -62,7 +62,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    max-width: 500px;
+    max-width: 100%;
 }
 
 .bioPart .profPic {
@@ -89,7 +89,6 @@ body {
     flex-direction: column;
     min-height: 100%;
     min-width: 50%;
-    /* border: 1px dashed red; */
     text-wrap: wrap;
     gap: 15px;
 }
@@ -105,7 +104,6 @@ body {
     word-wrap: break-word;
     max-width: 200px;
     font-family: serif;
-    /* border: red 1px dashed; */
     text-wrap: wrap;
 }
 
@@ -194,7 +192,6 @@ body {
     width: 96%;
     height: 1px;
     background-color: #000000;
-    /* position: fixed; */
     z-index: 1;
 }
 
@@ -202,7 +199,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* border: red 1px dashed; */
     position: relative;
     width: 100%;
 }
@@ -213,8 +209,8 @@ body {
     justify-content: center;
     align-items: center;
     gap: 50px;
-    min-height: 5vh;
-    padding-bottom: 50px;
+    max-height: 20vh;
+    padding-bottom: 5vh;
 }
 
 .actionBox .textBox,

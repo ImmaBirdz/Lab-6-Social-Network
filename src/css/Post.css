@@ -57,7 +57,7 @@ body {
     height: calc(100vh - 60px);
     overflow-y: auto;
     position: fixed;
-    top: 60px;
+    top: 10vh;
     left: 15%;
 }
 
@@ -343,16 +343,16 @@ button.post-sidebar-item {
     }
 
     .feed {
-        top: 11%;
+        top: 10vh;
         left: 17%;
     }
     .sidebar-left {
-        top: 11%;
+        top: 10vh;
         width: 17%;
         z-index: 1;
     }
 
     .sidebar-right {
-        top: 11%;
+        top: 10vh;
     }
 }

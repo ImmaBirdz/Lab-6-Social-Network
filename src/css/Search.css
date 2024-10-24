@@ -9,7 +9,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     height: calc(100vh - 60px);
     position: fixed;
-    top: 60px;
+    top: 10vh;
     left: 15%;
     overflow: hidden;
 }

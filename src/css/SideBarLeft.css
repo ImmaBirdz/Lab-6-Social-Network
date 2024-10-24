@@ -7,7 +7,7 @@
     height: calc(100vh - 60px);
     overflow-y: auto;
     position: fixed;
-    top: 60px;
+    top: 10vh;
     left: 0;
 }
 
