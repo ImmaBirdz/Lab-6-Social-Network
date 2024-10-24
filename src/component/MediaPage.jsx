@@ -56,8 +56,8 @@ const MediaPage = () => {
                     postData &&
                     //check if post has media some
                     postData && postData.some(post => Array.isArray(post.media) && post.media.length > 0) ? 
-                    postData.map((post, index) => (
-                        post.media && post.media.map((media, index) => (
+                    postData.map((post) => (
+                        post.media && post.media.map((media) => (
                             <div className="mediaContent" key={media} onClick={() => window.location.href = `post/${post.id}`}>
                                 <a href="#"><img src={media} alt="media"></img></a>
                             </div>
@@ -66,7 +66,6 @@ const MediaPage = () => {
                     )) 
                     : 
                     <>No Media Post</>
-                    
                 }
             </div>
         </div>
