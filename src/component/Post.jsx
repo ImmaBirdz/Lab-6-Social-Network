@@ -9,19 +9,15 @@ import SideBarRight from './SideBarRight';
 import { TabTitle } from './TabTitle';
 
 const Post = () => {
-    const { postID, loginID, isEditPostModalOpen, setIsEditPostModalOpen } = useContext(LoginContext);
-    const { profileID, setProfileID } = useContext(LoginContext);
+    const { postID, loginID, profileID, setProfileID, isPostSidebarShown, setIsPostSidebarShown } = useContext(LoginContext);
     const [postData, setPostData] = useState({}); // State for post data
     const [profileData, setProfileData] = useState({}); // State for profile data
     const [commentIdData, setCommentIdData] = useState([]); // State for comment data
     const [postInteractionData, setPostInteractionData] = useState({}); // State for post interaction data
     const [showCommentInput, setShowCommentInput] = useState(false);
     const [commentText, setCommentText] = useState('');
-    const [isPostSidebarShown, setPostSidebarShown] = useState(false);
     const [isSidebarShown, setSidebarShow] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
-
-    const navigate = useNavigate();
 
     const toggleSidebar = () => {
         setSidebarShow(!isSidebarShown);
@@ -204,7 +200,7 @@ const Post = () => {
 
     // Post Sidebar button handler
     const togglePostSidebar = () => {
-        setPostSidebarShown(!isPostSidebarShown);
+        setIsPostSidebarShown(!isPostSidebarShown);
     }
 
     // Like button handler
@@ -280,49 +276,7 @@ const Post = () => {
         }
     }
 
-    // Edit Post button handler
-    const handleEditPost = () => {
-        setIsEditPostModalOpen(!isEditPostModalOpen);
-    }
-
-    // Delete Post button handler
-    const handleDeletePost = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this post?')) {
-            return;
-        } else {
-            try {
-                // Delete media from storage
-                if (postData.media) {
-                    try {
-                        // Delete entire folder by post.id as folder name
-                        const mediaRef = storageRef(storage, `post/${id}`);
-                        const mediaList = await listAll(mediaRef);
-
-                        mediaList.items.forEach(async item => {
-                            await deleteObject(item);
-                        });
-                        console.log('Media successfully deleted.');
-                    } catch (error) {
-                        console.error('Error deleting media:', error);
-                    }
-                }
-                
-                await deleteDoc(doc(db, 'post', id));
-                console.log('Post deleted successfully');
-                // Update the number of posts in user_data
-                const userDoc = doc(db, 'user_data', loginID);
-                await updateDoc(userDoc, {
-                    number_of_posts: profileData.number_of_posts - 1
-                });
-                setPostData(null);
-                alert('Post deleted successfully');
-                navigate(-1);
-            } catch (error) {
-                console.error('Error deleting post:', error);
-            }
-        }
-    }
-
+    
     // Delete Comment button handler
     const handleDeleteComment = async (commentID) => {
         try {
@@ -377,38 +331,26 @@ const Post = () => {
                                             <span className='postUsername' onClick={() => window.location.href = `/${profileID}`}>{`@${postData.user_id}`}</span>
                                         </div>
                                     </div>
+                                    {
+                                        loginID === postData.user_id &&
+                                        <div className="post-sidebar">
+                                            <button className='post-sidebar-option' onClick={() => togglePostSidebar()}>
+                                                <ion-icon name="ellipsis-horizontal"></ion-icon>
+                                            </button>
+                                        </div>
+                                    }
                                 </div>
                                 <p className="postText">{postData.input}</p>
                                 <div className='group-postImage'>
                                     {postData.media &&
-                                        postData.media.length > 2 && postData.media.length < 5 ?
                                         postData.media.map((media, index) => (
-                                            <>
-                                                {index < 2 &&
-                                                    <div className="postImage-top">
-                                                        <div className="postImage" key={media}>
-                                                            <img onClick={() => { setSelectedImage(media); document.getElementById('img').showModal() }} src={media} />
-                                                        </div>
-                                                    </div>
-                                                }
-                                                {index >= 2 &&
-                                                    <div className="postImage-bottom">
-                                                        <div className="postImage" key={media}>
-                                                            <img onClick={() => { setSelectedImage(media); document.getElementById('img').showModal(); }} src={media} />
-                                                        </div>
-                                                    </div>
-                                                }
-                                            </>
-                                        ))
-                                        :
-                                        postData.media && postData.media.map((media, index) => (
                                             <div className="postImage" key={media}>
                                                 <img onClick={() => { setSelectedImage(media); document.getElementById('img').showModal() }} src={media} />
                                             </div>
                                         ))
                                     }
-
                                 </div>
+
                                 <div className='postTime'> Posted at {postData.post_time ? new Date(postData.post_time.seconds * 1000).toLocaleString() : ''}</div>
                                 <div className="postAction">
                                     <div className="activitiesIcons">
@@ -434,28 +376,7 @@ const Post = () => {
                                     </div>
                                 </div>
                             </div>
-                            {
-                                loginID === postData.user_id &&
-                                <div className="post-sidebar">
-                                    <button className='post-sidebar-option' onClick={() => togglePostSidebar()}>
-                                        <ion-icon name="ellipsis-horizontal"></ion-icon>
-                                    </button>
-                                    {isPostSidebarShown ? (
-                                        <>
-                                            <button className='post-sidebar-item' onClick={() => handleEditPost()}>
-                                                <ion-icon name="create-outline"></ion-icon>
-                                            </button>
-                                            <button className='post-sidebar-item' title='Delete this post' onClick={() => handleDeletePost(postID)}>
-                                                <ion-icon name="trash-outline"></ion-icon>
-                                            </button>
-                                            <button className="post-sidebar-item">
-                                                <ion-icon name="close-outline" onClick={() => togglePostSidebar()}></ion-icon>
-                                            </button>
-                                        </>
-                                    ) : null
-                                    }
-                                </div>
-                            }
+                            
                         </div>
 
                         {/* Separator Line */}

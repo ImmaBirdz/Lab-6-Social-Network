@@ -34,7 +34,8 @@ body {
 
 .postedContent {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     border-radius: 10px;
     padding: 0 0 0 15px;
 }
