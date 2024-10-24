@@ -20,8 +20,9 @@ body {
     background-color: #F8E8EE;
     padding: 20px;
     border-radius: 0;
+    min-height: 90vh;
     max-height: 90vh;
-    overflow-y: scroll;
+    overflow-y: auto;
     position: fixed;
     top: 10vh;
     left: 15%;
