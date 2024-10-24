@@ -85,6 +85,9 @@ const SideBarLeft = () => {
 
     return (
         <aside className="sidebar-left">
+            <div className="sidebar-left-title">
+                <h2>Friends</h2>
+            </div>
             <ul>
                 {friends.map(friend => (
                     <li key={friend.username} onClick={() => window.location.href = `/${friend.username}`}>
