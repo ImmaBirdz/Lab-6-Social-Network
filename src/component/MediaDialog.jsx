@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { LoginContext } from '../variable/LoginContext'
 import '../css/MediaDialog.css'
 
@@ -10,10 +10,6 @@ const MediaDialog = () => {
         setIsMediaDialogOpen(false);
         setSelectedImage('');
     }
-    useEffect(() => {
-        console.log('media dialog open', isMediaDialogOpen)
-        console.log('selected image', selectedImage)
-    }, [ selectedImage])
 
     return (
         <>

@@ -1,8 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
-import { deleteObject, listAll, ref as storageRef } from 'firebase/storage';
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { db, storage } from '../backend/firebaseConfig';
+import { db } from '../backend/firebaseConfig';
 import '../css/Post.css'; // Separate CSS for styling posts
 import { LoginContext } from '../variable/LoginContext';
 import SideBarRight from './SideBarRight';
