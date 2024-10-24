@@ -15,9 +15,10 @@ import QuickPost from './component/QuickPost';
 import EditPost from './component/EditPost';
 import SideBarPost from './component/SideBarPost';
 import Search from './component/Search';
+import MediaDialog from './component/MediaDialog';
 
 function ProfileWrapper() {
-  const { profileID, setProfileID, contextProfileID } = useContext(LoginContext);
+  const { setProfileID, contextProfileID } = useContext(LoginContext);
   // set tempProfileID to the profileID in the URL
   const { profileID: tempProfileID } = useParams();
   let found = false;
@@ -69,6 +70,7 @@ function App() {
               <SideBarLeft />
               <SideBarRight />
               <QuickPost />
+              <MediaDialog />
               <EditPost />
               <SideBarPost />
             </>

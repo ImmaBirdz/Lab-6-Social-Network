@@ -3,10 +3,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { db } from '../backend/firebaseConfig';
 import '../css/SideBarLeft.css';
 import { LoginContext } from '../variable/LoginContext';
+import { useLocation } from 'react-router-dom';
 
 const SideBarLeft = () => {
-    const { loginID } = useContext(LoginContext);
+    const { loginID, setSelectedFriend } = useContext(LoginContext);
     const [ friends, setFriends ] = useState([]);
+    const location = useLocation();
 
     const getFriendsOfUser = async (loginID) => {
         try {
@@ -83,14 +85,29 @@ const SideBarLeft = () => {
         });
     }, [loginID]);
 
+    // Handle friend click event
+    const handleFriendClick = (friend) => {
+        if (location.pathname === `/message/chat`) {
+            // Set the selected friend ID
+            setSelectedFriend(friend.id);
+        }
+        else {
+            // Redirect to the friend's profile page
+            window.location.href = `/${friend.username}`;
+        }
+    }
+
     return (
         <aside className="sidebar-left">
             <div className="sidebar-left-title">
-                <h2>Friends</h2>
+                {
+                    // Display the sidebar title based on the current page
+                    location.pathname === '/message/chat' ? <h3>Chat with Friend</h3> : <h2>Friends</h2>
+                }
             </div>
             <ul>
                 {friends.map(friend => (
-                    <li key={friend.username} onClick={() => window.location.href = `/${friend.username}`}>
+                    <li key={friend.username} onClick={() => handleFriendClick(friend)}>
                     <img src={friend.profile_pic} alt={friend.username} className="profile-pic" />
                     <span>{friend.display_name}</span>
                     {/* {friend.isOnline && ( */}
@@ -100,7 +117,7 @@ const SideBarLeft = () => {
                             className="online-icon" 
                         />
                     {/* )} */}
-                </li>
+                    </li>
                 ))}
             </ul>
         </aside>
