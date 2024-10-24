@@ -85,7 +85,7 @@ const QuickPost = () => {
     e.preventDefault();
 
     // Check if the input is empty
-    if (!postInput) {
+    if (!postInput && selectedImage.length === 0) {
       alert('Please enter something before posting!');
       return;
     }
