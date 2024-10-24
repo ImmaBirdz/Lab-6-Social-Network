@@ -138,6 +138,15 @@ button.post-sidebar-item {
     display: flex;
 }
 
+.postImage{
+    max-height: 700px;
+    img{
+        position: relative;
+        left: 20px;
+        width: 400px;
+    }
+}
+
 .post-separator {
     border: none;
     height: 1px;

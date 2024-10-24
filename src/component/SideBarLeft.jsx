@@ -92,7 +92,7 @@ const SideBarLeft = () => {
                     <span>{friend.display_name}</span>
                     {/* {friend.isOnline && ( */}
                         <img 
-                            src="https://img.icons8.com/color-glass/48/cat.png" 
+                            src="https://img.icons8.com/?size=100&id=119894&format=png&color=000000" 
                             alt="Online" 
                             className="online-icon" 
                         />
