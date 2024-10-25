@@ -157,6 +157,7 @@ const Post = () => {
 
     // send notification to the post owner if you like the post
     const sendLikeNotification = async () => {
+        if (loginID === postData.user_id) return;
         // send notification to the post owner
         const notificationCollection = collection(db, 'notifications');
         const notificatioyPayload = {
@@ -184,6 +185,7 @@ const Post = () => {
 
     // send notification to the post owner if you comment the post
     const sendCommentNotification = async () => {
+        if (loginID === postData.user_id) return;
         // send notification to the post owner
         const notificationCollection = collection(db, 'notifications');
         const notificatioyPayload = {
