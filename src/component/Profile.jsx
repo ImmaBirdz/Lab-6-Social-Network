@@ -9,6 +9,7 @@ import { TabTitle } from './TabTitle';
 import SideBarRight from './SideBarRight';
 import TextPage from './TextPage';
 
+
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('Text'); // Set default tab to Text Page
     const { loginID, profileID } = useContext(LoginContext);
@@ -21,6 +22,10 @@ const Profile = () => {
     const [friendStatus, setFriendStatus] = useState(false); // Friend status
     const [friendRequest, setFriendRequest] = useState(false); // Friend request status
     const [showFriendRequest, setShowFriendRequest] = useState(false); // Show friend request
+    const [showFriendListModal, setShowFriendListModal] = useState(false);
+    const [friendList, setFriendList] = useState([]);
+    
+
 
 
     useEffect(() => {
@@ -317,7 +322,7 @@ const Profile = () => {
                 });
             });
 
-            const friendsRef = collection(db, 'friends'); // Reference to the collection
+            const friendsRef = collection(db, 'friends');
             const querySnapshot2 = getDocs(friendsRef);
 
             querySnapshot2.then((snapshot) => {
@@ -331,6 +336,30 @@ const Profile = () => {
         }
     }, [loginID, profileID]);
 
+    
+    const fetchFriendList = async () => {
+        try {
+            const friendsRef = collection(db, 'friends');
+            const friendQuery = query(
+                friendsRef,
+                where('user1', '==', profileID) 
+            );
+            const friendSnapshot = await getDocs(friendQuery);
+            
+            const friends = friendSnapshot.docs.map(doc => doc.data());
+            setFriendList(friends);
+            
+            // Set the modal to show
+            setShowFriendListModal(true);
+        } catch (error) {
+            console.error("Error fetching friend list: ", error);
+        }
+
+        
+    };
+    
+    
+
     return (
         <div className="profileContainer">
 
@@ -339,6 +368,8 @@ const Profile = () => {
                 <div className="bioBox">
                     <div className="leftBox">
                         <div className="profPic" style={{ backgroundImage: `url(${profileData.profile_pic})` }}></div>
+
+                        
 
                         <div className="accInfo">
                             <div className="nameBox">
@@ -362,14 +393,22 @@ const Profile = () => {
                                 :
                                 <div className="postNum">{profileData.number_of_posts} post</div>
                             }
-                            {profileData.number_of_friends > 1 ?
-                                <div className="followersNum"><a href="#">{profileData.number_of_friends} friends</a></div>
-                                :
-                                <div className="followersNum"><a href="#">{profileData.number_of_friends} friend</a></div>
-                            }
+                            
+                            {profileData.number_of_friends > 1 ? (
+                                <div className="followersNum">
+                                    <a href="#" onClick={fetchFriendList}>
+                                        {profileData.number_of_friends} friends
+                                    </a>
+                                </div>
+                            ) : (
+                                <div className="followersNum">
+                                    <a href="#" onClick={fetchFriendList}>
+                                        {profileData.number_of_friends} friend
+                                    </a>
+                                </div>
+                            )}
                         </div>
-                        { // Show edit button if the profile is the user's own profile
-                            profileID === loginID ? (
+                            { profileID === loginID ? (
                                 <div className="editBtn">
                                     <button onClick={handleShow}>Edit Profile</button>
                                 </div>
@@ -516,6 +555,43 @@ const Profile = () => {
                     </div>
                 </div>
             )}
+
+        
+            {/* Friend List Modal */}
+            {showFriendListModal && (
+                 <div className="FriendModal">
+                    <div className="FmodalContent">
+                        <button className="FcloseButton" onClick={() => setShowFriendListModal(false)}>✕</button>
+                        <h2>Friends of {profileData.display_name}</h2>
+                        <ul>
+                            {friendList.map((friend, index) => (
+                                <li key={index}>
+                                    <a href={`/${friend.user2}`} className="friendLink">
+                                        <div
+
+
+                                        // ลิ้งไปโปรไฟล์โอเครดีแต่ว่าทำไทภาพตไม่ขึ้นไม่รู้ใครทำได้ฟากแก้ตรงนี้ที
+
+                                            className="friendProfilePic"
+                                            style={{ backgroundImage: `url(${friend.profile_pic || 'default-pic-url'})` }}
+                                        ></div>
+                                        <span>{friend.user2}</span>
+                                    </a>
+                                </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                )}
+
+
+                                
+
+                                  
+
+                                
+
+                   
 
             <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
             <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
