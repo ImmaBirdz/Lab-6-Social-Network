@@ -147,7 +147,7 @@
 
 .add-friend-button {
     position: relative;
-    background-color: #c42484;
+    background-color: #E8A0BF;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -158,6 +158,6 @@
 }
 
 .add-friend-button:hover {
-    background-color: #f25081;
+    background-color: #F3BAD6;
     letter-spacing: 0;
 }
