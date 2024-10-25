@@ -102,20 +102,26 @@ const SideBarLeft = () => {
             <div className="sidebar-left-title">
                 {
                     // Display the sidebar title based on the current page
-                    location.pathname === '/message/chat' ? <h3>Chat with Friend</h3> : <h2>Friends</h2>
+                    location.pathname === '/message/chat' ? <h3>Chat with Friends</h3> : <h2>Friends</h2>
                 }
             </div>
             <ul>
                 {friends.map(friend => (
                     <li key={friend.username} onClick={() => handleFriendClick(friend)}>
                     <img src={friend.profile_pic} alt={friend.username} className="profile-pic" />
-                    <span>{friend.display_name}</span>
+                    <div className="sidebar-left-friend-info">
+                        <span className='sidebar-left-display-name'>{friend.display_name}</span>
+                        <span className='sidebar-left-username'>{`@${friend.username}`}</span>
+                    </div>
                     {/* {friend.isOnline && ( */}
+                    <div className="sidebar-left-online-icon">
+
                         <img 
                             src="https://img.icons8.com/?size=100&id=119894&format=png&color=000000" 
                             alt="Online" 
                             className="online-icon" 
-                        />
+                            />
+                    </div>
                     {/* )} */}
                     </li>
                 ))}
