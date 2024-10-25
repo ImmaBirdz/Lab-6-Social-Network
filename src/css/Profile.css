@@ -457,8 +457,8 @@ body {
 
 .FcloseButton {
     position: absolute; 
-    top: 0px; /* Distance from the top of the modal */
-    right: 0px; /* Distance from the right of the modal */
+    top: 0px; 
+    right: 0px; 
     padding: 5px 12px;
     background: #ef8bdb;
     color: #ffffff; 
@@ -470,11 +470,11 @@ body {
 }
 
 .FcloseButton:hover {
-    color: #ff0000; /* Darker color on hover */
+    color: #ff0000;
 }
 
 .FmodalContent h2 {
-    margin-top: 0; /* Adjust margin so it aligns well with the close button */
+    margin-top: 0; 
     font-size: 24px;
     color: #333;
     text-align: center;
