@@ -22,7 +22,7 @@ const Profile = () => {
     const [friendRequest, setFriendRequest] = useState(false); // Friend request status
     const [showFriendRequest, setShowFriendRequest] = useState(false); // Show friend request
     const [showFriendListModal, setShowFriendListModal] = useState(false);
-    const [friendList, setFriendList] = useState([]);
+    const [friendData, setFriendData] = useState([]);
     
 
 
@@ -335,6 +335,26 @@ const Profile = () => {
         }
     }, [loginID, profileID]);
 
+    const fetchFriendProfilePics = async (friends) => {
+        try {
+            const profilePics = await Promise.all(friends.map(async (friend) => {
+                const userRef = doc(db, 'user_data', friend.user2); 
+                const userSnapshot = await getDoc(userRef);
+                
+                if (userSnapshot.exists()) {
+                    const userData = userSnapshot.data();
+                    return { ...friend, profile_pic: userData.profile_pic };
+                } else {
+                    console.warn(`User ${friend.user2} does not exist`);
+                    return { ...friend, profile_pic: 'default-pic-url' };
+                }
+            }));
+            setFriendData(profilePics);
+        } catch (error) {
+            console.error("Error fetching friend profile pictures: ", error);
+        }
+    };
+    
     
     const fetchFriendList = async () => {
         try {
@@ -346,15 +366,13 @@ const Profile = () => {
             const friendSnapshot = await getDocs(friendQuery);
             
             const friends = friendSnapshot.docs.map(doc => doc.data());
-            setFriendList(friends);
+            await fetchFriendProfilePics(friends); 
             
             // Set the modal to show
             setShowFriendListModal(true);
         } catch (error) {
             console.error("Error fetching friend list: ", error);
         }
-
-        
     };
     
     
@@ -556,32 +574,31 @@ const Profile = () => {
             )}
 
         
-            {/* Friend List Modal */}
             {showFriendListModal && (
-                 <div className="FriendModal">
+                <div className="FriendModal">
                     <div className="FmodalContent">
                         <button className="FcloseButton" onClick={() => setShowFriendListModal(false)}>✕</button>
                         <h2>Friends of {profileData.display_name}</h2>
                         <ul>
-                            {friendList.map((friend, index) => (
-                                <li key={index}>
-                                    <a href={`/${friend.user2}`} className="friendLink">
-                                        <div
-
-
-                                        // ลิ้งไปโปรไฟล์โอเครดีแต่ว่าทำไทภาพตไม่ขึ้นไม่รู้ใครทำได้ฟากแก้ตรงนี้ที
-
-                                            className="friendProfilePic"
-                                            style={{ backgroundImage: `url(${friend.profile_pic || 'default-pic-url'})` }}
-                                        ></div>
-                                        <span>{friend.user2}</span>
-                                    </a>
-                                </li>
-                                ))}
-                            </ul>
-                        </div>
+                            {friendData.length > 0 ? ( 
+                                friendData.map((friend, index) => (
+                                    <li key={index}>
+                                        <a href={`/${friend.user2}`} className="friendLink">
+                                            <div
+                                                className="friendProfilePic"
+                                                style={{ backgroundImage: `url(${friend.profile_pic || 'default-pic-url'})` }}
+                                            ></div>
+                                            <span>{friend.user2}</span>
+                                        </a>
+                                    </li>
+                                ))
+                            ) : (
+                                <li>No friends found.</li> // Show message if no friends
+                            )}
+                        </ul>
                     </div>
-                )}
+                </div>
+            )}
 
 
                                 
