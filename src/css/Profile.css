@@ -429,11 +429,21 @@ body {
   }
 
 .friendNorejectBtn{
+    position: relative;
+    top: 5vh;
+    left: 4vh;
+}
 
+.friendRejectBtn{
+    position: relative;
+    top: 4vh;
+    left: 4vh;
 }
 
 .friendReqBtn{
-    
+    position: relative;
+    top: 5vh;
+    left: 4vh;
 }
 
 
