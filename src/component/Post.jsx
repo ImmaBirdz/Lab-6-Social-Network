@@ -147,6 +147,152 @@ const Post = () => {
         TabTitle(`Post from ${postData.user_id} | Black Cat with Bow`);
     }, [postID, postData.user_id]);
 
+    // Post Sidebar button handler
+    const togglePostSidebar = () => {
+        setIsPostSidebarShown(!isPostSidebarShown);
+        console.log('Post Sidebar button clicked');
+    }
+
+    // -------------------------------------------- Notification functions --------------------------------------------
+
+    // send notification to the post owner if you like the post
+    const sendLikeNotification = async () => {
+        // send notification to the post owner
+        const notificationCollection = collection(db, 'notifications');
+        const notificatioyPayload = {
+            when: serverTimestamp(),
+            type: 'post_like',
+            post_id: postID,
+            from: loginID,
+            to: postData.user_id
+        };
+        await addDoc(notificationCollection, {
+            ...notificatioyPayload,
+        });
+    };
+
+    // delete notification if you unlike
+    const deleteLikeNotification = async () => {
+        const notificationCollection = collection(db, 'notifications');
+        const notificationSnapshot = await getDocs(notificationCollection);
+        notificationSnapshot.forEach(doc => {
+            if (doc.data().from === loginID && doc.data().post_id === postID) {
+                deleteDoc(doc.ref);
+            }
+        });
+    }
+
+    // send notification to the post owner if you comment the post
+    const sendCommentNotification = async () => {
+        // send notification to the post owner
+        const notificationCollection = collection(db, 'notifications');
+        const notificatioyPayload = {
+            when: serverTimestamp(),
+            type: 'post_comment',
+            comment: commentText,
+            post_id: postID,
+            from: loginID,
+            to: postData.user_id
+        };
+        await addDoc(notificationCollection, {
+            ...notificatioyPayload,
+        });
+    };
+
+    // delete notification if you delete your comment
+    const deleteCommentNotification = async (commentID) => {
+        const notificationCollection = collection(db, 'notifications');
+        const notificationSnapshot = await getDocs(notificationCollection);
+        notificationSnapshot.forEach(doc => {
+            if (doc.data().from === loginID && doc.data().post_id === postID && doc.data().type === 'post_comment') {
+                deleteDoc(doc.ref);
+            }
+        });
+    }
+
+    // -------------------------------------------- Like and Comment functions --------------------------------------------
+
+    // Like button handler
+    const handleLike = async () => {
+        const postInteractionCollection = collection(db, 'user_data', loginID, 'post_interaction');
+        const postInteractionDoc = doc(postInteractionCollection, postID);
+        // if you don't have post interaction data, create one
+        const postInteractionDocSnapshot = await getDocs(postInteractionCollection);
+        let isLikedDocExists = false;
+
+        // check if this is the first time you interact to like button in the post
+        postInteractionDocSnapshot.forEach(doc => {
+            if (doc.id === postID) {
+                isLikedDocExists = true;
+            }
+        });
+
+        if (!isLikedDocExists) {
+            await setDoc(postInteractionDoc, {
+                isLiked: true,
+            });
+            await updateDoc(doc(db, 'post', postID), {
+                number_of_likes: postData.number_of_likes + 1,
+            });
+
+            //update postData
+            setPostData({
+                ...postData,
+                number_of_likes: postData.number_of_likes + 1,
+            });
+
+            setPostInteractionData({
+                ...postInteractionData,
+                isLiked: true,
+            });
+            // send notification to the post owner
+            sendLikeNotification();
+        }
+
+        if (postInteractionData.isLiked && isLikedDocExists) {
+            await updateDoc(postInteractionDoc, {
+                isLiked: false,
+            });
+            await updateDoc(doc(db, 'post', postID), {
+                number_of_likes: postData.number_of_likes - 1,
+            });
+
+            //update postData
+            setPostData({
+                ...postData,
+                number_of_likes: postData.number_of_likes - 1,
+            });
+
+            setPostInteractionData({
+                ...postInteractionData,
+                isLiked: false,
+            });
+            // delete notification if you unlike
+            deleteLikeNotification();
+        }
+        else {
+            await updateDoc(postInteractionDoc, {
+                isLiked: true,
+            });
+            await updateDoc(doc(db, 'post', postID), {
+                number_of_likes: postData.number_of_likes + 1,
+            });
+
+            //update postData
+            setPostData({
+                ...postData,
+                number_of_likes: postData.number_of_likes + 1,
+            });
+
+            setPostInteractionData({
+                ...postInteractionData,
+                isLiked: true,
+            });
+            // send notification to the post owner
+            sendLikeNotification();
+        }
+    }
+
     // Validate and send comment to firestore
     const validateComment = async () => {
         // check if comment input is empty
@@ -183,6 +329,7 @@ const Post = () => {
             ...postData,
             number_of_comments: postData.number_of_comments + 1,
         });
+        sendCommentNotification();
 
         // reset input
         setCommentText('');
@@ -193,86 +340,6 @@ const Post = () => {
     const handleAddCommentClick = () => {
         setShowCommentInput(!showCommentInput);
     };
-
-    // Post Sidebar button handler
-    const togglePostSidebar = () => {
-        setIsPostSidebarShown(!isPostSidebarShown);
-        console.log('Post Sidebar button clicked');
-    }
-
-    // Like button handler
-    const handleLike = async () => {
-        const postInteractionCollection = collection(db, 'user_data', loginID, 'post_interaction');
-        const postInteractionDoc = doc(postInteractionCollection, postID);
-        // if you don't have post interaction data, create one
-        const postInteractionDocSnapshot = await getDocs(postInteractionCollection);
-        let isLikedDocExists = false;
-
-        postInteractionDocSnapshot.forEach(doc => {
-            if (doc.id === postID) {
-                isLikedDocExists = true;
-            }
-        });
-
-        if (!isLikedDocExists) {
-            await setDoc(postInteractionDoc, {
-                isLiked: true,
-            });
-            await updateDoc(doc(db, 'post', postID), {
-                number_of_likes: postData.number_of_likes + 1,
-            });
-
-            //update postData
-            setPostData({
-                ...postData,
-                number_of_likes: postData.number_of_likes + 1,
-            });
-
-            setPostInteractionData({
-                ...postInteractionData,
-                isLiked: true,
-            });
-        }
-
-        if (postInteractionData.isLiked && isLikedDocExists) {
-            await updateDoc(postInteractionDoc, {
-                isLiked: false,
-            });
-            await updateDoc(doc(db, 'post', postID), {
-                number_of_likes: postData.number_of_likes - 1,
-            });
-
-            //update postData
-            setPostData({
-                ...postData,
-                number_of_likes: postData.number_of_likes - 1,
-            });
-
-            setPostInteractionData({
-                ...postInteractionData,
-                isLiked: false,
-            });
-        } else {
-            await updateDoc(postInteractionDoc, {
-                isLiked: true,
-            });
-            await updateDoc(doc(db, 'post', postID), {
-                number_of_likes: postData.number_of_likes + 1,
-            });
-
-            //update postData
-            setPostData({
-                ...postData,
-                number_of_likes: postData.number_of_likes + 1,
-            });
-
-            setPostInteractionData({
-                ...postInteractionData,
-                isLiked: true,
-            });
-        }
-    }
-
     
     // Delete Comment button handler
     const handleDeleteComment = async (commentID) => {
@@ -286,12 +353,13 @@ const Post = () => {
                 ...postData,
                 number_of_comments: postData.number_of_comments - 1,
             });
-            console.log('Comment deleted successfully');
+            deleteCommentNotification(commentID);
         } catch (error) {
             console.error('Error deleting comment:', error);
         }
     };
 
+    // Open media dialog
     const handleOpenMediaDialog = (media) => {
         setSelectedImage(media);
         setIsMediaDialogOpen(true);
