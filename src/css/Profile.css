@@ -163,6 +163,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    button{
+        background-color: #F3D0D7;
+    }
 }
 
 .rightBox .editBtn:hover {
@@ -432,18 +435,27 @@ body {
     position: relative;
     top: 5vh;
     left: 4vh;
+    button{
+        background-color: #F3D0D7;
+    }
 }
 
 .friendRejectBtn{
     position: relative;
     top: 4vh;
     left: 4vh;
+    button{
+        background-color: #F3D0D7;
+    }
 }
 
 .friendReqBtn{
     position: relative;
     top: 5vh;
     left: 4vh;
+    button{
+        background-color: #F3D0D7;
+    }
 }
 
 
