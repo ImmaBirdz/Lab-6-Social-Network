@@ -85,7 +85,7 @@ const QuickPost = () => {
     e.preventDefault();
 
     // Check if the input is empty
-    if (!postInput) {
+    if (!postInput && selectedImage.length === 0) {
       alert('Please enter something before posting!');
       return;
     }
@@ -190,7 +190,7 @@ const QuickPost = () => {
       {/* Profile Icon */}
       <img
         className="circle-icon"
-        src="https://img.icons8.com/color/96/cat_in_a_box.png"
+        src="https://img.icons8.com/?size=100&id=e5fTlycugATH&format=png&color=000000"
         alt="Post something"
         onClick={togglePostModal}
       />
@@ -253,7 +253,7 @@ const QuickPost = () => {
                 />
               </label>
               <img
-                src="https://img.icons8.com/pulsar-color/48/cat-profile.png"
+                src="https://img.icons8.com/?size=100&id=qtbSJ7fk66Su&format=png&color=000000"
                 alt="Add emoji"
                 className="emoji-icon"
                 onClick={toggleEmojiPickerModal}

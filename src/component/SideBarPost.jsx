@@ -96,10 +96,6 @@ const SideBarPost = () => {
             }
         }
     }
-
-    useEffect(() => {
-        console.log('Post Sidebar is shown:', isPostSidebarShown)
-    }, [isPostSidebarShown])
     
     return (
     <div>
