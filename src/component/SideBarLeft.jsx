@@ -102,7 +102,7 @@ const SideBarLeft = () => {
             <div className="sidebar-left-title">
                 {
                     // Display the sidebar title based on the current page
-                    location.pathname === '/message/chat' ? <h3>Chat with Friend</h3> : <h2>Friends</h2>
+                    location.pathname === '/message/chat' ? <h3>Chat with Friends</h3> : <h2>Friends</h2>
                 }
             </div>
             <ul>
