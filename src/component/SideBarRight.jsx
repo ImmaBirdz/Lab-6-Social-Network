@@ -49,7 +49,8 @@ const SideBarRight = () => {
                 if (doc.data().to === loginID) {
                     userDataSnapshot.docs.map(userDoc => {
                         if (userDoc.id === doc.data().from) {
-                            setNotifications(prevNotifications => [...prevNotifications, { ...doc.data(), profile_pic: userDoc.data().profile_pic }]);
+                            const { password, ...userData } = userDoc.data(); // Remove password from userData
+                            setNotifications(prevNotifications => [...prevNotifications, { ...doc.data(), ...userData }]);
                         }
                     });
                 }
@@ -71,7 +72,8 @@ const SideBarRight = () => {
                 if (doc.data().to === loginID) {
                     userDataSnapshot.docs.map(userDoc => {
                         if (userDoc.id === doc.data().from) {
-                            setNotifications(prevNotifications => [...prevNotifications, { ...doc.data(), type: 'friend_request' , profile_pic: userDoc.data().profile_pic }]);    
+                            const { password, ...userData } = userDoc.data(); // Remove password from userData
+                            setNotifications(prevNotifications => [...prevNotifications, { ...doc.data(), type: 'friend_request', ...userData }]);
                         }
                     }
                     );
@@ -128,7 +130,7 @@ const SideBarRight = () => {
                                         backgroundImage: `url(${notification.profile_pic})`,
                                         backgroundSize: '48px 48px',
                                     }}/>
-                                    <div className="notification-friend-request-text">{`@${notification.from} send a friend request to you.`}</div>
+                                    <div className="notification-friend-request-text">{`${notification.display_name} send a friend request to you.`}</div>
                                 </div>
                             </li>
                             : notification.type === 'post_like' ?
@@ -138,7 +140,7 @@ const SideBarRight = () => {
                                         backgroundImage: `url(${notification.profile_pic})`,
                                         backgroundSize: '48px 48px',
                                     }}/>
-                                    <div className="notification-post-like-text">{`@${notification.from} liked your post.`}</div>
+                                    <div className="notification-post-like-text">{`${notification.display_name} liked your post.`}</div>
                                 </div>
                             </li>
                             : notification.type === 'post_comment' ?
@@ -149,7 +151,7 @@ const SideBarRight = () => {
                                         backgroundSize: '48px 48px',
                                     }}/>
                                     <div className="group-post-comment">
-                                        <div className="notification-post-comment-text">{`@${notification.from} commented on your post. "${notification.comment}"`}</div>
+                                        <div className="notification-post-comment-text">{`@${notification.display_name} commented on your post. "${notification.comment}"`}</div>
                                         {/* <div className="notification-post-comment-text">{`""`}</div> */}
                                     </div>
                                 </div>
