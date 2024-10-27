@@ -32,6 +32,8 @@ const Search = () => {
     setSearchTerm(event.target.value);
   };
 
+  
+
   return (
     <div className="SbackgroundContainer">
       
@@ -70,11 +72,6 @@ const Search = () => {
                     </a>
                   </div>
                   <div className="search-profile-bio">{filteredProfileData.bio}</div>
-                  {
-                    filteredProfileData.id === loginID ? null
-                    :
-                    <button className='add-friend-button'>Add Friend</button>
-                  }
                 </div>
               </div>
             ))
