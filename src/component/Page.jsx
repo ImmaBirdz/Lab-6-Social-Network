@@ -11,10 +11,9 @@ const Page = () => {
     const [ postData, setPostData ] = useState([]); // State for post data
     const [ profileData, setProfileData ] = useState([]); // State for profile data
     const [ postInteractionData, setPostInteractionData ] = useState([]); // State for post interaction data
-    // const [ isPostModalOpen, setIsPostModalOpen ] = useState(false); // State main modal
 
     useEffect(() => {
-        TabTitle("Feed | Black Cat with Bow");
+        TabTitle("Black Cat with Bow");
     } , []);
 
     // fetch every post data to postData and sort by post time
