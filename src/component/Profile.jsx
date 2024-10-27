@@ -465,24 +465,24 @@ const Profile = () => {
                                 (
                                     friendStatus ?
                                         
-                                        <div className='friendNorejectBtn'>
-                                            <div className="editBtn">
+                                        <>
+                                            <div className="friendNorejectBtn">
                                                 <button>Friend</button>
                                             </div>
-                                            <div className="editBtn">
+                                            <div className="friendRejectBtn">
                                                 <button onClick={handleUnfriend}>Unfriend</button>
                                             </div>
-                                        </div>
+                                        </>
                                         :
                                         showFriendRequest ?
-                                            <div className='friendNorejectBtn'>
-                                                <div className="editBtn">
+                                            <>
+                                                <div className="friendNorejectBtn">
                                                     <button onClick={handleAcceptRequest}>Accept Request</button>
                                                 </div>
-                                                <div className="editBtn">
+                                                <div className="friendRejectBtn">
                                                     <button onClick={handleUndoRequest}>Reject Request</button>
                                                 </div>
-                                            </div>
+                                            </>
                                             :
                                             friendRequest ?
                                                 

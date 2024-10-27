@@ -163,6 +163,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    button{
+        background-color: #EED3D9;
+    }
 }
 
 .rightBox .editBtn:hover {
@@ -428,6 +431,32 @@ body {
     object-fit: cover;
 }
 
+.friendNorejectBtn{
+    position: relative;
+    top: 5vh;
+    left: 4vh;
+    button{
+        background-color: #EED3D9;
+    }
+}
+
+.friendRejectBtn{
+    position: relative;
+    top: 4vh;
+    left: 4vh;
+    button{
+        background-color: #EED3D9;
+    }
+}
+
+.friendReqBtn{
+    position: relative;
+    top: 5vh;
+    left: 4vh;
+    button{
+        background-color: #EED3D9;
+    }
+}
 
 /* friend list modal */
 
