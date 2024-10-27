@@ -372,7 +372,7 @@ body {
     }
 }
 
-  
+
 .formGroup {
     margin-bottom: 15px;
     color: #000000;
@@ -382,36 +382,36 @@ body {
     display: block;
     margin-bottom: 5px;
 }
-  
+
 .formGroup input {
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
 }
-  
+
 .saveBtn, .closeBtn {
     padding: 10px 15px;
     margin-right: 10px;
 }
-  
+
 .saveBtn {
     background-color: #A5B68D;
     color: white;
     border: none;
     cursor: pointer;
 }
-  
+
 .closeBtn {
     background-color: #EE6983;
     color: white;
     border: none;
     cursor: pointer;
-  }
-  
+}
+
 .closeBtn:hover, .saveBtn:hover {
     opacity: 0.8;
- }
-  
+}
+
 
 .profilePreview {
     width: 100px;
@@ -420,22 +420,13 @@ body {
     object-fit: cover;
     margin-bottom: 10px;
 }
-  
+
 .profileImage {
     width: 150px;
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
-  }
-
-.friendNorejectBtn{
-
 }
-
-.friendReqBtn{
-    
-}
-
 
 
 /* friend list modal */
@@ -455,7 +446,7 @@ body {
 }
 
 .FmodalContent {
-    background-color: #ffffff;
+    background-color: #FDE5EC;
     border-radius: 8px;
     padding: 20px;
     max-width: 500px;
@@ -499,8 +490,13 @@ body {
     display: flex;
     align-items: center;
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #FFD1DA;
     color: #555;
+}
+
+.FmodalContent li:hover {
+    background-color: #FFEFEF;
+    border-radius: 8px;
 }
 
 
@@ -510,13 +506,6 @@ body {
     text-decoration: none; /* Remove underline */
     color: inherit; 
 }
-
-.friendLink:hover {
-    background-color: #f0f0f0; 
-    width: max-content;
-    border-radius: 8px;
-}
-
 
 .friendProfilePic {
     width: 40px;

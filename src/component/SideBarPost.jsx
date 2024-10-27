@@ -1,10 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react'
+import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { deleteObject, listAll, ref as storageRef } from 'firebase/storage';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LoginContext } from '../variable/LoginContext'
-import { storage, db } from '../backend/firebaseConfig'
-import { collection, doc, getDocs, updateDoc, deleteDoc } from 'firebase/firestore'
-import { ref as storageRef, listAll, deleteObject } from 'firebase/storage'
-import '../css/SideBarPost.css'
+import { db, storage } from '../backend/firebaseConfig';
+import '../css/SideBarPost.css';
+import { LoginContext } from '../variable/LoginContext';
 
 const SideBarPost = () => {
     const { isPostSidebarShown, setIsPostSidebarShown, isEditPostModalOpen, setIsEditPostModalOpen, postID, loginID } = useContext(LoginContext)
@@ -48,7 +48,7 @@ const SideBarPost = () => {
         }
 
         main();
-    }, [postID, postData.user_id]);
+    }, [postID]);
 
     const togglePostSidebar = () => {
         setIsPostSidebarShown(!isPostSidebarShown);
@@ -89,12 +89,27 @@ const SideBarPost = () => {
                     number_of_posts: profileData.number_of_posts - 1
                 });
                 setPostData(null);
-                alert('Post deleted successfully');
-                navigate(-1);
+                deletePostNotification(id)
+                .then((data) => {
+                    alert(data.message);
+                    navigate(-1);
+                })
             } catch (error) {
                 console.error('Error deleting post:', error);
             }
         }
+    }
+
+    // delete all of notifications if you delete the post
+    const deletePostNotification = async (postID) => {
+        const notificationsRef = collection(db, 'notifications');
+        const q = query(notificationsRef, where('post_id', '==', postID));
+        const querySnapshot = await getDocs(q);
+    
+        const deletePromises = querySnapshot.docs.map(doc => deleteDoc(doc.ref));
+        await Promise.all(deletePromises);
+    
+        return Promise.resolve({message: 'Post deleted successfully'});
     }
     
     return (

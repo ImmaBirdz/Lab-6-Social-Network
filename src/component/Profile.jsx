@@ -24,9 +24,6 @@ const Profile = () => {
     const [showFriendListModal, setShowFriendListModal] = useState(false);
     const [friendData, setFriendData] = useState([]);
     
-
-
-
     useEffect(() => {
         // Fetch user's profile data based on loginID from Firebase
         const fetchProfileData = async () => {
@@ -338,14 +335,14 @@ const Profile = () => {
     const fetchFriendProfilePics = async (friends) => {
         try {
             const profilePics = await Promise.all(friends.map(async (friend) => {
-                const userRef = doc(db, 'user_data', friend.user2); 
+                const userRef = doc(db, 'user_data', friend.userID); 
                 const userSnapshot = await getDoc(userRef);
                 
                 if (userSnapshot.exists()) {
                     const userData = userSnapshot.data();
                     return { ...friend, profile_pic: userData.profile_pic };
                 } else {
-                    console.warn(`User ${friend.user2} does not exist`);
+                    console.warn(`User ${friend.userID} does not exist`);
                     return { ...friend, profile_pic: 'default-pic-url' };
                 }
             }));
@@ -359,17 +356,51 @@ const Profile = () => {
     const fetchFriendList = async () => {
         try {
             const friendsRef = collection(db, 'friends');
-            const friendQuery = query(
-                friendsRef,
-                where('user1', '==', profileID) 
-            );
-            const friendSnapshot = await getDocs(friendQuery);
-            
-            const friends = friendSnapshot.docs.map(doc => doc.data());
-            await fetchFriendProfilePics(friends); 
-            
-            // Set the modal to show
+
+            // Create two queries to find friends of the profileID (in both directions)
+            const friendQuery = query(friendsRef, where('user1', '==', profileID));
+            const friendQuery2 = query(friendsRef, where('user2', '==', profileID));
+
+            // Fetch the matching documents for both queries
+            const querySnapshot = await getDocs(friendQuery);
+            const querySnapshot2 = await getDocs(friendQuery2);
+
+            // Combine both query results and loop through them to delete
+            const allSnapshots = [...querySnapshot.docs, ...querySnapshot2.docs];
+
+            if (allSnapshots.length === 0) {
+                console.log("No friends found");
+                return; 
+            }
+
+            // const friends = allSnapshots.map(doc => doc.data()); //old code
+
+            const friends = allSnapshots.map(doc => ({
+                id: doc.id,        // Get the document ID
+                ...doc.data(),     // Spread the document data
+            }));
+
+            const result = friends.map((item) => {
+                return {
+                  id: item.id,
+                  users: [item.user1, item.user2],
+                }
+            }).filter((item) => item.users.includes(profileID));
+
+            //remove profileID from users
+            result.forEach((item) => {
+                item.users = item.users.filter((user) => user !== profileID)
+            })
+
+            //change from array to string (arr of user to one userID string)
+            result.forEach((item) => {
+                item.userID = item.users.join(" ")
+                delete item.users
+            })
+
+            fetchFriendProfilePics(result);
             setShowFriendListModal(true);
+
         } catch (error) {
             console.error("Error fetching friend list: ", error);
         }
@@ -586,12 +617,12 @@ const Profile = () => {
                             {friendData.length > 0 ? ( 
                                 friendData.map((friend, index) => (
                                     <li key={index}>
-                                        <a href={`/${friend.user2}`} className="friendLink">
+                                        <a href={`/${friend.userID}`} className="friendLink">
                                             <div
                                                 className="friendProfilePic"
                                                 style={{ backgroundImage: `url(${friend.profile_pic || 'default-pic-url'})` }}
                                             ></div>
-                                            <span>{friend.user2}</span>
+                                            <span>{friend.userID}</span>
                                         </a>
                                     </li>
                                 ))
