@@ -11,7 +11,7 @@ import TextPage from './TextPage';
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('Text'); // Set default tab to Text Page
-    const { loginID, profileID } = useContext(LoginContext);
+    const { loginID, profileID, setIsMediaDialogOpen, setSelectedImage } = useContext(LoginContext);
     const [profileData, setProfileData] = useState({});
     const [showModal, setShowModal] = useState(false); // Modal state
     const [editProfileData, setEditProfileData] = useState({}); // Editable profile upload
@@ -382,8 +382,8 @@ const Profile = () => {
 
             const result = friends.map((item) => {
                 return {
-                  id: item.id,
-                  users: [item.user1, item.user2],
+                    id: item.id,
+                    users: [item.user1, item.user2],
                 }
             }).filter((item) => item.users.includes(profileID));
 
@@ -406,6 +406,11 @@ const Profile = () => {
         }
     };
     
+    // Open media dialog
+    const handleOpenMediaDialog = (media) => {
+        setSelectedImage(media);
+        setIsMediaDialogOpen(true);
+    };
     
 
     return (
@@ -415,10 +420,7 @@ const Profile = () => {
                 
                 <div className="bioBox">
                     <div className="leftBox">
-                        <div className="profPic" style={{ backgroundImage: `url(${profileData.profile_pic})` }}></div>
-
-                        
-
+                        <div className="profPic" style={{ backgroundImage: `url(${profileData.profile_pic})` }} onClick={() => handleOpenMediaDialog(profileData.profile_pic)} />
                         <div className="accInfo">
                             <div className="nameBox">
                                 <div className="profName">{profileData.display_name}</div>
