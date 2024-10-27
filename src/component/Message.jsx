@@ -122,7 +122,8 @@ const Message = () => {
                                     <div className="container1">
                                         <img src={selectedFriendData.profile_pic} className="msgimg" alt={selectedFriendData.username} />
                                         <div className="active">
-                                            <p>{selectedFriendData.display_name}</p>
+                                            <div className='active-displayname'>{selectedFriendData.display_name}</div>
+                                            <div className='active-username'>{`@${selectedFriendData.username}`}</div>
                                         </div>
                                     </div>
                                 </div>
