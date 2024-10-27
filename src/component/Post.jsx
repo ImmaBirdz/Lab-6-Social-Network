@@ -249,6 +249,7 @@ const Post = () => {
             });
             // send notification to the post owner
             sendLikeNotification();
+            return;
         }
 
         if (postInteractionData.isLiked && isLikedDocExists) {
@@ -271,6 +272,7 @@ const Post = () => {
             });
             // delete notification if you unlike
             deleteLikeNotification();
+            return;
         }
         else {
             await updateDoc(postInteractionDoc, {
@@ -292,6 +294,7 @@ const Post = () => {
             });
             // send notification to the post owner
             sendLikeNotification();
+            return;
         }
     }
 

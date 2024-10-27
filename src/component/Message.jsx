@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { LoginContext } from '../variable/LoginContext';
 import { db } from '../backend/firebaseConfig';
-import { collection, getDocs, addDoc, query, where, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import '../css/Message.css';
 import { TabTitle } from './TabTitle';
 
@@ -15,7 +15,6 @@ const Message = () => {
 
     const chatRef = useRef(null); // Ref for chat container
 
-    // Tab Title
     useEffect(() => {
         TabTitle('Message | Black Cat with Bow');
     }, []);
@@ -30,12 +29,9 @@ const Message = () => {
     // Fetch Login data
     useEffect(() => {
         const fetchLoginData = async () => {
-            const userCollection = collection(db, 'user_data');
-            const userSnapshot = await getDocs(userCollection);
+            const userSnapshot = await getDocs(collection(db, 'user_data'));
             userSnapshot.forEach(doc => {
-                if (doc.id === loginID) {
-                    setLoginData(doc.data());
-                }
+                if (doc.id === loginID) setLoginData(doc.data());
             });
         }
 
@@ -45,19 +41,16 @@ const Message = () => {
     // Fetch Selected Friend data
     useEffect(() => {
         const fetchSelectedFriendData = async () => {
-            const userCollection = collection(db, 'user_data');
-            const userSnapshot = await getDocs(userCollection);
+            const userSnapshot = await getDocs(collection(db, 'user_data'));
             userSnapshot.forEach(doc => {
-                if (doc.id === selectedFriend) {
-                    setSelectedFriendData(doc.data());
-                }
+                if (doc.id === selectedFriend) setSelectedFriendData(doc.data());
             });
         }
 
         fetchSelectedFriendData();
     }, [selectedFriend]);
 
-    // Find Chat ID between Login and Selected Friend
+    // Find or create Chat ID
     useEffect(() => {
         const findChatID = async () => {
             const chatCollection = collection(db, 'chats');
@@ -72,45 +65,32 @@ const Message = () => {
             const allSnapshots = [...querySnapshot1.docs, ...querySnapshot2.docs];
 
             if (allSnapshots.length === 0) {
-                // Create a new chat
-                const newChat = await addDoc(chatCollection, {
-                    user1: loginID,
-                    user2: selectedFriend
-                });
+                const newChat = await addDoc(chatCollection, { user1: loginID, user2: selectedFriend });
                 setChatID(newChat.id);
             } else {
-                allSnapshots.forEach(doc => {
-                    setChatID(doc.id);
-                });
+                allSnapshots.forEach(doc => setChatID(doc.id));
             }
 
         }
         findChatID();
     }, [loginID, selectedFriend]);
 
-
-    // Chat Data
+    // Fetch Chat Data with Real-time Listener
     useEffect(() => {
-        if (inputText.length > 0) return;
-        const fetchChatData = async () => {
-            const chatCollection = collection(db, 'chats', chatID, 'texts');
-            const chatSnapshot = await getDocs(chatCollection);
-            setChatData([]);
-            chatSnapshot.forEach(doc => {
-                setChatData(prevChat => [...prevChat, doc.data()]);
-            });
-            // sort chat data by when
-            setChatData(prevChat => prevChat.sort((a, b) => a.when - b.when));
-        }
+        if (!chatID) return;
+        const chatCollection = collection(db, 'chats', chatID, 'texts');
         
-        if (chatID) {
-            fetchChatData();
-        }
-    }, [chatID, inputText]);
+        const unsubscribe = onSnapshot(chatCollection, (snapshot) => {
+            const newChatData = snapshot.docs.map(doc => doc.data());
+            setChatData(newChatData.sort((a, b) => a.when - b.when));
+        });
+
+        // Cleanup listener on component unmount or when chatID changes
+        return () => unsubscribe();
+    }, [chatID]);
 
     // Send Message
     const handleSubmitText = async () => {
-        console.log('Input Text: ', inputText);
         if (inputText) {
             const chatCollection = collection(db, 'chats', chatID, 'texts');
             const newMessagePayload = {
@@ -118,21 +98,17 @@ const Message = () => {
                 from: loginID,
                 when: serverTimestamp()
             }
-
-            await addDoc(chatCollection, newMessagePayload).then(() => {
-                // clear input text
-                setInputText('');
-            });
+            await addDoc(chatCollection, newMessagePayload);
+            // Clear input field
+            setInputText('');
         }
     }
 
     // Handle Enter Key
     const handleEnterKey = (e) => {
-        if (e.key === 'Enter') {
-            handleSubmitText();
-        }
+        if (e.key === 'Enter') handleSubmitText();
     }
-    
+
     return (
         <div>
             <div className="message-container">
@@ -142,49 +118,46 @@ const Message = () => {
                         selectedFriend ? (
                         <>
                             {/* Msg Header Section */}
-                            <div className="msg-header">
-                                <div className="container1">
-                                    <img src={selectedFriendData.profile_pic} className="msgimg" alt={selectedFriendData.username} />
-                                    <div className="active">
-                                        <p>{selectedFriendData.display_name}</p>
+                                <div className="msg-header">
+                                    <div className="container1">
+                                        <img src={selectedFriendData.profile_pic} className="msgimg" alt={selectedFriendData.username} />
+                                        <div className="active">
+                                            <p>{selectedFriendData.display_name}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            {/* Chat Inbox */}
-                            <div className="chat-page">
-                                <div className="msg-inbox">
-                                    <div className="chats" ref={chatRef}>
-                                        {/* Message Container */}
-                                        <div className="msg-page">
-                                            {
-                                                Array.isArray(chatData) && chatData.map((msg, index) => (
-                                                    <div key={index} className={msg.from === loginID ? 'my-message' : 'friend-message' }>
+                                <div className="chat-page">
+                                    <div className="msg-inbox">
+                                        <div className="chats" ref={chatRef}>
+                                            <div className="msg-page">
+                                                {Array.isArray(chatData) && chatData.map((msg, index) => (
+                                                    <div key={index} className={msg.from === loginID ? 'my-message' : 'friend-message'}>
                                                         <p className="message">{msg.text}</p>
-                                                        <div className="message-time">{new Date(msg.when.seconds * 1000).toLocaleString()}</div>
+                                                        <div className="message-time">
+                                                            {msg.when ? new Date(msg.when.seconds * 1000).toLocaleString() : '...'}
+                                                        </div>
                                                     </div>
-                                                ))
-                                            }
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
-                                    {/* Msg Bottom Section */}
-                                    <div className="msg-bottom">
-                                        <div className="input-group">
-                                            <input 
-                                                type="text" 
-                                                className="form-control" 
-                                                placeholder="Write message..." 
-                                                value={inputText} 
-                                                onChange={(e) => setInputText(e.target.value)}
-                                                onKeyDown={(e) => handleEnterKey(e)}
-                                            />
-                                        </div>
-                                        <div className="send" value={inputText} onClick={handleSubmitText}>
-                                            <img src="https://img.icons8.com/dotty/80/filled-sent.png" alt="Send-arrow" className="send-arrow" />
+                                        <div className="msg-bottom">
+                                            <div className="input-group">
+                                                <input 
+                                                    type="text" 
+                                                    className="form-control" 
+                                                    placeholder="Write message..." 
+                                                    value={inputText} 
+                                                    onChange={(e) => setInputText(e.target.value)}
+                                                    onKeyDown={(e) => handleEnterKey(e)}
+                                                />
+                                            </div>
+                                            <div className="send" onClick={handleSubmitText}>
+                                                <img src="https://img.icons8.com/dotty/80/filled-sent.png" alt="Send-arrow" className="send-arrow" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </>
+                            </>
                         ) : (
                             <div className="no-chat">
                                 <h1>No chat selected</h1>
