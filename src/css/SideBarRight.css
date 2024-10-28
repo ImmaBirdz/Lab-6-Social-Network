@@ -1,65 +1,14 @@
-@media (min-width: 1025px) {
-
-    .sidebar-right {
-        width: 20%;
-        background-color: hsl(0, 0%, 100%);
-        padding: 20px;
-        border-radius: 0;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        height: calc(100vh - 60px);
-        overflow-y: auto;
-        position: fixed;
-        top: 10vh;
-        right: 0;
-        transform: none;
-    }
-
-    .toggle-sidebar-right {
-        display: none;
-    }
-
-    /* ------------------- Responsive's Side-Right Start ------------------ */
-
-    .sidebar-right {
-        width: 20%;
-        background-color: hsl(0, 0%, 100%);
-        padding: 20px;
-        border-radius: 0;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        height: calc(100vh - 60px);
-        overflow-y: auto;
-        position: fixed;
-        top: 10vh;
-        right: 0;
-    }
-
-    .toggle-sidebar-right {
-        display: none;
-    }
-
-    .sidebar-right.show {
-        transform: translateX(0);
-        /* bring sidebar back */
-    }
-
-    .sidebar-right.show .sidebar-right-content {
-        width: 30%;
-    }
-
-    .toggle-sidebar-right {
-        position: fixed;
-        top: 10vh;
-        right: 20px;
-        color: rgb(0, 0, 0);
-        border: none;
-        font-size: 1.5rem;
-        background: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        z-index: 1001;
-    }
-    /* ------------------- Responsive's Side-Right End ------------------ */
-
+.sidebar-right {
+    width: 20%;
+    background-color: hsl(0, 0%, 100%);
+    padding: 20px;
+    border-radius: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    position: fixed;
+    top: 10vh;
+    right: 0;
 }
 
 .sidebar-right-title{

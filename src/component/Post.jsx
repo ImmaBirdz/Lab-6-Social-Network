@@ -14,11 +14,6 @@ const Post = () => {
     const [postInteractionData, setPostInteractionData] = useState({}); // State for post interaction data
     const [showCommentInput, setShowCommentInput] = useState(false);
     const [commentText, setCommentText] = useState('');
-    const [isSidebarShown, setSidebarShow] = useState(false);
-
-    const toggleSidebar = () => {
-        setSidebarShow(!isSidebarShown);
-    };
 
     // fetch comment data from post data
     const fetchCommentIdData = async () => {
@@ -373,131 +368,123 @@ const Post = () => {
     return (
         <>
             <div className="main-Content">
-                <button className="toggle-sidebar-right" onClick={toggleSidebar}>
-                    {isSidebarShown ? '✖' : '☰'}
-                </button>
-                <div className={`sidebar-right ${isSidebarShown ? 'show' : ''}`}>
-                    <SideBarRight isSidebarShown={isSidebarShown} />
-                </div>
 
-                <div className={`container ${isSidebarShown ? 'shifted' : ''}`}>
-                    <main className="feed">
-                        <div className="postBoxMain">
-                            <div className="postMain">
-                                <div className="postedContent">
-                                    <div className="userProf">
-                                        <a href={`/${postData.user_id}`}>
-                                            <div className="userPics">
-                                                <img style={{
-                                                    backgroundImage: `url(${profileData.profile_pic})`,
-                                                    backgroundSize: '65px 65px',
-                                                }} />
-                                            </div>
-                                        </a>
-                                        <div className="infoPost">
-                                            <span className='postDisplayName' onClick={() => window.location.href = `/${profileID}`}><b><a>{profileData.display_name}</a></b></span>
-                                            <span className='postUsername' onClick={() => window.location.href = `/${profileID}`}>{`@${postData.user_id}`}</span>
+                <main className="feed">
+                    <div className="postBoxMain">
+                        <div className="postMain">
+                            <div className="postedContent">
+                                <div className="userProf">
+                                    <a href={`/${postData.user_id}`}>
+                                        <div className="userPics">
+                                            <img style={{
+                                                backgroundImage: `url(${profileData.profile_pic})`,
+                                                backgroundSize: '65px 65px',
+                                            }} />
                                         </div>
+                                    </a>
+                                    <div className="infoPost">
+                                        <span className='postDisplayName' onClick={() => window.location.href = `/${profileID}`}><b><a>{profileData.display_name}</a></b></span>
+                                        <span className='postUsername' onClick={() => window.location.href = `/${profileID}`}>{`@${postData.user_id}`}</span>
+                                    </div>
+                                </div>
+                                {
+                                    loginID === postData.user_id &&
+                                    <div className="post-sidebar">
+                                        <button className='post-sidebar-option' onClick={() => togglePostSidebar()}>
+                                            <ion-icon name="ellipsis-horizontal"></ion-icon>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                            <p className="postText">{postData.input}</p>
+                                {postData.media &&
+                                    <div className='group-postImage'>
+                                    {
+                                        postData.media.map((media, index) => (
+                                            <div className="postImage" key={media}>
+                                                <img src={media} onClick={() => handleOpenMediaDialog(media)} />
+                                            </div>
+                                        ))
+                                    }
+                                    </div>
+                                }
+
+                            <div className='postTime'> Posted at {postData.post_time ? new Date(postData.post_time.seconds * 1000).toLocaleString() : ''}</div>
+                            <div className="postAction">
+                                <div className="activitiesIcons">
+                                    <div className='likeGroup'>
+                                        {
+                                            postInteractionData.isLiked ?
+                                                <>
+                                                    <ion-icon name="heart" onClick={handleLike} style={{ fill: 'red' }}></ion-icon> {postData.number_of_likes}
+                                                </>
+                                                :
+                                                <>
+                                                    <ion-icon name="heart-outline" onClick={handleLike}></ion-icon> {postData.number_of_likes}
+                                                </>
+                                        }
                                     </div>
                                     {
-                                        loginID === postData.user_id &&
-                                        <div className="post-sidebar">
-                                            <button className='post-sidebar-option' onClick={() => togglePostSidebar()}>
-                                                <ion-icon name="ellipsis-horizontal"></ion-icon>
-                                            </button>
+                                        <div className='commentGroup'>
+                                            <ion-icon name="chatbox-outline"></ion-icon> {postData.number_of_comments}
                                         </div>
                                     }
-                                </div>
-                                <p className="postText">{postData.input}</p>
-                                    {postData.media &&
-                                        <div className='group-postImage'>
-                                        {
-                                            postData.media.map((media, index) => (
-                                                <div className="postImage" key={media}>
-                                                    <img src={media} onClick={() => handleOpenMediaDialog(media)} />
-                                                </div>
-                                            ))
-                                        }
-                                        </div>
-                                    }
-
-                                <div className='postTime'> Posted at {postData.post_time ? new Date(postData.post_time.seconds * 1000).toLocaleString() : ''}</div>
-                                <div className="postAction">
-                                    <div className="activitiesIcons">
-                                        <div className='likeGroup'>
-                                            {
-                                                postInteractionData.isLiked ?
-                                                    <>
-                                                        <ion-icon name="heart" onClick={handleLike} style={{ fill: 'red' }}></ion-icon> {postData.number_of_likes}
-                                                    </>
-                                                    :
-                                                    <>
-                                                        <ion-icon name="heart-outline" onClick={handleLike}></ion-icon> {postData.number_of_likes}
-                                                    </>
-                                            }
-                                        </div>
-                                        {
-                                            <div className='commentGroup'>
-                                                <ion-icon name="chatbox-outline"></ion-icon> {postData.number_of_comments}
-                                            </div>
-                                        }
-                                    </div>
                                 </div>
                             </div>
-                            
                         </div>
+                        
+                    </div>
 
-                        {/* Separator Line */}
-                        <hr className="post-separator" />
+                    {/* Separator Line */}
+                    <hr className="post-separator" />
 
-                        <div className="comment-section">
-                            <h4>Comments</h4>
-                            {commentIdData.map(comment => (
+                    <div className="comment-section">
+                        <h4>Comments</h4>
+                        {commentIdData.map(comment => (
 
-                                <div key={comment.id} className="comment">
-                                    <div className='comment-container'>
-                                        <div className="comment-header">
-                                            <a href={`/${comment.user_id}`}>
-                                                <img src={comment.user.profile_pic} alt="User Pic" className="profile-pic" />
-                                            </a>
-                                            <div className="comment-user">
-                                                <a href={`/${comment.user_id}`} className='comment-user-display'>{comment.user.display_name}</a>
-                                                <a href={`/${comment.user_id}`} className='comment-user-id'>{`@${comment.user_id}`}</a>
-                                            </div>
+                            <div key={comment.id} className="comment">
+                                <div className='comment-container'>
+                                    <div className="comment-header">
+                                        <a href={`/${comment.user_id}`}>
+                                            <img src={comment.user.profile_pic} alt="User Pic" className="profile-pic" />
+                                        </a>
+                                        <div className="comment-user">
+                                            <a href={`/${comment.user_id}`} className='comment-user-display'>{comment.user.display_name}</a>
+                                            <a href={`/${comment.user_id}`} className='comment-user-id'>{`@${comment.user_id}`}</a>
                                         </div>
-                                        <p>{comment.comment_input}</p>
-                                        <div className='comment-time'>Commented at {comment.comment_time ? new Date(comment.comment_time.seconds * 1000).toLocaleString() : ''}</div>
                                     </div>
-                                    {
-                                        loginID === comment.user_id &&
-                                        <div className="delete-comment" title='Delete your comment' onClick={() => handleDeleteComment(comment.id)}>
-                                            <ion-icon name="trash-outline"></ion-icon>
-                                        </div>
-                                    }
+                                    <p>{comment.comment_input}</p>
+                                    <div className='comment-time'>Commented at {comment.comment_time ? new Date(comment.comment_time.seconds * 1000).toLocaleString() : ''}</div>
                                 </div>
-                            ))}
+                                {
+                                    loginID === comment.user_id &&
+                                    <div className="delete-comment" title='Delete your comment' onClick={() => handleDeleteComment(comment.id)}>
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                    </div>
+                                }
+                            </div>
+                        ))}
 
-                            {/* Add Comment Button */}
-                            <button className="add-comment-btn" onClick={handleAddCommentClick}>
-                                {showCommentInput ? 'Cancel' : 'Add Comment'}
-                            </button>
+                        {/* Add Comment Button */}
+                        <button className="add-comment-btn" onClick={handleAddCommentClick}>
+                            {showCommentInput ? 'Cancel' : 'Add Comment'}
+                        </button>
 
-                            {/* Comment Input Field */}
-                            {showCommentInput && (
-                                <div className="comment-input">
-                                    <input
-                                        type="text"
-                                        id='comment-input'
-                                        value={commentText}
-                                        onChange={(e) => setCommentText(e.target.value)}
-                                        placeholder="Write a comment..."
-                                    />
-                                    <button className="submit-comment-btn" onClick={validateComment}>Submit</button>
-                                </div>
-                            )}
-                        </div>
-                    </main>
-                </div>
+                        {/* Comment Input Field */}
+                        {showCommentInput && (
+                            <div className="comment-input">
+                                <input
+                                    type="text"
+                                    id='comment-input'
+                                    value={commentText}
+                                    onChange={(e) => setCommentText(e.target.value)}
+                                    placeholder="Write a comment..."
+                                />
+                                <button className="submit-comment-btn" onClick={validateComment}>Submit</button>
+                            </div>
+                        )}
+                    </div>
+                </main>
             </div>
         </>
     );
