@@ -7,7 +7,6 @@ import '../css/SideBarRight.css'
 const SideBarRight = () => {
 
     const { loginID } = useContext(LoginContext);
-    const [isSidebarShown, setIsSidebarShown] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [userData, setUserData] = useState([]);
 
@@ -76,18 +75,10 @@ const SideBarRight = () => {
         });
     }
 
-    const toggleSidebar = () => {
-        setIsSidebarShown(!isSidebarShown);
-    }
-
     return (
         <div>
 
-            <button className="toggle-sidebar-right" onClick={toggleSidebar}>
-                {isSidebarShown ? '✖' : '☰'}
-            </button>
-
-            <aside className={`sidebar-right ${isSidebarShown ? 'show' : ''}`}>
+            <aside className='sidebar-right'>
                 <div className="sidebar-right-content">
                     <div className="sidebar-right-title">
                         <h3>Notification</h3>
