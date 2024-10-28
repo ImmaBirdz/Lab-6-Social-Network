@@ -151,7 +151,7 @@ const SideBarRight = () => {
                                         backgroundSize: '48px 48px',
                                     }}/>
                                     <div className="group-post-comment">
-                                        <div className="notification-post-comment-text">{`@${notification.display_name} commented on your post. "${notification.comment}"`}</div>
+                                        <div className="notification-post-comment-text">{`${notification.display_name} commented on your post. "${notification.comment}"`}</div>
                                         {/* <div className="notification-post-comment-text">{`""`}</div> */}
                                     </div>
                                 </div>
