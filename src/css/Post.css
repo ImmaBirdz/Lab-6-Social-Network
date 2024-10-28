@@ -300,20 +300,6 @@ button.post-sidebar-item {
     background-color: #f79fb9;
 }
 
-@media only screen and (max-width: 850px) {
-    .container {
-        flex-direction: column;
-    }
-
-    .sidebar-left {
-        width: 25%;
-    }
-
-    .feed {
-        width: 100%;
-    }
-}
-
 .trending-box,
 .suggestions-box {
     margin-bottom: 20px;
@@ -346,25 +332,4 @@ button.post-sidebar-item {
 .trending-box ul li:hover,
 .suggestions-box ul li:hover {
     text-decoration: underline;
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-
-    .navbar {
-        padding: 0 0 0 0;;
-    }
-
-    .feed {
-        top: 10vh;
-        left: 17%;
-    }
-    .sidebar-left {
-        top: 10vh;
-        width: 17%;
-        z-index: 1;
-    }
-
-    .sidebar-right {
-        top: 10vh;
-    }
 }
