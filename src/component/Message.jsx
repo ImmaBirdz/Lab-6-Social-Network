@@ -113,7 +113,7 @@ const Message = () => {
         <div>
             <div className="message-container">
                 {/* Chat Area (Middle Section) */}
-                <main className="feed">
+                <main className="message-feed">
                     {
                         selectedFriend ? (
                         <>
