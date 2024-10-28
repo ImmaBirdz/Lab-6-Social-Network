@@ -3,13 +3,13 @@ import { useEffect, useContext } from 'react'
 import '../css/Login.css'
 import { TabTitle } from './TabTitle'
 import { db, storage } from '../backend/firebaseConfig'
-import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, setDoc, collection, getDocs, updateDoc } from 'firebase/firestore';
 import { ref, getDownloadURL } from 'firebase/storage'
 import { LoginContext } from '../variable/LoginContext';
 
 const Login = () => {
 
-    const {isLogin, setIsLogin, setLoginID, isLoaded} = useContext(LoginContext);
+    const {isLogin, setIsLogin, loginID, setLoginID, isLoaded} = useContext(LoginContext);
 
     useEffect(() => {
         if (isLogin) {
@@ -83,6 +83,10 @@ const Login = () => {
                         found = true;
                         setIsLogin(true);
                         setLoginID(doc.id);
+                        // set online status
+                        updateDoc(doc.ref, {
+                            isOnline: true
+                        });
                         localStorage.setItem('loginID', doc.id); // add loginID to localStorage
                         alert('Login successful');
                     }
@@ -125,7 +129,8 @@ const Login = () => {
                 birthday: birthday,
                 gender: gender,
                 bio : "This is a bio",
-                profile_pic : defaultProfilePic
+                profile_pic : defaultProfilePic,
+                isOnline: false
             };
             // check if some data is already in the database
             let isDuplicate = false;

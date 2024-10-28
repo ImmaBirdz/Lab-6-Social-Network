@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import { db } from '../backend/firebaseConfig';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 
 const LoginContext = createContext();
 
@@ -29,6 +29,12 @@ const LoginProvider = (props) => {
         if (loginID) {
             setIsLogin(true);
             setLoginID(loginID);
+            // set online status
+            const userCollection = collection(db, 'user_data');
+            const userDoc = doc(userCollection, loginID);
+            updateDoc(userDoc, {
+                isOnline: true
+            });
         }
         setIsLoaded(true);
     }, []);
