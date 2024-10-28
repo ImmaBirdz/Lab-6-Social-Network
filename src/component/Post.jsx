@@ -369,7 +369,7 @@ const Post = () => {
         <>
             <div className="main-Content">
 
-                <main className="feed">
+                <main className="post-feed">
                     <div className="postBoxMain">
                         <div className="postMain">
                             <div className="postedContent">
