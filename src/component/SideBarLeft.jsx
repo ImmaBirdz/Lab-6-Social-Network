@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, doc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react';
 import { db } from '../backend/firebaseConfig';
 import '../css/SideBarLeft.css';
@@ -27,15 +27,14 @@ const SideBarLeft = () => {
             
             // Extract friend IDs and details
             const friends = allFriendDocs.map(doc => {
-            const data = doc.data();
-            return {
-                id: doc.id, // Friend request ID (if needed)
-                user1: data.user1,
-                user2: data.user2,
-            };
-        });
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    user1: data.user1,
+                    user2: data.user2,
+                };
+            });
 
-        // Optional: filter out duplicates and format the output if necessary
         const uniqueFriends = Array.from(new Set(friends.map(friend => {
             return friend.user1 === loginID ? friend.user2 : friend.user1;
         })));
@@ -47,87 +46,71 @@ const SideBarLeft = () => {
         }
     };
 
-    const getFriendDetails = async (friendIds) => {
-        try {
-            // Create an array of promises to fetch each friend's details
-            const friendDetailPromises = friendIds.map(async (friendId) => {
+    const subscribeToFriendStatus = (friendIds) => {
+        const unsubscribes = friendIds.map(friendId => {
             const friendDocRef = doc(db, 'user_data', friendId);
-            const friendDoc = await getDoc(friendDocRef);
+            
+            // Listen for real-time updates on each friend's document
+            return onSnapshot(friendDocRef, (docSnapshot) => {
+                if (docSnapshot.exists()) {
+                    const friendData = { id: friendId, ...docSnapshot.data() };
 
-            // Check if the friend exists
-            if (friendDoc.exists()) {
-                return { id: friendId, ...friendDoc.data() }; // Return friend ID and details
-            } else {
-                console.warn(`Friend with ID ${friendId} does not exist.`);
-                return null; // Return null if the friend does not exist
-            }
+                    setFriends(prevFriends => {
+                        const updatedFriends = prevFriends.filter(f => f.id !== friendId);
+                        return [...updatedFriends, friendData];
+                    });
+                }
+            });
         });
 
-            // Wait for all friend detail fetches to complete
-            const friendDetails = await Promise.all(friendDetailPromises);
-
-            // Filter out null values (friends that do not exist)
-            return friendDetails.filter(detail => detail !== null);
-        } catch (error) {
-            console.error("Error fetching friend details: ", error);
-            return []; // Return an empty array in case of error
-        }
+        // Return an unsubscribe function that removes all listeners
+        return () => unsubscribes.forEach(unsubscribe => unsubscribe());
     };
 
     useEffect(() => {
-        // Fetch friends for the current user
         getFriendsOfUser(loginID).then((friends) => {
-            // Fetch details for each friend
-            getFriendDetails(friends).then((friendDetails) => {
-                // Update the state with the friend details
-                setFriends(friendDetails);
-            });
+            const unsubscribe = subscribeToFriendStatus(friends);
+            
+            // Clean up listeners on component unmount
+            return () => unsubscribe();
         });
     }, [loginID]);
 
-    // Handle friend click event
     const handleFriendClick = (friend) => {
         if (location.pathname === `/message/chat`) {
-            // Set the selected friend ID
             setSelectedFriend(friend.id);
-        }
-        else {
-            // Redirect to the friend's profile page
+        } else {
             window.location.href = `/${friend.username}`;
         }
-    }
+    };
 
     return (
         <aside className="sidebar-left">
             <div className="sidebar-left-title">
-                {
-                    // Display the sidebar title based on the current page
-                    location.pathname === '/message/chat' ? <h3>Chat with Friends</h3> : <h2>Friends</h2>
-                }
+                {location.pathname === '/message/chat' ? <h3>Chat with Friends</h3> : <h2>Friends</h2>}
             </div>
             <ul>
                 {friends.map(friend => (
                     <li key={friend.username} onClick={() => handleFriendClick(friend)}>
-                    <img src={friend.profile_pic} alt={friend.username} className="profile-pic" />
-                    <div className="sidebar-left-friend-info">
-                        <span className='sidebar-left-display-name'>{friend.display_name}</span>
-                        <span className='sidebar-left-username'>{`@${friend.username}`}</span>
-                    </div>
-                    {/* {friend.isOnline && ( */}
-                    <div className="sidebar-left-online-icon">
-
-                        <img 
-                            src="https://img.icons8.com/?size=100&id=119894&format=png&color=000000" 
-                            alt="Online" 
-                            className="online-icon" 
-                            />
-                    </div>
-                    {/* )} */}
+                        <img src={friend.profile_pic} alt={friend.username} className="profile-pic" />
+                        <div className="sidebar-left-friend-info">
+                            <span className='sidebar-left-display-name'>{friend.display_name}</span>
+                            <span className='sidebar-left-username'>{`@${friend.username}`}</span>
+                        </div>
+                        {friend.isOnline && (
+                            <div className="sidebar-left-online-icon">
+                                <img 
+                                    src="https://img.icons8.com/?size=100&id=119894&format=png&color=000000" 
+                                    alt="Online" 
+                                    className="online-icon" 
+                                />
+                            </div>
+                        )}
                     </li>
                 ))}
             </ul>
         </aside>
-    )
+    );
 }
 
 export default SideBarLeft;

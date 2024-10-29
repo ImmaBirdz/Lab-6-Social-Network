@@ -79,6 +79,19 @@ body {
     background-color: #555;
 }
 
+.message-feed{
+    width: 65%;
+    background-color: #F8E8EE;
+    padding: 20px;
+    border-radius: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 90vh;
+    overflow-y: hidden;
+    position: fixed;
+    top: 10vh;
+    left: 15%;
+}
+
 .message-container {
     width: 65%;
     height: 100vh;

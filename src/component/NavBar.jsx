@@ -3,9 +3,9 @@ import '../css/NavBar.css'
 import { useState, useEffect, useContext } from 'react'
 import { LoginContext } from '../variable/LoginContext'
 import { db } from '../backend/firebaseConfig'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, doc, getDocs, updateDoc } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
-import  Logo  from '../img/Logo.png'
+import Logo from '../img/Logo.png'
 
 const NavBar = () => {
     const { loginID, setLoginID, setIsLogin } = useContext(LoginContext);
@@ -30,6 +30,13 @@ const NavBar = () => {
     function handleLogout() {
         setLoginID(null);
         localStorage.removeItem('loginID');
+        // set online status
+        const userCollection = collection(db, 'user_data');
+        const userDoc = doc(userCollection, loginID);
+        updateDoc(userDoc, {
+            isOnline: false
+        });
+
         setIsLogin(false);
         alert('You are successfully logged out');
         navigate('/');
